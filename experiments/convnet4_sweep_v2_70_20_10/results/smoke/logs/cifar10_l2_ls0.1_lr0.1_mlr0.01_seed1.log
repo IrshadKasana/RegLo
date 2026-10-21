@@ -1,0 +1,5 @@
+[cifar10 l2 ls=0.1 lr=0.1 mlr=0.01 seed=1] T=  20 ckpt=1.8917 * (3s)
+[cifar10 l2 ls=0.1 lr=0.1 mlr=0.01 seed=1] T=  40 ckpt=2.3110 (7s)
+LO cifar10_l2_ls0.1_lr0.1_mlr0.01_seed1: val_acc=0.2588
+/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)

@@ -1,0 +1,17 @@
+train_arguments:
+  # Baseline Model 1 for the FMNIST cell: explicit AdamW+SAM at
+  # meta-test (evaluate_optimizee --if_normal_optim --regularizer
+  # adamw_sam_fmnist --dataset fmnist --optimizee_model mlp).
+  adaptive: True
+  SAMonOptimizer: True
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  rho: 0.05
+  weight_decay: 0.01
+  momentum: 0.0
+  optzee_wd: 0.0
+  model_name: 'AdamW_SAM_fmnist'
+  regularizer: 'sam'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

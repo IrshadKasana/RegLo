@@ -1,0 +1,27 @@
+train_arguments:
+  # Model-1 benchmark: explicit AdamW+GAM at meta-test — the matched
+  # three-way comparison ladder (AdamW+GAM vs No-Reg LO vs GAM LO).
+  # usage: evaluate_optimizee --if_normal_optim --regularizer adamw_gam_baseline
+  #        --base_optimizer AdamW ...
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  weight_decay: 0.01
+  momentum: 0.0
+  optzee_wd: 0.0
+  adaptive: True
+  grad_beta_0: 1.0
+  grad_beta_1: 1.0
+  grad_beta_2: -1.0
+  grad_beta_3: 1.0
+  grad_rho: 0.04
+  grad_rho_max: 0.04
+  grad_rho_min: 0.02
+  grad_norm_rho: 0.2
+  grad_norm_rho_max: 0.4
+  grad_norm_rho_min: 0.2
+  grad_gamma: 0.03
+  model_name: 'AdamW_GAM_baseline'
+  regularizer: 'gam'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

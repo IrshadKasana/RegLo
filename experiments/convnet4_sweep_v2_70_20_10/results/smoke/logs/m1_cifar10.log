@@ -1,0 +1,4 @@
+M1 cifar10 lr=0.001 val=0.2810
+M1 cifar10 lr=0.01 val=0.3743
+/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)

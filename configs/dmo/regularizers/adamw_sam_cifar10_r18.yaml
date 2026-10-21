@@ -1,0 +1,19 @@
+train_arguments:
+  # Baseline Model 1 for the CIFAR-10 cell: explicit AdamW+SAM on
+  # ResNet-18 (evaluate_optimizee --if_normal_optim --regularizer
+  # adamw_sam_cifar10_r18 --dataset cifar10 --optimizee_model resnet18
+  # --set augment=True eval_every=10).
+  adaptive: True
+  SAMonOptimizer: True
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  rho: 0.05
+  weight_decay: 0.01
+  momentum: 0.0
+  optzee_wd: 0.0
+  augment: True
+  model_name: 'AdamW_SAM_c10_r18'
+  regularizer: 'sam'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

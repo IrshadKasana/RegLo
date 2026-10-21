@@ -1,0 +1,20 @@
+train_arguments:
+  base_optimizer: 'adam'                 # Base optimizer type
+  lr: 0.001                       # Learning rate of the base_optimizer
+  weight_decay: 0.0            # Weight decay of the base_optimizer
+  momentum: 0.9                 # Momentum of the base_optimizer
+  rho_min: 0.5
+  rho_max: 2.0
+  alpha: 0.4
+  adaptive: True                # Adaptive flag for gam
+  grad_gamma: 0.03              #
+  model_name: 'testpGSAM_sgd_LO_300424' # name of the optimizer model with specs
+  regularizer: 'gsam'            #name of the regularizer
+  if_avreg: True                               # turn on regularization on Optimizer
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+  # ---- Eq. 7 penalty mode available (Change.MD 78); default stays legacy ascent ----
+  reg_mode: 'penalty'     # consolidated Alg. 1 objective (final design; 'ascent' = legacy)
+  lambda_reg: 0.1
+  xi: 1.0e-12
+  if_smooth: True         # smoothing term live, as in sam.yaml

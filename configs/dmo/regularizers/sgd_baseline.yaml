@@ -1,0 +1,16 @@
+train_arguments:
+  # MetaReg paper baseline optimiser (Balaji et al. 2018, Sec. 4.1):
+  # plain SGD, lr 0.001, momentum 0.9, no sharpness regulariser.
+  base_optimizer: 'SGD'
+  lr: 0.001
+  momentum: 0.9
+  weight_decay: 0.0
+  optzee_wd: 0.0
+  adaptive: False
+  rho: 0.0
+  SAMonOptimizer: False
+  model_name: 'SGD_baseline'
+  regularizer: 'no_reg'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

@@ -1,0 +1,52 @@
+[orchestrator] 0 done, 1 to run, 3 workers x 2 threads
+[orchestrator] ok   m1_cifar10 (73s)
+[orchestrator] 0 done, 6 to run, 3 workers x 2 threads
+[orchestrator] ok   m2_cifar10_l2_lam0.01 (115s)
+[orchestrator] ok   m2_cifar10_sam_lam0.01_rho0.001 (115s)
+[orchestrator] ok   m2_cifar10_l2_lam0.1 (115s)
+[orchestrator] ok   m2_cifar10_sam_lam0.1_rho0.001 (44s)
+[orchestrator] ok   m2_cifar10_sam_lam0.1_rho0.01 (44s)
+[orchestrator] ok   m2_cifar10_sam_lam0.01_rho0.01 (49s)
+[orchestrator] 0 done, 2 to run, 3 workers x 2 threads
+[orchestrator] ok   cifar10_none_ls0_lr0_mlr0.01_seed0 (29s)
+[orchestrator] ok   cifar10_none_ls0_lr0_mlr0.001_seed0 (34s)
+[orchestrator] 0 done, 2 to run, 3 workers x 2 threads
+[orchestrator] ok   cifar10_none_ls0.01_lr0_mlr0.01_seed0 (28s)
+[orchestrator] ok   cifar10_none_ls0.1_lr0_mlr0.01_seed0 (39s)
+[orchestrator] 0 done, 4 to run, 3 workers x 2 threads
+[orchestrator] ok   cifar10_sam_ls0.1_lr0.01_mlr0.01_seed0 (130s)
+[orchestrator] ok   cifar10_l2_ls0.1_lr0.01_mlr0.01_seed0 (131s)
+[orchestrator] ok   cifar10_l2_ls0.1_lr0.1_mlr0.01_seed0 (130s)
+[orchestrator] ok   cifar10_sam_ls0.1_lr0.1_mlr0.01_seed0 (152s)
+[orchestrator] 4 done, 4 to run, 3 workers x 2 threads
+[orchestrator] ok   cifar10_l2_ls0.01_lr0.01_mlr0.01_seed0 (43s)
+[orchestrator] ok   cifar10_l2_ls0.01_lr0.1_mlr0.01_seed0 (47s)
+[orchestrator] ok   cifar10_sam_ls0.01_lr0.01_mlr0.01_seed0 (51s)
+[orchestrator] ok   cifar10_sam_ls0.01_lr0.1_mlr0.01_seed0 (46s)
+[orchestrator] 0 done, 8 to run, 3 workers x 2 threads
+[orchestrator] ok   cifar10_none_ls0.1_lr0_mlr0.01_seed1 (28s)
+[orchestrator] ok   cifar10_none_ls0_lr0_mlr0.01_seed1 (29s)
+[orchestrator] ok   cifar10_none_ls0_lr0_mlr0.01_seed2 (32s)
+[orchestrator] ok   cifar10_l2_ls0.1_lr0.1_mlr0.01_seed1 (25s)
+[orchestrator] ok   cifar10_none_ls0.1_lr0_mlr0.01_seed2 (31s)
+[orchestrator] ok   cifar10_l2_ls0.1_lr0.1_mlr0.01_seed2 (31s)
+[orchestrator] ok   cifar10_sam_ls0.01_lr0.01_mlr0.01_seed2 (36s)
+[orchestrator] ok   cifar10_sam_ls0.01_lr0.01_mlr0.01_seed1 (40s)
+# Five-method sweep — ConvNet-4, 70:20:10 split
+
+Selection: source validation split (seed 0) only. ID test = source 10 % split. OOD = selected model, no retraining, on the TARGET dataset's 20 % partition. ± = std. error over inits (M1/M2) or meta-seeds (M3/M4a/M5). OOD acc is accuracy under the *target's own label ids* (the two label spaces are unrelated, so ≈ chance is expected); OOD AUROC = ID-test vs OOD separation by max-softmax confidence.
+
+
+## CIFAR-10 (source) → SVHN (OOD target)
+
+| method | R | config | val acc % (selection) | ID test acc % | OOD acc % → SVHN | OOD AUROC | cells | n |
+|---|---|---|---|---|---|---|---|---|
+| M1 AdamW | - | lr=0.01 | 37.43 | 38.77 | 9.75 | 0.666 | - | 1 inits |
+| M2 AdamW+R | l2 | λ=0.01 (lr=0.01) | 24.00 | 24.15 | 9.59 | 0.566 | 2 | 1 inits |
+| M2 AdamW+R | sam | λ=0.01, ρ=0.01 (lr=0.01) | 37.67 | 37.78 | 9.67 | 0.656 | 4 | 1 inits |
+| M3 LO | - | meta_lr=0.01 | 31.74 | 26.46 ± 3.32 | 8.28 ± 0.50 | 0.672 | 2 | 3 meta-seeds |
+| M4a LO+smooth | - | λ_smooth=0.1, meta_lr=0.01 | 31.81 | 27.72 ± 1.70 | 8.79 ± 0.40 | 0.579 | 2 | 3 meta-seeds |
+| M5 LO+smooth+R | l2 | λ_smooth=0.1, λ_reg=0.1, meta_lr=0.01 | 29.14 | 27.33 ± 0.96 | 10.44 ± 0.31 | 0.591 | 4 | 3 meta-seeds |
+| M5 LO+smooth+R | sam | λ_smooth=0.01, λ_reg=0.01, meta_lr=0.01 | 33.98 | 28.70 ± 3.89 | 8.63 ± 0.95 | 0.648 | 4 | 3 meta-seeds |
+
+[orchestrator] total 14.5 min

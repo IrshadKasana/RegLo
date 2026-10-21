@@ -1,0 +1,21 @@
+train_arguments:
+  # Benchmark: plain AdamW with NO sharpness regularizer, applied directly
+  # to the optimizee at meta-test. This is method 8 of the common
+  # comparison setup — the "does the regularizer help at all?" anchor.
+  # Routes to the `else: optimizer.step()` branch of
+  # fit_w_normal_optimizer (no SAM/GAM/GSAM wrapper is constructed).
+  # usage: evaluate_optimizee --if_normal_optim
+  #        --regularizer adamw_no_reg_baseline --base_optimizer AdamW
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  weight_decay: 0.01
+  momentum: 0.0
+  optzee_wd: 0.0
+  adaptive: False
+  rho: 0.0
+  SAMonOptimizer: False
+  model_name: 'AdamW_NoReg_baseline'
+  regularizer: 'no_reg'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

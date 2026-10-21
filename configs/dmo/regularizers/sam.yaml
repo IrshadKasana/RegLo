@@ -1,0 +1,19 @@
+train_arguments:
+  adaptive: True             # Turns on for adaptiveSAM
+  SAMonOptimizer: True          # If SAM on optimizer parameters
+  base_optimizer: 'sgd'         # Base optimizer type
+  lr: 0.001   # EQUALIZED meta-lr (was 0.01). gam/gsam meta-train at 0.001; a 10x lr mismatch between arms confounds every LO-vs-LO comparison. Checkpoints trained at 0.01 must be RE-TRAINED for a matched-budget comparison.
+  rho: 0.05
+  model_name: 'SAMLO_mnist_mlp_dev'   # legacy AdSAM_sgd_LO_140424 is read-only (item 9)              # name of the optimizer model with specs
+  regularizer: 'sam'
+  optzee_wd: 0.0
+  weight_decay: 0.0            # Weight decay of base_optimizer
+  momentum: 0.0                 # Momentum of base_optimizer
+  if_avreg: True                               # turn on regularization on Optimizer
+  if_pretrained: False   # was True (item 9)
+  pretrained_model_name: 'no_name'
+  # ---- Eq. 7 / Consolidated Algorithm 1 (Change.MD items 70, 78) ----
+  reg_mode: 'penalty'     # 'penalty' = Alg. 1 objective; 'ascent' = legacy two-pass SAM
+  lambda_reg: 0.1         # weight of R_SAM (Phase-1 sweep re-picks this)
+  xi: 1.0e-12             # Alg. 1 line 16 stabiliser
+  if_smooth: True         # smoothing term LIVE (crash fixed, item 22)

@@ -1,0 +1,30 @@
+#!/bin/bash
+#==========================
+# PBS Configuration  (Agastya, PBS Pro)
+#==========================
+#PBS -N v3lane0
+#PBS -q gpu-ext
+#PBS -l select=1:ncpus=40:mem=120gb
+#PBS -l walltime=96:00:00
+#PBS -o logs/lane0.out
+#PBS -e logs/lane0.err
+#PBS -V
+
+cd "$PBS_O_WORKDIR"
+mkdir -p logs
+
+module purge
+module load compilers/cuda/11.1
+export PYTHONUNBUFFERED=1
+export OMP_NUM_THREADS=40
+PY="$HOME/.conda/envs/learn_reg/bin/python"
+
+echo "Job lane0 started $(date) on $(hostname)"
+nvidia-smi || echo "WARNING : nvidia-smi not found"
+
+cd experiments/convnet4_sweep_v3_4datasets
+"$PY" run_sweep.py node --lane 0 --lanes 2 --procs 2 --threads 20 --max-hours 95.5 --require-gpu --preset full --datasets svhn cifar10 mnist fmnist --regs l1 l2 sam gsam gam --final-seeds 1 2 --wait-hours 12
+rc=$?
+echo "Finished $(date)  rc=$rc"
+echo "NOTE: if the log ends with WALLTIME_EXIT, qsub this SAME script again (or use the chain)."
+exit $rc

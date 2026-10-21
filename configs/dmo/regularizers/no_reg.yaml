@@ -1,0 +1,11 @@
+train_arguments:
+  base_optimizer: 'adam'         # Base optimizer type
+  lr: 0.001   # EQUALIZED meta-lr (was 0.01). gam/gsam meta-train at 0.001; a 10x lr mismatch between arms confounds every LO-vs-LO comparison. Checkpoints trained at 0.01 must be RE-TRAINED for a matched-budget comparison.
+  weight_decay: 0.0              # Weight decay of base_optimizer
+  momentum: 0.0                  # Momentum of base_optimizer
+  model_name: 'NOREG_LO_dev'   # legacy DMO_adam_280424 is read-only (item 8)  # name of the optimizer model with specs
+  regularizer: 'no_reg'          # name of the regularizer
+  optzee_wd: 0.0                 # L2 weight decay on optimizee (off for no_reg)
+  if_avreg: False                # turn off regularization on Optimizer
+  if_pretrained: False   # was True -> fine-tuned AND overwrote the 2024 checkpoint (item 8)           # not finetuning from a pretrained LO
+  pretrained_model_name: 'no_name'

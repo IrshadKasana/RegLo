@@ -1,0 +1,5 @@
+train_arguments:
+  smooth_eps: 0.01    # was 1.0 — huge for a gradient-space l_inf ball; Alg-1 default (item 15)                              # radius of the neighbourhood
+  smooth_lamb: 1.0                             # regularization coeff
+  if_smooth: False                              # if want smoothening or not
+  smooth_num_pga_steps: 10                     # number of projected gradient descent

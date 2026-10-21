@@ -1,0 +1,11 @@
+train_arguments:
+  # PRODUCTION evaluation — #COMMENTED values from optimizee_eval.yaml
+  optimizee_epochs: 1000       # from "optimizee_epochs: 60 #1000"
+  n_training: 5                # from "n_training: 2 #5"  (mean +/- std)
+  patience: 100                # from "patience: 20 #100"
+  hyper_eps: True              # from "hyper_eps: False #True" -> figs 06/07/06b/07b
+  calc_hessian: False #True           # fig 08 Hessian spectrum
+  eval_every: 1                # per-cell eval_overrides raise this for resnet18
+  batch_size: 512
+  allow_cpu: False
+  resume: True
