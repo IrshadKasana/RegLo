@@ -1,22 +1,5 @@
 # Learning Regularizers: Experiments and Reproducibility Guide
 
-This repository contains the codebase used for the work:
-
-**Learning Regularizers: Learning Optimizers that can Regularize**  
-Suraj Kumar Sahoo, Narayanan C. Krishnan  
-arXiv: `2510.08968`
-
-The main question in this work is:
-
-> Can a learned optimizer internalize the behavior of explicit regularizers such as SAM, GAM, and GSAM, and then transfer those regularization effects to new optimizee tasks?
-
-From the paper abstract and the current codebase, the main experimental story is:
-
-- train learned optimizers with and without explicit regularization during meta-training,
-- evaluate them on downstream optimizee tasks,
-- compare them against standard optimizers such as SGD/Adam with and without explicit regularizers,
-- study generalization across datasets and optimizee architectures,
-- inspect the sharpness behavior of the converged solutions using PGD-based neighborhood analysis.
 
 ## What Is In This Repository
 
