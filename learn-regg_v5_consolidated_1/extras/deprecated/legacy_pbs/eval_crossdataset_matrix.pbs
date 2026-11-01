@@ -1,0 +1,42 @@
+#!/bin/bash
+#PBS -N ev_xdataset
+#PBS -q gpu-ext
+#PBS -l nodes=1:ppn=40
+#PBS -l walltime=24:00:00
+#PBS -l mem=60gb
+#PBS -o eval_crossdataset.out
+#PBS -e eval_crossdataset.err
+#PBS -V
+
+cd $PBS_O_WORKDIR
+module load compilers/cuda/11.1
+~/.conda/envs/learn_reg/bin/python -c "import torch; assert torch.cuda.is_available(), 'CUDA not visible - env/module mismatch (Change.MD item 25)'" || exit 1
+
+echo "==== Cross-dataset generalization matrix started at $(date) on $(hostname) ===="
+nvidia-smi || echo "no GPU visible"
+
+PY=~/.conda/envs/learn_reg/bin/python
+
+# One row of the cross-dataset matrix: an LO meta-trained on LO_DS,
+# meta-tested on every dataset. Repeat this job with different LO/LO_DS
+# pairs (e.g. an LO you meta-trained on cifar10 via
+#   train.py --regularizer sam --set dataset=cifar10 model_name=... )
+# to fill the full matrix; generate_paper_plots.py renders the heatmap.
+LO=AdSAM_sgd_LO_140424
+LO_DS=mnist
+MODEL=big_conv
+
+for DS in mnist fmnist cifar10 cifar100; do
+    echo "---- ${LO} (meta-trained on ${LO_DS}) -> meta-test on ${DS} ----"
+    $PY experiments/dmo/evaluate_optimizee.py \
+        --saved_model $LO \
+        --dataset $DS \
+        --optimizee_model $MODEL \
+        --lo_train_dataset $LO_DS \
+        --eval_tag xds_${LO_DS} \
+        --set n_training=5 optimizee_epochs=1000
+done
+
+echo "==== Job ended at $(date) ===="
+# --- production settings (uncomment at deploy; Change.MD item 79) ---
+#    --set n_training=10 optimizee_epochs=1000 patience=100 calc_hessian=True hyper_eps=True allow_cpu=False

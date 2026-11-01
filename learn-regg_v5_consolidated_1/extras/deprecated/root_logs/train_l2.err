@@ -1,0 +1,2 @@
+/var/spool/pbs/mom_priv/jobs/121884.agastya1.SC: line 16: nvidia-smi: command not found
+=>> PBS: job killed: walltime 82917 exceeded limit 82800

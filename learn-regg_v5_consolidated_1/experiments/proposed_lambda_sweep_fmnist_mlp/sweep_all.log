@@ -1,0 +1,350 @@
+/home/hp/miniconda3/envs/new_env/lib/python3.10/site-packages/torch/cuda/__init__.py:182: UserWarning: CUDA initialization: Unexpected error from cudaGetDeviceCount(). Did you run some cuda functions before calling NumCudaDevices() that might have already set an error? Error 804: forward compatibility was attempted on non supported HW (Triggered internally at /pytorch/c10/cuda/CUDAFunctions.cpp:119.)
+  return torch._C._cuda_getDeviceCount() > 0
+[orchestrator] 0 done, 100 to run, 14 workers
+[orchestrator] ok   ref_adamw (108s)
+[orchestrator] ok   ls0_lr0_seed0 (1484s)
+[orchestrator] ok   ls0.001_lr0_seed0 (2087s)
+[orchestrator] ok   ls0.004_lr0_seed0 (2112s)
+[orchestrator] ok   ls0.07_lr0_seed0 (2117s)
+[orchestrator] ok   ls0.05_lr0_seed0 (2132s)
+[orchestrator] ok   ls0.02_lr0_seed0 (2151s)
+[orchestrator] ok   ls0.04_lr0_seed0 (2201s)
+[orchestrator] ok   ls0.1_lr0_seed0 (2222s)
+[orchestrator] ok   ls0.006_lr0_seed0 (2237s)
+[orchestrator] ok   ls0.2_lr0_seed0 (2131s)
+[orchestrator] ok   ls0.007_lr0_seed0 (2244s)
+[orchestrator] ok   ls0.03_lr0_seed0 (2255s)
+[orchestrator] ok   ls0.002_lr0_seed0 (2276s)
+[orchestrator] ok   ls0.01_lr0_seed0 (2309s)
+[orchestrator] ok   ls0.3_lr0_seed0 (2194s)
+[orchestrator] ok   ls0.4_lr0_seed0 (2137s)
+[orchestrator] ok   ls0_lr0.001_seed0 (2312s)
+[orchestrator] ok   ls0.5_lr0_seed0 (2326s)
+[orchestrator] ok   ls0_lr0.007_seed0 (2232s)
+[orchestrator] ok   ls0_lr0.002_seed0 (2327s)
+[orchestrator] ok   ls0_lr0.004_seed0 (2354s)
+[orchestrator] ok   ls0_lr0.01_seed0 (2336s)
+[orchestrator] ok   ls0_lr0.006_seed0 (2435s)
+[orchestrator] ok   ls0_lr0.05_seed0 (2372s)
+[orchestrator] ok   ls0_lr0.07_seed0 (2348s)
+[orchestrator] ok   ls0_lr0.03_seed0 (2419s)
+[orchestrator] ok   ls0_lr0.02_seed0 (2434s)
+[orchestrator] ok   ls0_lr0.04_seed0 (2454s)
+[orchestrator] ok   ls0_lr0_seed1 (1491s)
+[orchestrator] ok   ls0_lr0.1_seed0 (2426s)
+[orchestrator] ok   ls0_lr0.2_seed0 (2268s)
+[orchestrator] ok   ls0.001_lr0_seed1 (2165s)
+[orchestrator] ok   ls0.002_lr0_seed1 (2147s)
+[orchestrator] ok   ls0.007_lr0_seed1 (2114s)
+[orchestrator] ok   ls0_lr0.3_seed0 (2342s)
+[orchestrator] ok   ls0_lr0.4_seed0 (2349s)
+[orchestrator] ok   ls0_lr0.5_seed0 (2376s)
+[orchestrator] ok   ls0.01_lr0_seed1 (2173s)
+[orchestrator] ok   ls0.004_lr0_seed1 (2220s)
+[orchestrator] ok   ls0.006_lr0_seed1 (2259s)
+[orchestrator] ok   ls0.03_lr0_seed1 (2238s)
+[orchestrator] ok   ls0.02_lr0_seed1 (2278s)
+[orchestrator] ok   ls0.04_lr0_seed1 (2282s)
+[orchestrator] ok   ls0.05_lr0_seed1 (2201s)
+[orchestrator] ok   ls0.07_lr0_seed1 (2236s)
+[orchestrator] ok   ls0.1_lr0_seed1 (2165s)
+[orchestrator] ok   ls0.5_lr0_seed1 (2082s)
+[orchestrator] ok   ls0.2_lr0_seed1 (2218s)
+[orchestrator] ok   ls0.3_lr0_seed1 (2178s)
+[orchestrator] ok   ls0.4_lr0_seed1 (2310s)
+[orchestrator] ok   ls0_lr0.001_seed1 (2309s)
+[orchestrator] ok   ls0_lr0.004_seed1 (2292s)
+[orchestrator] ok   ls0_lr0.01_seed1 (2322s)
+[orchestrator] ok   ls0_lr0.002_seed1 (2458s)
+[orchestrator] ok   ls0_lr0.006_seed1 (2401s)
+[orchestrator] ok   ls0_lr0.007_seed1 (2393s)
+[orchestrator] ok   ls0_lr0.02_seed1 (2367s)
+[orchestrator] ok   ls0_lr0.03_seed1 (2388s)
+[orchestrator] ok   ls0_lr0_seed2 (1485s)
+[orchestrator] ok   ls0_lr0.04_seed1 (2367s)
+[orchestrator] ok   ls0_lr0.05_seed1 (2343s)
+[orchestrator] ok   ls0_lr0.07_seed1 (2344s)
+[orchestrator] ok   ls0_lr0.1_seed1 (2339s)
+[orchestrator] ok   ls0_lr0.2_seed1 (2412s)
+[orchestrator] ok   ls0_lr0.3_seed1 (2294s)
+[orchestrator] ok   ls0.002_lr0_seed2 (2099s)
+[orchestrator] ok   ls0.001_lr0_seed2 (2126s)
+[orchestrator] ok   ls0.004_lr0_seed2 (2129s)
+[orchestrator] ok   ls0_lr0.4_seed1 (2376s)
+[orchestrator] ok   ls0_lr0.5_seed1 (2479s)
+[orchestrator] ok   ls0.006_lr0_seed2 (2194s)
+[orchestrator] ok   ls0.007_lr0_seed2 (2117s)
+[orchestrator] ok   ls0.01_lr0_seed2 (2233s)
+[orchestrator] ok   ls0.02_lr0_seed2 (2137s)
+[orchestrator] ok   ls0.04_lr0_seed2 (2239s)
+[orchestrator] ok   ls0.03_lr0_seed2 (2294s)
+[orchestrator] ok   ls0.05_lr0_seed2 (2212s)
+[orchestrator] ok   ls0.3_lr0_seed2 (2137s)
+[orchestrator] ok   ls0.4_lr0_seed2 (2099s)
+[orchestrator] ok   ls0.2_lr0_seed2 (2185s)
+[orchestrator] ok   ls0.07_lr0_seed2 (2250s)
+[orchestrator] ok   ls0.5_lr0_seed2 (2196s)
+[orchestrator] ok   ls0.1_lr0_seed2 (2358s)
+[orchestrator] ok   ls0_lr0.001_seed2 (2161s)
+[orchestrator] ok   ls0_lr0.004_seed2 (2248s)
+[orchestrator] ok   ls0_lr0.002_seed2 (2295s)
+[orchestrator] ok   ls0_lr0.006_seed2 (2390s)
+[orchestrator] ok   ls0_lr0.007_seed2 (2313s)
+[orchestrator] ok   ls0_lr0.01_seed2 (2172s)
+[orchestrator] ok   ls0_lr0.1_seed2 (2058s)
+[orchestrator] ok   ls0_lr0.02_seed2 (2289s)
+[orchestrator] ok   ls0_lr0.03_seed2 (2280s)
+[orchestrator] ok   ls0_lr0.04_seed2 (2249s)
+[orchestrator] ok   ls0_lr0.05_seed2 (2260s)
+[orchestrator] ok   ls0_lr0.07_seed2 (2255s)
+[orchestrator] ok   ls0_lr0.2_seed2 (2147s)
+[orchestrator] ok   ls0_lr0.3_seed2 (2161s)
+[orchestrator] ok   ls0_lr0.4_seed2 (2113s)
+[orchestrator] ok   ls0_lr0.5_seed2 (1166s)
+# Proposed method on FMNIST + MLP: λ_smooth × λ_reg sweep
+
+Meta-loss = `L_task + λ_smooth·L_smooth + λ_reg·L_SAM` (repo's consolidated Alg. 1, penalty mode, ρ=0.005, ε_smooth=0.01); 0 switches a term off, so (0, 0) is the plain 'optimizee + optimizer' reference.
+
+Grid for both λ's: 0, 0.001, 0.002, 0.004, 0.006, 0.007, 0.01, 0.02, 0.03, 0.04, 0.05, 0.07, 0.1, 0.2, 0.3, 0.4, 0.5. Each cell: LO meta-trained on meta-seeds [0, 1, 2] (3 optimizee inits each, averaged), then a fresh MLP is trained 1000 steps with the frozen LO. **Validation accuracy** (3 000 held-out images) selects; `±` = SE across meta-seeds. `Δ` = paired difference to the (0, 0) reference, by meta-seed.
+
+## Axis sweep — λ_smooth (λ_reg = 0)
+
+| λ | val acc % | ± SE | Δ vs (0,0) pp | val NLL | test acc % |
+|---|---|---|---|---|---|
+| 0 | 84.80 | 0.03 | ref | 0.4193 | 84.48 |
+| 0.001 | 84.68 | 0.17 | -0.13 ± 0.18 (1/3) | 0.4247 | 84.24 |
+| 0.002 | 84.87 | 0.11 | +0.07 ± 0.11 (2/3) | 0.4162 | 84.47 |
+| 0.004 | 84.90 | 0.31 | +0.09 ± 0.34 (1/3) | 0.4188 | 84.37 |
+| 0.006 | 84.80 | 0.15 | -0.00 ± 0.17 (1/3) | 0.4250 | 84.17 |
+| 0.007 | 84.69 | 0.30 | -0.12 ± 0.27 (1/3) | 0.4171 | 84.38 |
+| 0.01 | 84.99 | 0.17 | +0.19 ± 0.15 (2/3) | 0.4173 | 84.29 |
+| 0.02 | 84.64 | 0.23 | -0.16 ± 0.27 (2/3) | 0.4248 | 84.22 |
+| 0.03 | 84.64 | 0.37 | -0.16 ± 0.40 (2/3) | 0.4342 | 84.13 |
+| 0.04 | 84.71 | 0.37 | -0.09 ± 0.36 (1/3) | 0.4223 | 84.10 |
+| 0.05 | 84.71 | 0.22 | -0.09 ± 0.25 (1/3) | 0.4145 | 84.36 |
+| 0.07 | 84.31 | 0.63 | -0.49 ± 0.66 (1/3) | 0.4677 | 83.49 |
+| 0.1 | 84.37 | 0.19 | -0.43 ± 0.22 (0/3) | 0.4237 | 84.22 |
+| 0.2 | 83.90 | 0.77 | -0.90 ± 0.80 (1/3) | 0.4486 | 83.35 |
+| **0.3** | 85.03 | 0.27 | +0.23 ± 0.27 (2/3) | 0.4121 | 84.44 |
+| 0.4 | 84.19 | 0.71 | -0.61 ± 0.75 (2/3) | 0.4324 | 83.79 |
+| 0.5 | 84.28 | 0.12 | -0.53 ± 0.11 (0/3) | 0.4390 | 83.77 |
+
+- λ matters? one-way F(16, 32) = 0.81, **p = 0.668** (seed-blocked; residual SD 0.59 pp)
+- quadratic fit over the non-zero λ's: optimum λ* = 0.000954 (90 % interval 5.91e-05 – 0.0172), P(interior max) = 0.58, curvature p = 0.569
+- **best non-zero λ on this axis: 0.3** (raw arg-max); raw arg-max over all levels: 0.3
+
+## Axis sweep — λ_reg (λ_smooth = 0)
+
+| λ | val acc % | ± SE | Δ vs (0,0) pp | val NLL | test acc % |
+|---|---|---|---|---|---|
+| 0 | 84.80 | 0.03 | ref | 0.4193 | 84.48 |
+| 0.001 | 84.41 | 0.29 | -0.40 ± 0.26 (0/3) | 0.4382 | 84.05 |
+| 0.002 | 84.81 | 0.07 | +0.00 ± 0.10 (1/3) | 0.4172 | 84.27 |
+| 0.004 | 84.93 | 0.21 | +0.13 ± 0.23 (2/3) | 0.4153 | 84.50 |
+| 0.006 | 84.76 | 0.15 | -0.04 ± 0.15 (1/3) | 0.4237 | 84.15 |
+| **0.007** | 85.16 | 0.03 | +0.36 ± 0.01 (3/3) | 0.4140 | 84.55 |
+| 0.01 | 84.84 | 0.34 | +0.04 ± 0.37 (2/3) | 0.4211 | 84.39 |
+| 0.02 | 84.20 | 0.61 | -0.60 ± 0.61 (1/3) | 0.4406 | 83.74 |
+| 0.03 | 84.51 | 0.09 | -0.29 ± 0.11 (0/3) | 0.4416 | 84.20 |
+| 0.04 | 84.76 | 0.11 | -0.04 ± 0.08 (1/3) | 0.4207 | 84.24 |
+| 0.05 | 84.55 | 0.12 | -0.26 ± 0.15 (1/3) | 0.4331 | 84.13 |
+| 0.07 | 84.80 | 0.25 | +0.00 ± 0.24 (2/3) | 0.4162 | 84.49 |
+| 0.1 | 84.52 | 0.28 | -0.28 ± 0.25 (1/3) | 0.4320 | 84.21 |
+| 0.2 | 85.11 | 0.21 | +0.31 ± 0.18 (2/3) | 0.4139 | 84.35 |
+| 0.3 | 84.99 | 0.07 | +0.19 ± 0.07 (3/3) | 0.4175 | 84.22 |
+| 0.4 | 85.05 | 0.16 | +0.24 ± 0.14 (2/3) | 0.4115 | 84.51 |
+| 0.5 | 84.95 | 0.16 | +0.15 ± 0.19 (2/3) | 0.4210 | 84.41 |
+
+- λ matters? one-way F(16, 32) = 1.19, **p = 0.327** (seed-blocked; residual SD 0.42 pp)
+- quadratic fit over the non-zero λ's: optimum λ* = 14.8 (90 % interval 5.91e-05 – 14.8), P(interior max) = 0.12, curvature p = 0.327
+- **best non-zero λ on this axis: 0.007** (raw arg-max); raw arg-max over all levels: 0.007
+
+## Best λ's (selected on validation accuracy over every cell run)
+
+- **λ_smooth = 0, λ_reg = 0.007** — val 85.16 ± 0.03 % (n=3 meta-seeds), test 84.55 %
+- reference (0, 0): val 84.80 ± 0.03 %
+- paired gain of the winner over the reference: +0.36 ± 0.01 pp (3/3 meta-seeds better)
+- 1 cells within 1 SE of the winner: (0, 0.007)
+- cells run: 33 of 289 possible; meta-seeds per cell: [3]
+
+## AdamW reference on FMNIST + MLP (not part of the sweep)
+
+lr=0.01, wd=0.01: val 84.75 ± 0.24 %, test 84.33 ± 0.10 % (6 optimizee inits)
+
+[orchestrator] axis winners -> centre of stage 'local': (0.3, 0.007)
+[orchestrator] 0 done, 75 to run, 14 workers
+[orchestrator] ok   ls0.3_lr0.006_seed0 (2863s)
+[orchestrator] ok   ls0.2_lr0.006_seed0 (2925s)
+[orchestrator] ok   ls0.2_lr0.004_seed0 (2934s)
+[orchestrator] ok   ls0.1_lr0.004_seed0 (2939s)
+[orchestrator] ok   ls0.2_lr0.02_seed0 (3017s)
+[orchestrator] ok   ls0.1_lr0.02_seed0 (3020s)
+[orchestrator] ok   ls0.1_lr0.006_seed0 (3040s)
+[orchestrator] ok   ls0.3_lr0.01_seed0 (3041s)
+[orchestrator] ok   ls0.1_lr0.007_seed0 (3047s)
+[orchestrator] ok   ls0.2_lr0.01_seed0 (3049s)
+[orchestrator] ok   ls0.2_lr0.007_seed0 (3096s)
+[orchestrator] ok   ls0.3_lr0.004_seed0 (3100s)
+[orchestrator] ok   ls0.3_lr0.007_seed0 (3130s)
+[orchestrator] ok   ls0.1_lr0.01_seed0 (3133s)
+[orchestrator] ok   ls0.4_lr0.004_seed0 (2872s)
+[orchestrator] ok   ls0.3_lr0.02_seed0 (3059s)
+[orchestrator] ok   ls0.4_lr0.007_seed0 (3004s)
+[orchestrator] ok   ls0.4_lr0.006_seed0 (3016s)
+[orchestrator] ok   ls0.5_lr0.02_seed0 (2927s)
+[orchestrator] ok   ls0.4_lr0.01_seed0 (3021s)
+[orchestrator] ok   ls0.5_lr0.007_seed0 (3007s)
+[orchestrator] ok   ls0.1_lr0.004_seed1 (2959s)
+[orchestrator] ok   ls0.5_lr0.006_seed0 (3049s)
+[orchestrator] ok   ls0.5_lr0.004_seed0 (3060s)
+[orchestrator] ok   ls0.1_lr0.006_seed1 (3013s)
+[orchestrator] ok   ls0.1_lr0.007_seed1 (3018s)
+[orchestrator] ok   ls0.4_lr0.02_seed0 (3153s)
+[orchestrator] ok   ls0.5_lr0.01_seed0 (3127s)
+[orchestrator] ok   ls0.1_lr0.01_seed1 (3034s)
+[orchestrator] ok   ls0.2_lr0.006_seed1 (2893s)
+[orchestrator] ok   ls0.1_lr0.02_seed1 (2997s)
+[orchestrator] ok   ls0.2_lr0.007_seed1 (2917s)
+[orchestrator] ok   ls0.2_lr0.004_seed1 (3046s)
+[orchestrator] ok   ls0.2_lr0.02_seed1 (2954s)
+[orchestrator] ok   ls0.3_lr0.004_seed1 (2999s)
+[orchestrator] ok   ls0.4_lr0.006_seed1 (2927s)
+[orchestrator] ok   ls0.2_lr0.01_seed1 (3066s)
+[orchestrator] ok   ls0.3_lr0.007_seed1 (3010s)
+[orchestrator] ok   ls0.4_lr0.004_seed1 (2976s)
+[orchestrator] ok   ls0.3_lr0.006_seed1 (3084s)
+[orchestrator] ok   ls0.3_lr0.02_seed1 (3097s)
+[orchestrator] ok   ls0.3_lr0.01_seed1 (3236s)
+[orchestrator] ok   ls0.4_lr0.01_seed1 (2975s)
+[orchestrator] ok   ls0.5_lr0.004_seed1 (2925s)
+[orchestrator] ok   ls0.4_lr0.007_seed1 (3062s)
+[orchestrator] ok   ls0.4_lr0.02_seed1 (3020s)
+[orchestrator] ok   ls0.5_lr0.02_seed1 (2873s)
+[orchestrator] ok   ls0.5_lr0.01_seed1 (2954s)
+[orchestrator] ok   ls0.5_lr0.007_seed1 (3009s)
+[orchestrator] ok   ls0.5_lr0.006_seed1 (3042s)
+[orchestrator] ok   ls0.1_lr0.007_seed2 (2966s)
+[orchestrator] ok   ls0.1_lr0.02_seed2 (2947s)
+[orchestrator] ok   ls0.1_lr0.006_seed2 (3098s)
+[orchestrator] ok   ls0.1_lr0.004_seed2 (3138s)
+[orchestrator] ok   ls0.1_lr0.01_seed2 (3091s)
+[orchestrator] ok   ls0.2_lr0.004_seed2 (3112s)
+[orchestrator] ok   ls0.2_lr0.006_seed2 (2897s)
+[orchestrator] ok   ls0.2_lr0.01_seed2 (2994s)
+[orchestrator] ok   ls0.2_lr0.007_seed2 (3030s)
+[orchestrator] ok   ls0.3_lr0.006_seed2 (2893s)
+[orchestrator] ok   ls0.3_lr0.007_seed2 (2974s)
+[orchestrator] ok   ls0.3_lr0.02_seed2 (2952s)
+[orchestrator] ok   ls0.3_lr0.004_seed2 (3124s)
+[orchestrator] ok   ls0.2_lr0.02_seed2 (3163s)
+[orchestrator] ok   ls0.3_lr0.01_seed2 (3125s)
+[orchestrator] ok   ls0.4_lr0.01_seed2 (2892s)
+[orchestrator] ok   ls0.4_lr0.006_seed2 (3026s)
+[orchestrator] ok   ls0.4_lr0.007_seed2 (3027s)
+[orchestrator] ok   ls0.4_lr0.004_seed2 (3113s)
+[orchestrator] ok   ls0.4_lr0.02_seed2 (2984s)
+[orchestrator] ok   ls0.5_lr0.004_seed2 (1402s)
+[orchestrator] ok   ls0.5_lr0.006_seed2 (1353s)
+[orchestrator] ok   ls0.5_lr0.01_seed2 (1363s)
+[orchestrator] ok   ls0.5_lr0.02_seed2 (1339s)
+[orchestrator] ok   ls0.5_lr0.007_seed2 (1461s)
+# Proposed method on FMNIST + MLP: λ_smooth × λ_reg sweep
+
+Meta-loss = `L_task + λ_smooth·L_smooth + λ_reg·L_SAM` (repo's consolidated Alg. 1, penalty mode, ρ=0.005, ε_smooth=0.01); 0 switches a term off, so (0, 0) is the plain 'optimizee + optimizer' reference.
+
+Grid for both λ's: 0, 0.001, 0.002, 0.004, 0.006, 0.007, 0.01, 0.02, 0.03, 0.04, 0.05, 0.07, 0.1, 0.2, 0.3, 0.4, 0.5. Each cell: LO meta-trained on meta-seeds [0, 1, 2] (3 optimizee inits each, averaged), then a fresh MLP is trained 1000 steps with the frozen LO. **Validation accuracy** (3 000 held-out images) selects; `±` = SE across meta-seeds. `Δ` = paired difference to the (0, 0) reference, by meta-seed.
+
+## Axis sweep — λ_smooth (λ_reg = 0)
+
+| λ | val acc % | ± SE | Δ vs (0,0) pp | val NLL | test acc % |
+|---|---|---|---|---|---|
+| 0 | 84.80 | 0.03 | ref | 0.4193 | 84.48 |
+| 0.001 | 84.68 | 0.17 | -0.13 ± 0.18 (1/3) | 0.4247 | 84.24 |
+| 0.002 | 84.87 | 0.11 | +0.07 ± 0.11 (2/3) | 0.4162 | 84.47 |
+| 0.004 | 84.90 | 0.31 | +0.09 ± 0.34 (1/3) | 0.4188 | 84.37 |
+| 0.006 | 84.80 | 0.15 | -0.00 ± 0.17 (1/3) | 0.4250 | 84.17 |
+| 0.007 | 84.69 | 0.30 | -0.12 ± 0.27 (1/3) | 0.4171 | 84.38 |
+| 0.01 | 84.99 | 0.17 | +0.19 ± 0.15 (2/3) | 0.4173 | 84.29 |
+| 0.02 | 84.64 | 0.23 | -0.16 ± 0.27 (2/3) | 0.4248 | 84.22 |
+| 0.03 | 84.64 | 0.37 | -0.16 ± 0.40 (2/3) | 0.4342 | 84.13 |
+| 0.04 | 84.71 | 0.37 | -0.09 ± 0.36 (1/3) | 0.4223 | 84.10 |
+| 0.05 | 84.71 | 0.22 | -0.09 ± 0.25 (1/3) | 0.4145 | 84.36 |
+| 0.07 | 84.31 | 0.63 | -0.49 ± 0.66 (1/3) | 0.4677 | 83.49 |
+| 0.1 | 84.37 | 0.19 | -0.43 ± 0.22 (0/3) | 0.4237 | 84.22 |
+| 0.2 | 83.90 | 0.77 | -0.90 ± 0.80 (1/3) | 0.4486 | 83.35 |
+| **0.3** | 85.03 | 0.27 | +0.23 ± 0.27 (2/3) | 0.4121 | 84.44 |
+| 0.4 | 84.19 | 0.71 | -0.61 ± 0.75 (2/3) | 0.4324 | 83.79 |
+| 0.5 | 84.28 | 0.12 | -0.53 ± 0.11 (0/3) | 0.4390 | 83.77 |
+
+- λ matters? one-way F(16, 32) = 0.81, **p = 0.668** (seed-blocked; residual SD 0.59 pp)
+- quadratic fit over the non-zero λ's: optimum λ* = 0.000954 (90 % interval 5.91e-05 – 0.0172), P(interior max) = 0.58, curvature p = 0.569
+- **best non-zero λ on this axis: 0.3** (raw arg-max); raw arg-max over all levels: 0.3
+
+## Axis sweep — λ_reg (λ_smooth = 0)
+
+| λ | val acc % | ± SE | Δ vs (0,0) pp | val NLL | test acc % |
+|---|---|---|---|---|---|
+| 0 | 84.80 | 0.03 | ref | 0.4193 | 84.48 |
+| 0.001 | 84.41 | 0.29 | -0.40 ± 0.26 (0/3) | 0.4382 | 84.05 |
+| 0.002 | 84.81 | 0.07 | +0.00 ± 0.10 (1/3) | 0.4172 | 84.27 |
+| 0.004 | 84.93 | 0.21 | +0.13 ± 0.23 (2/3) | 0.4153 | 84.50 |
+| 0.006 | 84.76 | 0.15 | -0.04 ± 0.15 (1/3) | 0.4237 | 84.15 |
+| **0.007** | 85.16 | 0.03 | +0.36 ± 0.01 (3/3) | 0.4140 | 84.55 |
+| 0.01 | 84.84 | 0.34 | +0.04 ± 0.37 (2/3) | 0.4211 | 84.39 |
+| 0.02 | 84.20 | 0.61 | -0.60 ± 0.61 (1/3) | 0.4406 | 83.74 |
+| 0.03 | 84.51 | 0.09 | -0.29 ± 0.11 (0/3) | 0.4416 | 84.20 |
+| 0.04 | 84.76 | 0.11 | -0.04 ± 0.08 (1/3) | 0.4207 | 84.24 |
+| 0.05 | 84.55 | 0.12 | -0.26 ± 0.15 (1/3) | 0.4331 | 84.13 |
+| 0.07 | 84.80 | 0.25 | +0.00 ± 0.24 (2/3) | 0.4162 | 84.49 |
+| 0.1 | 84.52 | 0.28 | -0.28 ± 0.25 (1/3) | 0.4320 | 84.21 |
+| 0.2 | 85.11 | 0.21 | +0.31 ± 0.18 (2/3) | 0.4139 | 84.35 |
+| 0.3 | 84.99 | 0.07 | +0.19 ± 0.07 (3/3) | 0.4175 | 84.22 |
+| 0.4 | 85.05 | 0.16 | +0.24 ± 0.14 (2/3) | 0.4115 | 84.51 |
+| 0.5 | 84.95 | 0.16 | +0.15 ± 0.19 (2/3) | 0.4210 | 84.41 |
+
+- λ matters? one-way F(16, 32) = 1.19, **p = 0.327** (seed-blocked; residual SD 0.42 pp)
+- quadratic fit over the non-zero λ's: optimum λ* = 14.8 (90 % interval 5.91e-05 – 14.8), P(interior max) = 0.12, curvature p = 0.327
+- **best non-zero λ on this axis: 0.007** (raw arg-max); raw arg-max over all levels: 0.007
+
+## 2-D neighbourhood (both terms on)
+
+| λ_smooth \ λ_reg | 0.004 | 0.006 | 0.007 | 0.01 | 0.02 |
+|---|---|---|---|---|---|
+| 0.1 | 84.76 ± 0.13 | **85.09 ± 0.27** | 84.71 ± 0.19 | 84.60 ± 0.28 | 84.69 ± 0.26 |
+| 0.2 | 84.77 ± 0.16 | 84.82 ± 0.23 | 84.42 ± 0.67 | 84.41 ± 0.39 | 84.44 ± 0.31 |
+| 0.3 | 84.58 ± 0.22 | 83.99 ± 0.59 | 84.94 ± 0.27 | 84.29 ± 0.75 | 83.94 ± 0.56 |
+| 0.4 | 84.23 ± 0.86 | 84.79 ± 0.34 | 84.34 ± 0.18 | 84.67 ± 0.07 | 84.36 ± 0.32 |
+| 0.5 | 83.40 ± 0.87 | 83.79 ± 1.06 | 84.50 ± 0.29 | 83.10 ± 0.82 | 83.89 ± 0.37 |
+
+Paired Δ vs (0, 0), pp:
+
+| λ_smooth \ λ_reg | 0.004 | 0.006 | 0.007 | 0.01 | 0.02 |
+|---|---|---|---|---|---|
+| 0.1 | -0.04 ± 0.12 (2/3) | +0.29 ± 0.26 (2/3) | -0.10 ± 0.21 (1/3) | -0.20 ± 0.28 (1/3) | -0.11 ± 0.26 (1/3) |
+| 0.2 | -0.04 ± 0.13 (2/3) | +0.01 ± 0.21 (2/3) | -0.38 ± 0.70 (2/3) | -0.39 ± 0.41 (1/3) | -0.36 ± 0.34 (1/3) |
+| 0.3 | -0.23 ± 0.25 (1/3) | -0.81 ± 0.62 (1/3) | +0.13 ± 0.30 (2/3) | -0.51 ± 0.72 (2/3) | -0.86 ± 0.53 (0/3) |
+| 0.4 | -0.58 ± 0.84 (2/3) | -0.01 ± 0.31 (2/3) | -0.46 ± 0.21 (0/3) | -0.13 ± 0.08 (1/3) | -0.44 ± 0.29 (1/3) |
+| 0.5 | -1.41 ± 0.85 (0/3) | -1.01 ± 1.10 (2/3) | -0.31 ± 0.32 (1/3) | -1.70 ± 0.80 (0/3) | -0.91 ± 0.39 (0/3) |
+
+Two-way ANOVA on this 5×5 block (meta-seeds [0, 1, 2]):
+
+| Effect | F | df | p |
+|---|---|---|---|
+| λ_smooth | 1.35 | (4, 48) | 0.265 |
+| λ_reg | 0.15 | (4, 48) | 0.964 |
+| interaction | 0.48 | (16, 48) | 0.945 |
+
+## Best λ's (selected on validation accuracy over every cell run)
+
+- **λ_smooth = 0, λ_reg = 0.007** — val 85.16 ± 0.03 % (n=3 meta-seeds), test 84.55 %
+- reference (0, 0): val 84.80 ± 0.03 %
+- paired gain of the winner over the reference: +0.36 ± 0.01 pp (3/3 meta-seeds better)
+- 1 cells within 1 SE of the winner: (0, 0.007)
+- best cell with **both** terms on: λ_smooth = 0.1, λ_reg = 0.006 — val 85.09 ± 0.27 %, Δ vs (0,0) +0.29 ± 0.26 pp (2/3)
+- cells run: 58 of 289 possible; meta-seeds per cell: [3]
+
+## AdamW reference on FMNIST + MLP (not part of the sweep)
+
+lr=0.01, wd=0.01: val 84.75 ± 0.24 %, test 84.33 ± 0.10 % (6 optimizee inits)
+
+[orchestrator] total 543.0 min

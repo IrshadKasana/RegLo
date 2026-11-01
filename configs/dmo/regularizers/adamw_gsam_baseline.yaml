@@ -1,0 +1,20 @@
+train_arguments:
+  # Model-1 benchmark: explicit AdamW+GSAM at meta-test — the matched
+  # three-way comparison ladder (AdamW+GSAM vs No-Reg LO vs GSAM LO).
+  # usage: evaluate_optimizee --if_normal_optim --regularizer adamw_gsam_baseline
+  #        --base_optimizer AdamW ...
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  weight_decay: 0.01
+  momentum: 0.0
+  optzee_wd: 0.0
+  adaptive: True
+  rho_min: 0.5
+  rho_max: 2.0
+  alpha: 0.4
+  rho: 0.05
+  model_name: 'AdamW_GSAM_baseline'
+  regularizer: 'gsam'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

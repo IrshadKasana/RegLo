@@ -1,0 +1,213 @@
+{
+ "kind": "l1",
+ "lam": 0.001,
+ "seed": 0,
+ "phase": "tune",
+ "eval_seeds": [
+  50000,
+  50001,
+  50002
+ ],
+ "evals": [
+  {
+   "train_loss": 0.13176422571252894,
+   "train_acc": 0.9647407407407408,
+   "val_loss": 0.20271435546875,
+   "val_acc": 0.9386666666666666,
+   "test_loss": 0.19013001708984376,
+   "test_acc": 0.9442,
+   "l1_norm": 1175.0443115234375,
+   "l2_sq": 1061.123046875,
+   "frac_small": 0.018101822584867477
+  },
+  {
+   "train_loss": 0.1472012419524016,
+   "train_acc": 0.9595555555555556,
+   "val_loss": 0.22991750081380208,
+   "val_acc": 0.937,
+   "test_loss": 0.2123654541015625,
+   "test_acc": 0.9364,
+   "l1_norm": 1138.8583984375,
+   "l2_sq": 933.3541259765625,
+   "frac_small": 0.012696417048573494
+  },
+  {
+   "train_loss": 0.16025722023292824,
+   "train_acc": 0.9564814814814815,
+   "val_loss": 0.22181520589192708,
+   "val_acc": 0.93,
+   "test_loss": 0.221616845703125,
+   "test_acc": 0.9381,
+   "l1_norm": 1138.29736328125,
+   "l2_sq": 940.354248046875,
+   "frac_small": 0.015650533139705658
+  }
+ ],
+ "mean": {
+  "train_loss": 0.1464075626326196,
+  "train_acc": 0.9602592592592593,
+  "val_loss": 0.21814902072482636,
+  "val_acc": 0.9352222222222223,
+  "test_loss": 0.20803743896484375,
+  "test_acc": 0.9395666666666668,
+  "l1_norm": 1150.7333577473958,
+  "l2_sq": 978.2771402994791,
+  "frac_small": 0.015482924257715544
+ },
+ "meta_train": {
+  "best_heldout": 0.1587522029876709,
+  "history": [
+   {
+    "stage": 100,
+    "block": 0,
+    "train_task_loss": 1.3206181335449219,
+    "mean_R": 744.070859375,
+    "heldout": 0.17231544852256775,
+    "saved": true,
+    "elapsed": 9.846051692962646
+   },
+   {
+    "stage": 100,
+    "block": 1,
+    "train_task_loss": 1.1757123565673828,
+    "mean_R": 665.35390625,
+    "heldout": 0.20539383590221405,
+    "saved": false,
+    "elapsed": 19.277045011520386
+   },
+   {
+    "stage": 100,
+    "block": 2,
+    "train_task_loss": 1.049779815673828,
+    "mean_R": 645.479765625,
+    "heldout": 0.1587522029876709,
+    "saved": true,
+    "elapsed": 27.794989585876465
+   },
+   {
+    "stage": 200,
+    "block": 0,
+    "train_task_loss": 0.6515613555908203,
+    "mean_R": 814.029140625,
+    "heldout": 0.20718078315258026,
+    "saved": false,
+    "elapsed": 43.991008043289185
+   },
+   {
+    "stage": 200,
+    "block": 1,
+    "train_task_loss": 0.5933202743530274,
+    "mean_R": 534.5075390625,
+    "heldout": 0.24457497894763947,
+    "saved": false,
+    "elapsed": 59.15711450576782
+   },
+   {
+    "stage": 200,
+    "block": 2,
+    "train_task_loss": 0.5743994522094726,
+    "mean_R": 589.893515625,
+    "heldout": 0.20535564422607422,
+    "saved": false,
+    "elapsed": 74.22487568855286
+   },
+   {
+    "stage": 500,
+    "block": 0,
+    "train_task_loss": 0.47079638671875,
+    "mean_R": 732.4694375,
+    "heldout": 0.2411046028137207,
+    "saved": false,
+    "elapsed": 106.51095056533813
+   },
+   {
+    "stage": 500,
+    "block": 1,
+    "train_task_loss": 0.4454108581542969,
+    "mean_R": 653.5475,
+    "heldout": 0.2125329077243805,
+    "saved": false,
+    "elapsed": 139.8520212173462
+   },
+   {
+    "stage": 500,
+    "block": 2,
+    "train_task_loss": 0.45736184692382814,
+    "mean_R": 692.1414375,
+    "heldout": 0.1986287385225296,
+    "saved": false,
+    "elapsed": 171.75921416282654
+   },
+   {
+    "stage": 1000,
+    "block": 0,
+    "train_task_loss": 0.36998007202148436,
+    "mean_R": 686.56925,
+    "heldout": 0.19016370177268982,
+    "saved": false,
+    "elapsed": 234.53672552108765
+   },
+   {
+    "stage": 1000,
+    "block": 1,
+    "train_task_loss": 0.35885101318359375,
+    "mean_R": 666.339375,
+    "heldout": 0.1832265704870224,
+    "saved": false,
+    "elapsed": 296.56362414360046
+   },
+   {
+    "stage": 1000,
+    "block": 2,
+    "train_task_loss": 0.3935879211425781,
+    "mean_R": 771.2983125,
+    "heldout": 0.18359169363975525,
+    "saved": false,
+    "elapsed": 358.96014189720154
+   }
+  ],
+  "meta_train_seconds": 358.9658465385437
+ },
+ "cfg": {
+  "hidden_size": 20,
+  "num_layers": 2,
+  "meta_lr": 0.001,
+  "meta_batch": 128,
+  "tbptt": 20,
+  "stages": [
+   100,
+   200,
+   500,
+   1000
+  ],
+  "blocks_per_stage": 3,
+  "train_period": 20,
+  "eval_epochs": 5,
+  "smooth_lamb": 1.0,
+  "smooth_eps": 0.01,
+  "smooth_pga": 10,
+  "eval_steps": 1000,
+  "eval_batch": 512,
+  "n_inits": 3,
+  "adamw_wd": 0.01,
+  "adamw_lrs": [
+   0.001,
+   0.003,
+   0.01,
+   0.03
+  ],
+  "lams_l1": [
+   1e-05,
+   0.0001,
+   0.001,
+   0.01
+  ],
+  "lams_l2": [
+   0.0001,
+   0.001,
+   0.01,
+   0.1
+  ]
+ },
+ "device": "cuda:0"
+}

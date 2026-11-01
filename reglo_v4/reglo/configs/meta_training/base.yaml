@@ -1,0 +1,50 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  Stage 1 — meta-training the LSTM optimizer (Algorithm 1)
+#
+#  Shared by m3_lstm.yaml and m4_lstm_reg.yaml. The two differ ONLY in name,
+#  allowed_regularizers and objective; tests/test_config.py enforces this, so no
+#  meta-learning-rate, unroll or budget difference can creep in between M3 and M4.
+#  ??? = set by the profile (configs/profiles/production.yaml · smoke.yaml).
+# ════════════════════════════════════════════════════════════════════════════
+defaults:                    # (the regularizer is chosen in m3_lstm.yaml / m4_lstm_reg.yaml)
+  optimizee: convnet4        # round A, the protocol: ConvNet-4 … — meta_tag=<round> picks the round's
+  dataset: svhn              # source instead (configs/rounds.yaml; B: MLP on FMNIST), on its meta half
+  optimizer: lstm
+
+name: ???
+resume: true                 # continue from phi_last.pt after a walltime kill
+rerun: false                 # true → start over even if summary.json says the run finished
+
+inner:                       # the optimizee trained inside each unroll (Algorithm 1, lines 5–15)
+  unroll_steps: 20           # T — truncated-BPTT window (Andrychowicz et al. 2016; Chen et al. 2020);
+                             # every trajectory length must be a multiple of it
+  batch_size: 128
+  first_order: true          # the LSTM's inputs are detached gradients: no second-order terms
+  checkpoint_lstm: true      # recompute LSTM activations in the backward pass: less memory over the
+                             # unroll (the LSTM graph dominates it), for a little extra compute
+
+outer:                       # updating φ (Algorithm 1, line 24)
+  lr: 3.0e-4                 # η_meta of the outer Adam (protocol)
+  grad_clip: 1.0             # clip ‖∇_φ‖ for stability
+  loss_weights: uniform      # w_t in L_meta = Σ_t w_t·L(θ_t):  uniform | linear | exponential
+
+schedule:
+  num_trajectories: ???      # optimizees sampled from scratch (Algorithm 1, lines 2–4)        [profile]
+  trajectory_steps: ???      # inner steps per optimizee when the curriculum is off               [profile]
+  curriculum:                # Chen et al. (2020), used by the paper: lengthen the trajectories
+    enabled: true            # each time meta-validation stops improving
+    trajectory_steps: ???    # the lengths, shortest first                                         [profile]
+    patience: ???            # validations without improvement before the next length              [profile]
+
+validation:                  # φ is selected by how well it trains fresh optimizees
+  every: ???                 # trajectories between validations                                     [profile]
+  optimizees: ???            # fresh optimizees per validation, scores averaged                     [profile]
+  steps: ???                 # inner steps each, with the frozen φ                                  [profile]
+  fraction: 0.1              # share of the meta-training half held out to score them
+
+objective:                   # which terms of L_meta,reg are on
+  smooth: false              # λ_smooth·L_smooth(φ)
+  regularizer: false         # λ_reg·L_reg(θ_T(φ))
+  reg_batch: fresh           # batch for L_reg at θ_T: fresh (unbiased) | last (the unroll's last batch)
+
+checkpoint_every: ???        # trajectories between resumable checkpoints                         [profile]

@@ -1,0 +1,140 @@
+{
+ "dataset": "cifar10",
+ "adamw_lr": 0.001,
+ "evals": [
+  {
+   "train_loss": 2.028249462890625,
+   "train_acc": 0.2794,
+   "val_loss": 2.030358337402344,
+   "val_acc": 0.281,
+   "test_loss": 2.031587890625,
+   "test_acc": 0.2823333333333333,
+   "id_auroc": 0.7545292410728552,
+   "ood": {
+    "svhn": {
+     "loss": 2.504342206620128,
+     "acc": 0.08807533487763118,
+     "auroc_msp": 0.5341695244569779
+    },
+    "mnist": {
+     "loss": 2.859966064453125,
+     "acc": 0.0685,
+     "auroc_msp": 0.1398920476190476
+    },
+    "fmnist": {
+     "loss": 2.6691732352120536,
+     "acc": 0.03585714285714286,
+     "auroc_msp": 0.22194916666666667
+    }
+   },
+   "l1_norm": 438.5308837890625,
+   "l2_sq": 89.09931945800781,
+   "diverged": false,
+   "seconds": 67.46018099784851,
+   "curve": [
+    {
+     "step": 0,
+     "train_loss": NaN,
+     "train_subset_loss": 2.3121891021728516,
+     "train_subset_acc": 0.0859375,
+     "val_loss": 2.3050946451822916,
+     "val_acc": 0.10075
+    },
+    {
+     "step": 20,
+     "train_loss": 2.270992660522461,
+     "train_subset_loss": 2.194016695022583,
+     "train_subset_acc": 0.22265625,
+     "val_loss": 2.1994818115234374,
+     "val_acc": 0.21433333333333332
+    },
+    {
+     "step": 40,
+     "train_loss": 2.0845648050308228,
+     "train_subset_loss": 2.0469818115234375,
+     "train_subset_acc": 0.2890625,
+     "val_loss": 2.030358337402344,
+     "val_acc": 0.281
+    }
+   ],
+   "init_seed": 50000
+  }
+ ],
+ "weights": "weights/cifar10/m1_cifar10_lr0.001.pt",
+ "prov": {
+  "start_utc": "2026-10-21T07:02:07",
+  "host": "agastya1",
+  "pbs_jobid": "",
+  "pid": 54563,
+  "torch": "1.9.0+cu111",
+  "gpu": "cpu",
+  "code_sha1": "4eaecdb4c75c",
+  "end_utc": "2026-10-21T07:03:34",
+  "wall_seconds": 87.23007249832153
+ },
+ "cfg": {
+  "width": 16,
+  "rho_sam": 0.001,
+  "rho_gam": 0.04,
+  "rho_gsam": 0.005,
+  "smooth_eps": 0.01,
+  "smooth_pga": 10,
+  "hidden_size": 20,
+  "num_layers": 2,
+  "meta_opt": "adam",
+  "meta_lr": 0.001,
+  "meta_batch": 64,
+  "tbptt": 10,
+  "stages": [
+   20,
+   40
+  ],
+  "blocks_per_stage": 1,
+  "train_period": 1,
+  "ckpt_epochs": 1,
+  "eval_steps": 40,
+  "eval_batch": 64,
+  "lo_inits": 1,
+  "adamw_lrs": [
+   0.001,
+   0.5
+  ],
+  "curve_train_subset": 256,
+  "m5_mode": "full",
+  "adamw_wd": 0.01,
+  "adamw_inits": 1,
+  "curve_every": 20,
+  "grid": [
+   0.01,
+   0.5
+  ],
+  "meta_lrs": [
+   0.001,
+   0.5
+  ],
+  "rho_grid": [
+   [
+    "gam",
+    [
+     0.04,
+     0.06
+    ]
+   ],
+   [
+    "gsam",
+    [
+     0.005,
+     0.06
+    ]
+   ],
+   [
+    "sam",
+    [
+     0.001,
+     0.06
+    ]
+   ]
+  ],
+  "radius": 1
+ }
+}

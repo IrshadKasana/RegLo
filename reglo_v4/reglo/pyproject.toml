@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reglo"
+version = "0.4.0"
+description = "Learned optimizers that internalise regularization: M1 AdamW, M2 AdamW + regularizer, M3 LSTM optimizer, M4 LSTM optimizer meta-trained with L_smooth + L_reg."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Mohd Irshad Kasana" }]
+dependencies = [
+  "torch>=2.1",
+  "torchvision>=0.16",
+  "omegaconf>=2.3,<2.5",
+  "pyyaml>=6.0",
+  "numpy>=1.22",
+  "scipy>=1.9",            # torchvision reads SVHN's .mat files with scipy.io; also Welch p-values
+]
+
+[project.optional-dependencies]
+analysis = ["pandas>=1.5", "matplotlib>=3.7", "fvcore>=0.1.5", "openpyxl>=3.1"]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"

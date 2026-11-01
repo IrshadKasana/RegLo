@@ -1,0 +1,24 @@
+train_arguments:
+  # ====================================================================
+  # PRODUCTION meta-training (Agastya paper runs).
+  #   train.py --profile production
+  # Values are the #COMMENTED (large) entries documented in
+  # configs/dmo/base/meta_train.yaml.
+  # ====================================================================
+  optimizee_steps: 1000        # from "optimizee_steps: 40 #1000"
+  truncated_bptt_step: 20      # 1000 % 20 == 0
+  max_epochs: 10000            # from "max_epochs: 4 #10000"
+  train_period: 20             # from "train_period: 2 #20"
+  n_period: 3
+  if_cl: True                  # from "if_cl: False #True"
+  curriculum_steps: [100, 200, 500, 1000]   # the ladder train.py used to hardcode
+  eval_epochs: 5
+  batch_size: 128
+  allow_cpu: False             # refuse to silently meta-train on CPU
+  resume: True                 # 23h exit -> qsub the same script to continue
+  # early-stop patience for the curriculum (item 107): how many
+  # non-improving windows a stage may burn before the run is abandoned.
+  # 1 == the OLD behaviour (a single unlucky window killed the run and
+  # SAMLO_cifar10_resnet8 never wrote a checkpoint). 3 gives each stage
+  # ~3x(n_period-1) = 6 stochastic evals to show progress.
+  cl_patience: 3

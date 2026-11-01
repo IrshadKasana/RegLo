@@ -1,0 +1,13 @@
+/home/hp/miniconda3/envs/new_env/lib/python3.10/site-packages/torch/cuda/__init__.py:182: UserWarning: CUDA initialization: Unexpected error from cudaGetDeviceCount(). Did you run some cuda functions before calling NumCudaDevices() that might have already set an error? Error 804: forward compatibility was attempted on non supported HW (Triggered internally at /pytorch/c10/cuda/CUDAFunctions.cpp:119.)
+  return torch._C._cuda_getDeviceCount() > 0
+/home/hp/miniconda3/envs/new_env/lib/python3.10/site-packages/torch/cuda/__init__.py:827: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+[l1 lam=0.003 seed=4] T= 100 blk 1/2 task=2.1520 R=453.9 ckpt=0.3083 * (268s)
+[l1 lam=0.003 seed=4] T= 100 blk 2/2 task=2.2389 R=209.4 ckpt=1.1427 (525s)
+[l1 lam=0.003 seed=4] T= 200 blk 1/2 task=2.1368 R=295.3 ckpt=0.7970 (1197s)
+[l1 lam=0.003 seed=4] T= 200 blk 2/2 task=2.2348 R=178.1 ckpt=2.2931 (1758s)
+[l1 lam=0.003 seed=4] T= 500 blk 1/2 task=1.8637 R=373.7 ckpt=1.3770 (3104s)
+[l1 lam=0.003 seed=4] T= 500 blk 2/2 task=1.7606 R=630.7 ckpt=0.1915 * (4427s)
+[l1 lam=0.003 seed=4] T=1000 blk 1/2 task=1.2545 R=566.2 ckpt=0.4470 (6788s)
+[l1 lam=0.003 seed=4] T=1000 blk 2/2 task=1.1608 R=499.0 ckpt=0.1666 * (9341s)
+lo_l1_lam0.003_seed4: val_acc=0.9298

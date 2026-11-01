@@ -1,0 +1,151 @@
+[orchestrator] 0 done, 11 to run (1 gpu lane(s), 0 cpu lane(s) x 1 threads)
+[orchestrator] ok   tune_adamw on gpu (57s)
+[orchestrator] ok   tune_lo_none on gpu (308s)
+[orchestrator] ok   tune_lo_smooth on gpu (417s)
+[orchestrator] ok   tune_lo_l1_1e-05 on gpu (359s)
+[orchestrator] ok   tune_lo_l1_0.0001 on gpu (361s)
+[orchestrator] ok   tune_lo_l1_0.001 on gpu (364s)
+[orchestrator] ok   tune_lo_l1_0.01 on gpu (364s)
+[orchestrator] ok   tune_lo_l2_0.0001 on gpu (359s)
+[orchestrator] ok   tune_lo_l2_0.001 on gpu (360s)
+[orchestrator] ok   tune_lo_l2_0.01 on gpu (363s)
+[orchestrator] ok   tune_lo_l2_0.1 on gpu (363s)
+[orchestrator] selection:
+{
+ "adamw_none": {
+  "lr": 0.01,
+  "lam": 0.0,
+  "val_acc": 0.9248888888888889
+ },
+ "adamw_l1": {
+  "lr": 0.01,
+  "lam": 0.0001,
+  "val_acc": 0.9335555555555555
+ },
+ "adamw_l2": {
+  "lr": 0.01,
+  "lam": 0.0001,
+  "val_acc": 0.9285555555555556
+ },
+ "lo_l1": {
+  "lam": 0.001,
+  "val_acc": 0.9352222222222223
+ },
+ "lo_l1_grid": {
+  "1e-05": 0.9259,
+  "0.0001": 0.9267,
+  "0.001": 0.9352,
+  "0.01": 0.5894
+ },
+ "lo_l2": {
+  "lam": 0.001,
+  "val_acc": 0.9330000000000002
+ },
+ "lo_l2_grid": {
+  "0.0001": 0.9287,
+  "0.001": 0.933,
+  "0.01": 0.9287,
+  "0.1": 0.8868
+ }
+}
+[orchestrator] 0 done, 15 to run (1 gpu lane(s), 0 cpu lane(s) x 1 threads)
+[orchestrator] ok   final_adamw_s0 on gpu (7s)
+[orchestrator] ok   final_reeval_none_s0 on gpu (4s)
+[orchestrator] ok   final_reeval_smooth_s0 on gpu (4s)
+[orchestrator] ok   final_reeval_l1_s0 on gpu (4s)
+[orchestrator] ok   final_reeval_l2_s0 on gpu (4s)
+[orchestrator] ok   final_adamw_s1 on gpu (8s)
+[orchestrator] ok   final_lo_none_s1 on gpu (242s)
+[orchestrator] ok   final_lo_smooth_s1 on gpu (357s)
+[orchestrator] ok   final_lo_l1_s1 on gpu (358s)
+[orchestrator] ok   final_lo_l2_s1 on gpu (362s)
+[orchestrator] ok   final_adamw_s2 on gpu (6s)
+[orchestrator] ok   final_lo_none_s2 on gpu (242s)
+[orchestrator] ok   final_lo_smooth_s2 on gpu (358s)
+[orchestrator] ok   final_lo_l1_s2 on gpu (358s)
+[orchestrator] ok   final_lo_l2_s2 on gpu (362s)
+# MNIST: MLP + {AdamW, learned optimizer} × {none, L1, L2}
+
+Seeds: [0, 1, 2] (each = fresh LO meta-training + 3 optimizee inits). Numbers are mean ± std over seeds; **test accuracy is measured once, after training**, at the final of 1000 optimizee steps. Hyper-parameters were chosen on a held-out validation split, never on test.
+
+## Experiment: L1 regularizer
+
+| Method | hyper-params | Test acc (%) | Test NLL | Val acc (%) | Train acc (%) | ‖θ‖₁ | frac(|θ|<1e-3) |
+|---|---|---|---|---|---|---|---|
+| 1. MLP + AdamW | lr=0.01, wd=0.01 | **93.13 ± 0.08** | 0.2337 ± 0.0053 | 92.65 ± 0.21 | 96.56 ± 0.04 | 3324 | 0.005 |
+| 2. MLP + AdamW + L1 | lr=0.01, λ=0.0001 | **93.75 ± 0.31** | 0.2090 ± 0.0069 | 93.40 ± 0.33 | 95.74 ± 0.28 | 1044 | 0.079 |
+| 3. MLP + LO | meta-lr=1e-3 | **93.27 ± 0.16** | 0.2516 ± 0.0074 | 92.94 ± 0.20 | 95.89 ± 0.25 | 2407 | 0.008 |
+| 4. MLP + LO + L1 | λ=0.001, + smoothing | **93.65 ± 0.48** | 0.2174 ± 0.0190 | 93.20 ± 0.24 | 95.85 ± 0.45 | 1251 | 0.013 |
+
+Paired test-accuracy differences (same optimizee init + batch order):
+
+- (2) AdamW+L1 − (1) AdamW : +0.62 ± 0.25 pp (3/3 seeds better)
+- (4) LO+L1 − (3) LO       : +0.38 ± 0.52 pp (2/3 seeds better)
+- (3) LO − (1) AdamW                  : +0.14 ± 0.13 pp (3/3 seeds better)
+- (4) LO+L1 − (2) AdamW+L1 : -0.10 ± 0.63 pp (2/3 seeds better)
+- (4) LO+L1 − diagnostic LO+smoothing-only : +0.23 ± 0.70 pp (2/3 seeds better)
+
+## Experiment: L2 regularizer
+
+| Method | hyper-params | Test acc (%) | Test NLL | Val acc (%) | Train acc (%) | ‖θ‖₁ | frac(|θ|<1e-3) |
+|---|---|---|---|---|---|---|---|
+| 1. MLP + AdamW | lr=0.01, wd=0.01 | **93.13 ± 0.08** | 0.2337 ± 0.0053 | 92.65 ± 0.21 | 96.56 ± 0.04 | 3324 | 0.005 |
+| 2. MLP + AdamW + L2 | lr=0.01, λ=0.0001 | **93.49 ± 0.34** | 0.2185 ± 0.0095 | 93.14 ± 0.37 | 96.00 ± 0.29 | 1780 | 0.010 |
+| 3. MLP + LO | meta-lr=1e-3 | **93.27 ± 0.16** | 0.2516 ± 0.0074 | 92.94 ± 0.20 | 95.89 ± 0.25 | 2407 | 0.008 |
+| 4. MLP + LO + L2 | λ=0.001, + smoothing | **93.39 ± 0.48** | 0.2290 ± 0.0268 | 93.15 ± 0.49 | 96.20 ± 0.17 | 2223 | 0.009 |
+
+Paired test-accuracy differences (same optimizee init + batch order):
+
+- (2) AdamW+L2 − (1) AdamW : +0.36 ± 0.27 pp (3/3 seeds better)
+- (4) LO+L2 − (3) LO       : +0.12 ± 0.37 pp (1/3 seeds better)
+- (3) LO − (1) AdamW                  : +0.14 ± 0.13 pp (3/3 seeds better)
+- (4) LO+L2 − (2) AdamW+L2 : -0.09 ± 0.55 pp (1/3 seeds better)
+- (4) LO+L2 − diagnostic LO+smoothing-only : -0.03 ± 0.52 pp (1/3 seeds better)
+
+## Diagnostic (not one of the 4 methods)
+
+LO meta-trained with the smoothing term only (no L1/L2): test acc **93.42 ± 0.26** %. Method 4 contains the smoothing term (as the proposed model does), so method 4 vs method 3 mixes the effect of smoothing and of R; compare against this row to isolate R.
+
+## Selected hyper-parameters (validation accuracy)
+
+```json
+{
+ "adamw_none": {
+  "lr": 0.01,
+  "lam": 0.0,
+  "val_acc": 0.9248888888888889
+ },
+ "adamw_l1": {
+  "lr": 0.01,
+  "lam": 0.0001,
+  "val_acc": 0.9335555555555555
+ },
+ "adamw_l2": {
+  "lr": 0.01,
+  "lam": 0.0001,
+  "val_acc": 0.9285555555555556
+ },
+ "lo_l1": {
+  "lam": 0.001,
+  "val_acc": 0.9352222222222223
+ },
+ "lo_l1_grid": {
+  "1e-05": 0.9259,
+  "0.0001": 0.9267,
+  "0.001": 0.9352,
+  "0.01": 0.5894
+ },
+ "lo_l2": {
+  "lam": 0.001,
+  "val_acc": 0.9330000000000002
+ },
+ "lo_l2_grid": {
+  "0.0001": 0.9287,
+  "0.001": 0.933,
+  "0.01": 0.9287,
+  "0.1": 0.8868
+ }
+}
+```
+
+[orchestrator] total 105.9 min

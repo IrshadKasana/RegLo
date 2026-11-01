@@ -1,0 +1,40 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  EXTENDED — optional rows beyond the core design                     252 runs
+#
+#  Larger unseen optimizees (WRN-28-4, ViT-Lite-7/4) and a harder unseen dataset (CIFAR-100),
+#  evaluated with round A's optimizers (add B to `rounds` for the full cross-evaluation).
+#  For round A: WRN-28 and ViT-Lite on SVHN are unseen optimizees (Stage 2), the rest unseen
+#  datasets (Stage 3). M1, M2 × 5, M3, M4 × 5 = 12 variants × 3 seeds × 7 pairs (no source pair,
+#  so nothing is reused from Stage 1); the reports show these pairs in
+#  separate *_extended cubes. Submit after the core stages, one optimizee at a time if the queue
+#  is busy:
+#      bash cluster/slurm/submit.sh extended_evaluation --only optimizee=wrn28
+#  Epochs per profile and dataset: configs/profiles/ (production: SVHN 50, CIFAR 100).
+# ════════════════════════════════════════════════════════════════════════════
+name: extended_evaluation
+stage: [2, 3]
+study: main
+extended: true
+rounds: [A]
+
+train:
+  pairs:
+    - [wrn28, svhn]
+    - [vit_lite7, svhn]
+    - [resnet18, cifar100]
+    - [wrn28, cifar10]
+    - [wrn28, cifar100]
+    - [vit_lite7, cifar10]
+    - [vit_lite7, cifar100]
+  methods:
+    m1_adamw: [none]
+    m2_adamw_reg: [l1, l2, sam, gam, gsam]
+    m3_lstm: [none]
+    m4_lstm_reg: [l1, l2, sam, gam, gsam]
+  from_stage1: [m2_adamw_reg]
+  seeds: [42, 43, 44]
+  overrides: []
+  pair_overrides: {}
+  optimizer_overrides:       # ViTs need a smaller AdamW step and a warm-up
+    adamw:
+      vit_lite7: [optimizer.lr=5.0e-4, optimizer.scheduler.warmup_epochs=5]

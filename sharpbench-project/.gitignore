@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+data/
+results/
+logs/
+figures/
+tables/
+configs/winners*.yaml
+.venv/
+.ipynb_checkpoints/

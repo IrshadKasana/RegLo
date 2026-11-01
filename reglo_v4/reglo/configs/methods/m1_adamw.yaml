@@ -1,0 +1,14 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  M1 — Optimizee + AdamW                                     (protocol C1, baseline)
+#
+#      python scripts/train_optimizee.py method=m1_adamw optimizee=convnet4 dataset=svhn
+# ════════════════════════════════════════════════════════════════════════════
+defaults:
+  optimizer: adamw
+  regularizer: none
+
+label: M1
+name: m1_adamw
+optimizer_kind: conventional
+regularizer_applied: never           # never | every_step | meta_training_only
+allowed_regularizers: [none]

@@ -1,0 +1,191 @@
+from functools import reduce
+from operator import mul
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
+
+# Device setup: CUDA > Apple Silicon (MPS) > CPU
+if torch.cuda.is_available():
+    device = torch.device('cuda:0')
+elif torch.backends.mps.is_available():
+    device = torch.device('mps')
+else:
+    device = torch.device('cpu')
+
+print(f"CUDA available: {torch.cuda.is_available()}, MPS available: {torch.backends.mps.is_available()}, Device: {device}")
+
+
+def initialize_rnn_hidden_state(dim_hid, n_layers, n_params):
+    '''
+    dim_his : hidden state dimension (for each param)
+    n_layers : number of layers of LSTM
+    n_params : number of parameters in the optimizee model
+    '''
+    h0 = torch.zeros(n_layers, n_params, dim_hid).requires_grad_(requires_grad=False).to(device)
+    c0 = torch.zeros(n_layers, n_params, dim_hid).requires_grad_(requires_grad=False).to(device)
+
+    return h0, c0
+
+
+class MetaOptimizerLSTM(nn.Module):
+    # ===== UNCHANGED from the original file =====
+
+    def __init__(self, model, num_layers, hidden_size, preproc_factor=10.0, preproc=True):
+        super(MetaOptimizerLSTM, self).__init__()
+        self.meta_model = model
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        self.preproc = preproc
+
+        if self.preproc:
+            self.first_order = nn.LSTM(2, self.hidden_size, self.num_layers, batch_first=True, bias=False)
+        else:
+            self.first_order = nn.LSTM(1, self.hidden_size, self.num_layers, batch_first=True, bias=False)
+
+        self.outputer = nn.Linear(hidden_size, 1, bias=False)
+        self.outputer.weight.data.mul_(0.1)
+        self.preproc_factor = preproc_factor
+        self.preproc_threshold = np.exp(-preproc_factor)
+
+    def reset_lstm(self, keep_states=False, model=None):
+        self.meta_model.reset()
+        self.meta_model.copy_params_from(model)
+        if keep_states:
+            self.h0 = self.h0.data
+            self.c0 = self.c0.data
+        else:
+            self.h0, self.c0 = initialize_rnn_hidden_state(
+                self.hidden_size, self.num_layers, self.meta_model.get_flat_params().size(0)
+            )
+
+    def forward(self, x):
+        if self.preproc:
+            inp = torch.zeros(x.size()[0], 2).to(device)
+            keep_grads = (torch.abs(x) >= self.preproc_threshold).squeeze()
+            inp[:, 0][keep_grads] = (torch.log(torch.abs(x[keep_grads]) + 1e-8) / self.preproc_factor).squeeze()
+            inp[:, 1][keep_grads] = torch.sign(x[keep_grads]).squeeze()
+            inp[:, 0][~keep_grads] = -1
+            inp[:, 1][~keep_grads] = (float(np.exp(self.preproc_factor)) * x[~keep_grads]).squeeze()
+            x = inp.unsqueeze(1)
+            x = x.to(device)
+
+        output1, (hn1, cn1) = self.first_order(x, (self.h0, self.c0))
+        self.h0 = hn1
+        self.c0 = cn1
+        o1 = self.outputer(output1)
+        return o1.squeeze()
+
+    def meta_update(self, model_with_grads):
+        # collect gradients from optimizee (data only, no graph)
+        grads = []
+        for param in model_with_grads.parameters():
+            if param.grad is not None:
+                grads.append(param.grad.data.view(-1).unsqueeze(-1))
+
+        self.meta_model.copy_params_from(model_with_grads)
+        flat_params = self.meta_model.get_flat_params()
+        flat_grads = torch.cat(grads)
+
+        inputs = flat_grads.view(-1, 1).unsqueeze(1)
+
+        update = self(inputs)
+
+        flat_params = flat_params + update
+
+        self.meta_model.set_flat_params(flat_params)
+
+        # copy data back so the caller's model sees the update
+        self.meta_model.copy_params_to(model_with_grads)
+        return self.meta_model.model
+
+
+# =============================================================================
+# MetaModel — PATCHED to preserve the autograd graph through optimizee params.
+#
+# THE BUG:
+#   The previous implementation used `param.data = X`, which STRIPS the autograd
+#   graph_fn from X. That detaches the optimizee parameters from the LSTM, so
+#   when the meta-loss is backpropagated nothing reaches the LSTM weights and
+#   `LOs_optimizer.step()` becomes a no-op. Result: the LSTM never trains, and
+#   every regularizer config (No Reg / SAM / L2) saves byte-identical checkpoints
+#   (the seed-1 random init).
+#
+# THE FIX:
+#   Replace `module._parameters[name]` directly with the new tensor instead of
+#   assigning to `.data`. The new tensor keeps its `grad_fn` and the BPTT chain
+#   stays intact from optimizee output -> LSTM weights.
+#
+#   This matches the working reference implementation in
+#   extras/dmo/gam_reference/GAM_trial_with_comments.ipynb.
+# =============================================================================
+class MetaModel:
+
+    def __init__(self, model):
+        self.model = model
+
+    def parameters(self):
+        return self.model.parameters()
+
+    def reset(self):
+        """
+        Detach optimizee parameters from any old computational graph by
+        replacing them with their `.data` (a plain Tensor, no grad_fn).
+        This wipes the BPTT chain cleanly between unroll groups.
+        """
+        for module in self.model.modules():
+            if len(module._parameters) == 0:
+                continue
+            if module._parameters.get('weight') is not None:
+                module._parameters['weight'] = module._parameters['weight'].data
+            if module._parameters.get('bias') is not None:
+                module._parameters['bias'] = module._parameters['bias'].data
+
+    def get_flat_params(self):
+        params = []
+        for module in self.model.modules():
+            if len(module._parameters) == 0:
+                continue
+            if module._parameters.get('weight') is not None:
+                params.append(module._parameters['weight'].view(-1))
+            if module._parameters.get('bias') is not None:
+                params.append(module._parameters['bias'].view(-1))
+        return torch.cat(params)
+
+    def set_flat_params(self, flat_params):
+        """
+        Install the (autograd-connected) updated parameters into the model.
+
+        CRITICAL: assign DIRECTLY to `module._parameters[name]`, NOT to
+        `param.data`. The new value keeps its `grad_fn`, so backprop through
+        a forward pass of this model reaches the LSTM weights.
+        """
+        offset = 0
+        for module in self.model.modules():
+            if len(module._parameters) == 0:
+                continue
+            if module._parameters.get('weight') is not None:
+                weight_shape = module._parameters['weight'].size()
+                weight_flat_size = reduce(mul, weight_shape, 1)
+                module._parameters['weight'] = flat_params[
+                    offset:offset + weight_flat_size
+                ].view(*weight_shape)
+                offset += weight_flat_size
+            if module._parameters.get('bias') is not None:
+                bias_shape = module._parameters['bias'].size()
+                bias_flat_size = reduce(mul, bias_shape, 1)
+                module._parameters['bias'] = flat_params[
+                    offset:offset + bias_flat_size
+                ].view(*bias_shape)
+                offset += bias_flat_size
+
+    def copy_params_from(self, model):
+        """Copy raw data: source `model` -> meta-wrapped model. No graph."""
+        for modelA, modelB in zip(self.model.parameters(), model.parameters()):
+            modelA.data.copy_(modelB.data)
+
+    def copy_params_to(self, model):
+        """Copy raw data: meta-wrapped model -> caller's `model`. No graph."""
+        for modelA, modelB in zip(self.model.parameters(), model.parameters()):
+            modelB.data.copy_(modelA.data)

@@ -1,0 +1,8 @@
+adamw reg=none lr=0.001 wd=0.3 lam=0 val_acc=0.9042
+adamw reg=none lr=0.001 wd=1 lam=0 val_acc=0.8987
+adamw reg=none lr=0.003 wd=0.3 lam=0 val_acc=0.9223
+adamw reg=none lr=0.003 wd=1 lam=0 val_acc=0.9134
+adamw reg=none lr=0.01 wd=0.3 lam=0 val_acc=0.9272
+adamw reg=none lr=0.01 wd=1 lam=0 val_acc=0.9148
+adamw reg=none lr=0.03 wd=0.3 lam=0 val_acc=0.9214
+adamw reg=none lr=0.03 wd=1 lam=0 val_acc=0.9093

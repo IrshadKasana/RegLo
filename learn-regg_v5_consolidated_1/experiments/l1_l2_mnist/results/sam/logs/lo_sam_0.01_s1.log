@@ -1,0 +1,13 @@
+[sam lam_r=0.01 rho=0.05 seed=1] stage T= 100 block 1/3 task=1.1681 L_adv=1.4060 heldout=0.8170 *  (515s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T= 100 block 2/3 task=1.0704 L_adv=1.3157 heldout=0.2826 *  (984s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T= 100 block 3/3 task=0.8653 L_adv=1.0662 heldout=0.5686  (1439s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T= 200 block 1/3 task=0.6628 L_adv=0.8370 heldout=0.1479 *  (2225s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T= 200 block 2/3 task=0.6291 L_adv=0.8413 heldout=0.1575  (3050s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T= 200 block 3/3 task=0.5827 L_adv=0.9574 heldout=0.3253  (3867s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T= 500 block 1/3 task=0.4265 L_adv=0.5964 heldout=0.1989  (5652s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T= 500 block 2/3 task=0.4983 L_adv=0.7561 heldout=0.2913  (7531s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T= 500 block 3/3 task=0.4608 L_adv=0.5669 heldout=0.2233  (9389s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T=1000 block 1/3 task=0.3620 L_adv=0.4620 heldout=0.2080  (13037s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T=1000 block 2/3 task=0.3502 L_adv=0.4570 heldout=0.1961  (16592s)
+[sam lam_r=0.01 rho=0.05 seed=1] stage T=1000 block 3/3 task=0.3592 L_adv=0.4715 heldout=0.2133  (19999s)
+lo_sam_lam0.01_seed1: val=0.9248 test=0.9287

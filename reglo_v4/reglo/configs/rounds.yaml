@@ -1,0 +1,31 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  ROUNDS — which optimizee / dataset pair each family of learned optimizers is meta-trained on
+#
+#  A round meta-trains the LSTM optimizers (M3's φ, and M4's φ*_r for every regularizer r) on
+#  one pair, its SOURCE, and trains M2's AdamW + r on the same pair (Stage 1). Every evaluation
+#  pair of Stages 2–3 is then trained with the optimizers of every round (cross-evaluation),
+#  and what the pair is to a round follows from the round's source:
+#
+#      seen                         the source pair itself              Stage 2 and Stage 3
+#      unseen optimizee             another network, source dataset     Stage 2
+#      unseen dataset               source network, another dataset     Stage 3
+#      unseen optimizee + dataset   both different                      Stage 3
+#
+#  The same pair is unseen by one round and seen (or unseen in another way) by the other, so
+#  comparing the rounds on one pair separates "this task is harder" from "these optimizers
+#  were not meta-trained for it" — the transfer gap of the learned optimizers.
+#
+#  The round's name is the meta_tag of its optimizers (artifacts/<profile>/meta_training/<name>/)
+#  and marks the M3/M4 runs that use them (run folders m3_lstm@<name>, m4_lstm_reg-<r>@<name>).
+#  A source dataset needs meta_split.enabled: true (configs/datasets/): the optimizers are
+#  meta-trained on one half of its training images, every evaluation run trains on the other.
+#  Another round: add it here and to `rounds:` in the experiment files.
+# ════════════════════════════════════════════════════════════════════════════
+A:
+  optimizee: convnet4
+  dataset: svhn
+  description: the paper's protocol — ConvNet-4 on SVHN
+B:
+  optimizee: mlp
+  dataset: fmnist
+  description: MLP 128-128 on Fashion-MNIST (FashionMnistRelu128x128 in the learned-optimizer literature)

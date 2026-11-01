@@ -1,0 +1,76 @@
+# Five-method sweep — ConvNet-4, four datasets, 70:20:10 split
+
+Selection: source validation split (seed 0) only. ID test = source 10 % split; ID AUROC = macro one-vs-rest AUROC of the softmax output on it. OOD = selected model, no retraining, on the TARGET dataset's 20 % partition; OOD acc is accuracy under the *target's own label ids* (unrelated label spaces → ≈ chance expected); OOD AUROC = ID-test vs OOD separation by max-softmax confidence. ± = std. error over inits (M1/M2) or meta-seeds (M3/M4a/M5).
+
+
+## MNIST (source) → SVHN (OOD target)
+
+| method | R | config | val acc % | ID test acc % | ID AUROC | OOD acc % → SVHN | OOD AUROC | cells | n |
+|---|---|---|---|---|---|---|---|---|---|
+| M1 AdamW | - | lr=0.001 | 81.01 | 80.19 | 0.979 | 9.27 | 0.998 | 2 | 1 inits |
+| M2 AdamW+R | l2 | lr=0.001, λ=0.01 | 81.64 | 81.03 | 0.979 | 9.01 | 0.998 | 4 | 1 inits |
+| M2 AdamW+R | sam | lr=0.001, λ=0.01, ρ=0.001 | 80.69 | 80.04 | 0.979 | 9.12 | 0.997 | 6 | 1 inits |
+| M3 LO | - | meta_lr=0.001 | 87.06 | 83.46 ± 3.71 | 0.991 ± 0.001 | 8.78 ± 0.17 | 0.999 ± 0.000 | 2 | 3 meta-seeds |
+| M4a LO+smooth | - | λ_smooth=0.5, meta_lr=0.001 | 87.74 | 80.45 ± 7.45 | 0.986 ± 0.007 | 8.12 ± 0.27 | 0.998 ± 0.001 | 4 | 3 meta-seeds |
+| M5 LO+smooth+R | l2 | λ_smooth=0.01, λ_reg=0.01, meta_lr=0.001 | 89.22 | 82.19 ± 4.83 | 0.988 ± 0.005 | 7.83 ± 0.11 | 0.999 ± 0.000 | 5 | 3 meta-seeds |
+| M5 LO+smooth+R | sam | λ_smooth=0.5, λ_reg=0.01, meta_lr=0.001, ρ=0.06 | 87.94 | 82.34 ± 2.84 | 0.990 ± 0.001 | 7.80 ± 0.11 | 0.999 ± 0.000 | 6 | 3 meta-seeds |
+
+## MNIST (source) → CIFAR-10 (OOD target)
+
+| method | R | config | val acc % | ID test acc % | ID AUROC | OOD acc % → CIFAR-10 | OOD AUROC | cells | n |
+|---|---|---|---|---|---|---|---|---|---|
+| M1 AdamW | - | lr=0.001 | 81.01 | 80.19 | 0.979 | 7.33 | 0.988 | 2 | 1 inits |
+| M2 AdamW+R | l2 | lr=0.001, λ=0.01 | 81.64 | 81.03 | 0.979 | 7.85 | 0.989 | 4 | 1 inits |
+| M2 AdamW+R | sam | lr=0.001, λ=0.01, ρ=0.001 | 80.69 | 80.04 | 0.979 | 7.78 | 0.987 | 6 | 1 inits |
+| M3 LO | - | meta_lr=0.001 | 87.06 | 83.46 ± 3.71 | 0.991 ± 0.001 | 8.59 ± 1.00 | 0.996 ± 0.001 | 2 | 3 meta-seeds |
+| M4a LO+smooth | - | λ_smooth=0.5, meta_lr=0.001 | 87.74 | 80.45 ± 7.45 | 0.986 ± 0.007 | 8.66 ± 0.66 | 0.992 ± 0.003 | 4 | 3 meta-seeds |
+| M5 LO+smooth+R | l2 | λ_smooth=0.01, λ_reg=0.01, meta_lr=0.001 | 89.22 | 82.19 ± 4.83 | 0.988 ± 0.005 | 8.25 ± 0.53 | 0.993 ± 0.001 | 5 | 3 meta-seeds |
+| M5 LO+smooth+R | sam | λ_smooth=0.5, λ_reg=0.01, meta_lr=0.001, ρ=0.06 | 87.94 | 82.34 ± 2.84 | 0.990 ± 0.001 | 8.65 ± 0.26 | 0.996 ± 0.001 | 6 | 3 meta-seeds |
+
+## MNIST (source) → FashionMNIST (OOD target)
+
+| method | R | config | val acc % | ID test acc % | ID AUROC | OOD acc % → FashionMNIST | OOD AUROC | cells | n |
+|---|---|---|---|---|---|---|---|---|---|
+| M1 AdamW | - | lr=0.001 | 81.01 | 80.19 | 0.979 | 9.71 | 0.937 | 2 | 1 inits |
+| M2 AdamW+R | l2 | lr=0.001, λ=0.01 | 81.64 | 81.03 | 0.979 | 10.12 | 0.942 | 4 | 1 inits |
+| M2 AdamW+R | sam | lr=0.001, λ=0.01, ρ=0.001 | 80.69 | 80.04 | 0.979 | 10.45 | 0.932 | 6 | 1 inits |
+| M3 LO | - | meta_lr=0.001 | 87.06 | 83.46 ± 3.71 | 0.991 ± 0.001 | 14.09 ± 2.13 | 0.951 ± 0.010 | 2 | 3 meta-seeds |
+| M4a LO+smooth | - | λ_smooth=0.5, meta_lr=0.001 | 87.74 | 80.45 ± 7.45 | 0.986 ± 0.007 | 11.49 ± 1.87 | 0.937 ± 0.016 | 4 | 3 meta-seeds |
+| M5 LO+smooth+R | l2 | λ_smooth=0.01, λ_reg=0.01, meta_lr=0.001 | 89.22 | 82.19 ± 4.83 | 0.988 ± 0.005 | 11.34 ± 3.02 | 0.933 ± 0.026 | 5 | 3 meta-seeds |
+| M5 LO+smooth+R | sam | λ_smooth=0.5, λ_reg=0.01, meta_lr=0.001, ρ=0.06 | 87.94 | 82.34 ± 2.84 | 0.990 ± 0.001 | 12.25 ± 1.22 | 0.947 ± 0.012 | 6 | 3 meta-seeds |
+
+## CIFAR-10 (source) → SVHN (OOD target)
+
+| method | R | config | val acc % | ID test acc % | ID AUROC | OOD acc % → SVHN | OOD AUROC | cells | n |
+|---|---|---|---|---|---|---|---|---|---|
+| M1 AdamW | - | lr=0.001 | 28.10 | 28.23 | 0.755 | 8.81 | 0.534 | 2 | 1 inits |
+| M2 AdamW+R | l2 | lr=0.001, λ=0.01 | 27.93 | 28.12 | 0.754 | 8.55 | 0.567 | 4 | 1 inits |
+| M2 AdamW+R | sam | lr=0.001, λ=0.01, ρ=0.001 | 28.43 | 28.70 | 0.753 | 8.87 | 0.543 | 6 | 1 inits |
+| M3 LO | - | meta_lr=0.001 | 29.10 | 28.49 ± 2.04 | 0.788 ± 0.014 | 9.01 ± 0.40 | 0.585 ± 0.067 | 2 | 3 meta-seeds |
+| M4a LO+smooth | - | λ_smooth=0.01, meta_lr=0.001 | 29.83 | 29.16 ± 1.09 | 0.783 ± 0.009 | 8.74 ± 0.51 | 0.565 ± 0.066 | 4 | 3 meta-seeds |
+| M5 LO+smooth+R | l2 | λ_smooth=0.01, λ_reg=0.01, meta_lr=0.001 | 28.97 | 29.08 ± 1.11 | 0.783 ± 0.011 | 9.05 ± 0.33 | 0.579 ± 0.075 | 5 | 3 meta-seeds |
+| M5 LO+smooth+R | sam | λ_smooth=0.5, λ_reg=0.01, meta_lr=0.001, ρ=0.001 | 29.30 | 29.56 ± 1.91 | 0.788 ± 0.016 | 9.97 ± 0.37 | 0.518 ± 0.105 | 6 | 3 meta-seeds |
+
+## CIFAR-10 (source) → MNIST (OOD target)
+
+| method | R | config | val acc % | ID test acc % | ID AUROC | OOD acc % → MNIST | OOD AUROC | cells | n |
+|---|---|---|---|---|---|---|---|---|---|
+| M1 AdamW | - | lr=0.001 | 28.10 | 28.23 | 0.755 | 6.85 | 0.140 | 2 | 1 inits |
+| M2 AdamW+R | l2 | lr=0.001, λ=0.01 | 27.93 | 28.12 | 0.754 | 5.99 | 0.143 | 4 | 1 inits |
+| M2 AdamW+R | sam | lr=0.001, λ=0.01, ρ=0.001 | 28.43 | 28.70 | 0.753 | 8.03 | 0.135 | 6 | 1 inits |
+| M3 LO | - | meta_lr=0.001 | 29.10 | 28.49 ± 2.04 | 0.788 ± 0.014 | 4.18 ± 0.20 | 0.250 ± 0.077 | 2 | 3 meta-seeds |
+| M4a LO+smooth | - | λ_smooth=0.01, meta_lr=0.001 | 29.83 | 29.16 ± 1.09 | 0.783 ± 0.009 | 3.03 ± 0.35 | 0.323 ± 0.156 | 4 | 3 meta-seeds |
+| M5 LO+smooth+R | l2 | λ_smooth=0.01, λ_reg=0.01, meta_lr=0.001 | 28.97 | 29.08 ± 1.11 | 0.783 ± 0.011 | 4.90 ± 1.48 | 0.321 ± 0.120 | 5 | 3 meta-seeds |
+| M5 LO+smooth+R | sam | λ_smooth=0.5, λ_reg=0.01, meta_lr=0.001, ρ=0.001 | 29.30 | 29.56 ± 1.91 | 0.788 ± 0.016 | 7.79 ± 2.26 | 0.422 ± 0.201 | 6 | 3 meta-seeds |
+
+## CIFAR-10 (source) → FashionMNIST (OOD target)
+
+| method | R | config | val acc % | ID test acc % | ID AUROC | OOD acc % → FashionMNIST | OOD AUROC | cells | n |
+|---|---|---|---|---|---|---|---|---|---|
+| M1 AdamW | - | lr=0.001 | 28.10 | 28.23 | 0.755 | 3.59 | 0.222 | 2 | 1 inits |
+| M2 AdamW+R | l2 | lr=0.001, λ=0.01 | 27.93 | 28.12 | 0.754 | 2.84 | 0.220 | 4 | 1 inits |
+| M2 AdamW+R | sam | lr=0.001, λ=0.01, ρ=0.001 | 28.43 | 28.70 | 0.753 | 3.64 | 0.207 | 6 | 1 inits |
+| M3 LO | - | meta_lr=0.001 | 29.10 | 28.49 ± 2.04 | 0.788 ± 0.014 | 3.87 ± 1.63 | 0.341 ± 0.041 | 2 | 3 meta-seeds |
+| M4a LO+smooth | - | λ_smooth=0.01, meta_lr=0.001 | 29.83 | 29.16 ± 1.09 | 0.783 ± 0.009 | 3.38 ± 0.97 | 0.372 ± 0.048 | 4 | 3 meta-seeds |
+| M5 LO+smooth+R | l2 | λ_smooth=0.01, λ_reg=0.01, meta_lr=0.001 | 28.97 | 29.08 ± 1.11 | 0.783 ± 0.011 | 4.65 ± 0.58 | 0.312 ± 0.041 | 5 | 3 meta-seeds |
+| M5 LO+smooth+R | sam | λ_smooth=0.5, λ_reg=0.01, meta_lr=0.001, ρ=0.001 | 29.30 | 29.56 ± 1.91 | 0.788 ± 0.016 | 3.24 ± 1.56 | 0.351 ± 0.091 | 6 | 3 meta-seeds |

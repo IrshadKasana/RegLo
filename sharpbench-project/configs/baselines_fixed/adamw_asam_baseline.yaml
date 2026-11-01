@@ -1,0 +1,16 @@
+train_arguments:
+  # AdamW + ASAM. SEPARATE FILE ON PURPOSE: ASAM rescales the perturbation
+  # by |w|, so its rho lives on a 10-50x LARGER scale than vanilla SAM.
+  # Never put ASAM and SAM on the same rho grid.
+  #
+  # Grid (Kwon et al. ICML'21 / WSAM paper Sec 6.4): [0.1, 0.5, 1.0, 2.0, 4.0]
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  weight_decay: 0.01
+  adaptive: True           # ASAM
+  rho: 0.5                 # NOT 0.05 -- that would be near-unregularized
+  regularizer: 'sam'
+  model_name: 'AdamW_ASAM_baseline'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

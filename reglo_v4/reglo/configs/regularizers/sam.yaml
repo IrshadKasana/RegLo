@@ -1,0 +1,14 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  SAM (Foret et al. 2021)                                  — zeroth-order flatness
+#      R(θ) = max_{‖ε‖₂≤ρ} L(θ+ε) − L(θ),   one-step inner max  ε̂ = ρ·∇L/(‖∇L‖ + ξ), ξ = 1e-12
+# ════════════════════════════════════════════════════════════════════════════
+name: sam
+rho: 0.05                    # neighbourhood radius (protocol; the method sketch also notes 0.03)
+
+explicit:                    # M2 — two passes per step: ascend to θ+ε̂, then step with ∇L(θ+ε̂)
+  adaptive: false            # true → ASAM (scale-invariant ε)
+
+meta:                        # M4 — Algorithm 1, lines 21–22: L_reg = L_meta(φ + ε̂), ε̂ = ρ·∇_φL_meta/‖∇_φL_meta‖
+  coef: 0.1                  # λ_reg, the same for every r (the reference code's value; worth a short sweep)
+  space: phi                 # phi:   perturb the LSTM's own weights φ (the proposed method)
+                             # theta: perturb the optimizee's end point θ_T(φ) instead: L(θ_T + ε̂)

@@ -1,0 +1,29 @@
+# Ignore datasets, weights, and backups
+checkpoints/
+dataset/
+datasets/
+data/
+*backup*/
+agastya_results/
+__pycache__/
+.ipynb_checkpoints/
+
+# Ignore heavy file extensions
+*.pth
+*.pt
+*.h5
+*.zip
+*.tgz
+*.tar.gz
+*.iso
+*.pdf# Ignore datasets, checkpoints, and large archives
+checkpoints/
+dataset/
+agastya_results/
+*.zip
+*.tgz
+*.tar.gz
+*.iso
+*.pdf
+*.pth
+*.pt

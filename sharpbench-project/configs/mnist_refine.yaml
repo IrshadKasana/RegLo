@@ -1,0 +1,80 @@
+# =====================================================================
+# STAGE-2 REFINEMENT TEMPLATE -- densify around the coarse optimum.
+# =====================================================================
+# Run configs/mnist_lambda.yaml first, read the winners, THEN edit the
+# grids below to bracket each winner and re-run. The sweep is resumable
+# and keyed on the full hyperparameter tuple, so overlapping points are
+# skipped automatically -- only genuinely new settings cost time.
+#
+# EXAMPLE: if the coarse stage selects SAM rho=0.05, replace the sam grid
+# with [0.03, 0.04, 0.05, 0.07, 0.09] to resolve the peak. The placeholder
+# values below assume a coarse optimum near rho=0.05 / gamma=0.8; CHANGE
+# THEM to match what you actually got.
+#
+# Do not refine a hyperparameter whose coarse curve was flat: if
+# `analyze` reports a plateau, the honest result is the plateau, and
+# densifying inside it just resolves noise.
+# ---------------------------------------------------------------------
+
+fixed:
+  dataset: mnist
+  model: mlp
+  hidden: 20
+  act: relu
+  batch_size: 128
+  epochs: 100
+  weight_decay: 0.01
+  lr_schedule: cosine
+  label_noise: 0.0
+  data_root: ./data
+  deterministic: true
+  allow_tf32: false
+  measure_sharpness: true
+  sharpness_radii: [0.05, 0.5]
+  keep_history: true
+
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+lr_grid: [1.0e-4, 3.0e-4, 1.0e-3]
+
+arms:
+  - name: adamw
+    regularizer: none
+    grid: {}
+
+  - name: sam
+    regularizer: sam
+    grid:
+      adaptive: [false]
+      rho: [0.03, 0.04, 0.05, 0.07, 0.09]      # <-- EDIT around your winner
+
+  - name: asam
+    regularizer: sam
+    grid:
+      adaptive: [true]
+      rho: [0.35, 0.5, 0.7, 1.0, 1.4]          # <-- EDIT
+
+  - name: gsam
+    regularizer: gsam
+    grid:
+      adaptive: [false]
+      rho: [0.03, 0.05, 0.07]                  # <-- EDIT
+      alpha: [0.01, 0.02, 0.03, 0.05]          # <-- EDIT
+
+  - name: wsam
+    regularizer: wsam
+    grid:
+      adaptive: [false]
+      decouple: [true]
+      rho: [0.03, 0.05, 0.07]                  # <-- EDIT
+      gamma: [0.74, 0.78, 0.80, 0.84, 0.88]    # lam 2.8 .. 7.3  <-- EDIT
+
+  - name: gam
+    regularizer: gam
+    lr_grid: [1.0e-4, 3.0e-4]
+    grid:
+      adaptive: [true]
+      _scale: [0.75, 1.0, 1.5, 2.0]            # <-- EDIT
+      grad_gamma: [0.05, 0.1, 0.2]             # <-- EDIT
+    derive:
+      grad_rho: "0.04 * _scale"
+      grad_norm_rho: "0.20 * _scale"

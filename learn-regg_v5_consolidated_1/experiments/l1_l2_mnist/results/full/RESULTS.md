@@ -1,0 +1,83 @@
+# MNIST: MLP + {AdamW, learned optimizer} × {none, L1, L2}
+
+Seeds: [0, 1, 2] (each = fresh LO meta-training + 3 optimizee inits). Numbers are mean ± std over seeds; **test accuracy is measured once, after training**, at the final of 1000 optimizee steps. Hyper-parameters were chosen on a held-out validation split, never on test.
+
+## Experiment: L1 regularizer
+
+| Method | hyper-params | Test acc (%) | Test NLL | Val acc (%) | Train acc (%) | ‖θ‖₁ | frac(abs θ < 1e-3) |
+|---|---|---|---|---|---|---|---|
+| 1. MLP + AdamW | lr=0.01, wd=0.01 | **93.16 ± 0.02** | 0.2320 ± 0.0042 | 92.57 ± 0.21 | 96.59 ± 0.10 | 3325 | 0.005 |
+| 2. MLP + AdamW + L1 | lr=0.01, λ=0.0001 | **93.76 ± 0.29** | 0.2087 ± 0.0068 | 93.36 ± 0.31 | 95.74 ± 0.29 | 1044 | 0.081 |
+| 3. MLP + LO | meta-lr=1e-3 | **93.25 ± 0.40** | 0.2597 ± 0.0291 | 92.87 ± 0.41 | 95.80 ± 0.30 | 2932 | 0.007 |
+| 4. MLP + LO + L1 | λ=1e-05, + smoothing | **93.42 ± 0.74** | 0.2397 ± 0.0404 | 92.96 ± 0.85 | 96.20 ± 0.33 | 2593 | 0.010 |
+
+Paired test-accuracy differences (same optimizee init + batch order):
+
+- (2) AdamW+L1 − (1) AdamW : +0.60 ± 0.29 pp (3/3 seeds better)
+- (4) LO+L1 − (3) LO       : +0.17 ± 0.35 pp (2/3 seeds better)
+- (3) LO − (1) AdamW                  : +0.10 ± 0.41 pp (2/3 seeds better)
+- (4) LO+L1 − (2) AdamW+L1 : -0.34 ± 0.58 pp (1/3 seeds better)
+- (4) LO+L1 − diagnostic LO+smoothing-only : +0.49 ± 0.93 pp (2/3 seeds better)
+
+## Experiment: L2 regularizer
+
+| Method | hyper-params | Test acc (%) | Test NLL | Val acc (%) | Train acc (%) | ‖θ‖₁ | frac(abs θ < 1e-3) |
+|---|---|---|---|---|---|---|---|
+| 1. MLP + AdamW | lr=0.01, wd=0.01 | **93.16 ± 0.02** | 0.2320 ± 0.0042 | 92.57 ± 0.21 | 96.59 ± 0.10 | 3325 | 0.005 |
+| 2. MLP + AdamW + L2 | lr=0.01, λ=0.0001 | **93.46 ± 0.30** | 0.2187 ± 0.0098 | 93.10 ± 0.33 | 95.98 ± 0.31 | 1779 | 0.012 |
+| 3. MLP + LO | meta-lr=1e-3 | **93.25 ± 0.40** | 0.2597 ± 0.0291 | 92.87 ± 0.41 | 95.80 ± 0.30 | 2932 | 0.007 |
+| 4. MLP + LO + L2 | λ=0.001, + smoothing | **93.85 ± 0.30** | 0.2119 ± 0.0099 | 93.43 ± 0.08 | 96.33 ± 0.22 | 1676 | 0.011 |
+
+Paired test-accuracy differences (same optimizee init + batch order):
+
+- (2) AdamW+L2 − (1) AdamW : +0.30 ± 0.29 pp (3/3 seeds better)
+- (4) LO+L2 − (3) LO       : +0.60 ± 0.64 pp (3/3 seeds better)
+- (3) LO − (1) AdamW                  : +0.10 ± 0.41 pp (2/3 seeds better)
+- (4) LO+L2 − (2) AdamW+L2 : +0.39 ± 0.60 pp (2/3 seeds better)
+- (4) LO+L2 − diagnostic LO+smoothing-only : +0.92 ± 1.24 pp (2/3 seeds better)
+
+## Diagnostic (not one of the 4 methods)
+
+LO meta-trained with the smoothing term only (no L1/L2): test acc **92.94 ± 0.94** %. Method 4 contains the smoothing term (as the proposed model does), so method 4 vs method 3 mixes the effect of smoothing and of R; compare against this row to isolate R.
+
+## Selected hyper-parameters (validation accuracy)
+
+```json
+{
+ "adamw_none": {
+  "lr": 0.01,
+  "lam": 0.0,
+  "val_acc": 0.9235555555555556
+ },
+ "adamw_l1": {
+  "lr": 0.01,
+  "lam": 0.0001,
+  "val_acc": 0.9328888888888889
+ },
+ "adamw_l2": {
+  "lr": 0.01,
+  "lam": 0.0001,
+  "val_acc": 0.9293333333333335
+ },
+ "lo_l1": {
+  "lam": 1e-05,
+  "val_acc": 0.9325555555555556
+ },
+ "lo_l1_grid": {
+  "1e-05": 0.9326,
+  "0.0001": 0.9282,
+  "0.001": 0.9252,
+  "0.01": 0.908
+ },
+ "lo_l2": {
+  "lam": 0.001,
+  "val_acc": 0.9331111111111111
+ },
+ "lo_l2_grid": {
+  "0.0001": 0.928,
+  "0.001": 0.9331,
+  "0.01": 0.9272,
+  "0.1": 0.8794
+ }
+}
+```

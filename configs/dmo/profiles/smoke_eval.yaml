@@ -1,0 +1,11 @@
+train_arguments:
+  # SMOKE evaluation — ACTIVE values from configs/dmo/base/optimizee_eval.yaml
+  optimizee_epochs: 60         # base active value (#1000 = production)
+  n_training: 2                # base active value (#5 = production)
+  patience: 20                 # base active value (#100 = production)
+  hyper_eps: False             # base active value (#True = production)
+  calc_hessian: False
+  eval_every: 1
+  batch_size: 512
+  allow_cpu: True
+  resume: True

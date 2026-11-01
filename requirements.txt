@@ -1,0 +1,10 @@
+numpy
+torch
+torchvision
+tqdm
+PyYAML
+# hessian-eigenthings
+pyhessian
+joblib
+matplotlib
+git+https://github.com/noahgolmant/pytorch-hessian-eigenthings  # Hessian spectrum (fig 08); install on Agastya login node

@@ -1,0 +1,21 @@
+#!/bin/bash
+#PBS -N tr_sam_bigcnn
+#PBS -q gpu-test
+#PBS -l nodes=1:ppn=40
+#PBS -l walltime=23:00:00
+#PBS -l mem=60gb
+#PBS -o train_sam_bigcnn.out
+#PBS -e train_sam_bigcnn.err
+#PBS -V
+
+cd $PBS_O_WORKDIR
+module load compilers/cuda/11.1
+
+echo "==== Job started at $(date) on $(hostname) ===="
+echo "==== sam-LO  |  CIFAR-10 + BigCNN (~1.28M params) ===="
+nvidia-smi || echo "no GPU visible"
+
+~/.conda/envs/learn_reg/bin/python experiments/dmo/train.py \
+    --regularizer=sam_bigcnn
+
+echo "==== Job ended at $(date) ===="

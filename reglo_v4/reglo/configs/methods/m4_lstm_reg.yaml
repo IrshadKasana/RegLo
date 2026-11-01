@@ -1,0 +1,21 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  M4 — Optimizee + LSTM optimizer + regularizer r            (proposed, protocol C4)
+#
+#  φ*_r comes from Stage 1 (meta_training=m4_lstm_reg regularizer=r meta_tag=<round>), meta-trained on
+#      L_meta + λ_smooth·L_smooth + λ_reg·L_reg(r)                        (Algorithm 1)
+#  Here φ*_r is frozen and NO regularizer is computed: one forward–backward pass per step.
+#  `regularizer=r` only chooses which φ*_r to load, `meta_tag=<round>` whose (configs/rounds.yaml).
+#
+#      python scripts/train_optimizee.py method=m4_lstm_reg regularizer=sam optimizee=convnet4 dataset=svhn
+#      python scripts/train_optimizee.py method=m4_lstm_reg regularizer=sam optimizee=convnet4 dataset=svhn meta_tag=B
+# ════════════════════════════════════════════════════════════════════════════
+defaults:
+  optimizer: lstm
+  regularizer: ???                   # which φ*_r to load: l1 | l2 | sam | gam | gsam
+
+label: M4
+name: m4_lstm_reg
+optimizer_kind: learned
+regularizer_applied: meta_training_only
+allowed_regularizers: [l1, l2, sam, gam, gsam]
+checkpoint: ${paths.artifacts}/meta_training/${meta_tag}/m4_lstm_reg-${regularizer.name}/phi_best.pt   # meta_tag = round

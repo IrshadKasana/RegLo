@@ -1,0 +1,20 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  L_smooth (Xiong & Hsieh 2022) — part of M4's meta-objective, never used at test time
+#
+#      L_smooth(φ) = max_{s' ∈ B∞(s_t, ε)} ‖u(s_t) − u(s')‖²₂       hidden state h_t held fixed
+#
+#  s_t is the LSTM's input (the RMS-normalised gradient, so ε is relative to its typical
+#  size 1); u is its output in the LSTM's own units (before output_scale), and the squared
+#  norm runs over every optimizee coordinate. The max is found by projected gradient
+#  ascent (PGA): sign steps of size step_ratio·ε, clipped back into the ε-ball.
+# ════════════════════════════════════════════════════════════════════════════
+name: smooth
+coef: 1.0                    # λ_smooth (the reference code's value)
+epsilon: 0.01                # ℓ∞ radius on the normalised gradient input (Algorithm 1 default; Xiong &
+                             # Hsieh's 1.0 is as large as the input itself)
+pga_steps: 10                # N_PGA
+step_ratio: 0.2              # PGA step = ε/5, as in Xiong & Hsieh's released code
+init_ratio: 0.01             # Gaussian start of the perturbation: std ε·init_ratio (Xiong & Hsieh: 0.01 at ε = 1)
+every: 1                     # compute at every inner step; k > 1 → every k-th step (cheaper)
+reduction: sum               # sum: ‖·‖²₂ over all coordinates, as above; mean: divided by their number
+                             # (with ε = 0.01 the mean is ~1e-11 at initialisation — no effect at all)

@@ -1,0 +1,18 @@
+train_arguments:
+  # AdamW + SAM baseline. Vanilla (non-adaptive) SAM -- this is what
+  # "AdamW+SAM" means unless you say otherwise.
+  #
+  # rho is SWEPT; the value here is the placeholder the sweep overwrites.
+  # Grid (Foret et al. ICLR'21): [0.01, 0.02, 0.05, 0.1, 0.2, 0.5]
+  base_optimizer: 'AdamW'
+  lr: 0.001                # also swept: [1e-4, 3e-4, 1e-3]
+  weight_decay: 0.01
+  adaptive: False          # FIXED: vanilla SAM
+  rho: 0.05                # Foret's headline default
+  regularizer: 'sam'
+  model_name: 'AdamW_SAM_baseline'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+  # REMOVED (silently ignored by the code, now raises):
+  #   momentum, optzee_wd, SAMonOptimizer

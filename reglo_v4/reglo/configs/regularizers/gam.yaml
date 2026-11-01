@@ -1,0 +1,15 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  GAM (Zhang et al. 2023)                                  — first-order flatness
+#      form gradnorm (protocol):  R(θ) = ρ·‖∇L(θ)‖₂
+#      form max      (paper):     R(θ) = ρ·max_{‖ε‖≤ρ} ‖∇L(θ+ε)‖₂   (one ascent step on ‖∇L‖)
+# ════════════════════════════════════════════════════════════════════════════
+name: gam
+rho: 0.05
+form: gradnorm
+
+explicit:                    # M2 — two passes per step: ∇(ρ‖∇L‖) = ρ·H∇L/‖∇L‖ by a finite difference
+  fd_radius: 0.01            # r in  H·v ≈ (∇L(θ + r·v) − ∇L(θ)) / r
+
+meta:                        # M4 — L_reg = ρ‖∇_φL_meta‖ on the LSTM's weights φ (its gradient ρ·H∇/‖∇‖ by
+  coef: 0.1                  # a finite difference of radius fd_radius); λ_reg, the same for every r
+  space: phi                 # theta: ρ‖∇L(θ_T)‖ at the optimizee's end point, exact double backpropagation

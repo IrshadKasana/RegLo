@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+
+# Data and results are large and regenerated; keep only the folder skeletons
+datasets/*
+!datasets/README.md
+artifacts/**
+!artifacts/**/
+!artifacts/README.md
+!artifacts/**/.gitkeep
+
+# Cluster job output (PBS: name.o12345, SLURM: name-12345_7.out)
+*.o[0-9]*
+*.e[0-9]*
+cluster_logs/
+
+# Editors
+.idea/
+*.swp

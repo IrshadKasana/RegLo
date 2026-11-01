@@ -1,0 +1,78 @@
+#!/bin/bash
+#PBS -N sharpbench
+#PBS -l nodes=1:ppn=40
+#PBS -l mem=60gb
+#PBS -q gpu-ext
+#PBS -l walltime=36:00:00
+#PBS -o logs/sharpbench.out
+#PBS -e logs/sharpbench.err
+# ---------------------------------------------------------------------------
+# sharpbench sweep on Agastya (IIT Jammu). Matched to the official HPC guide:
+# queue gpu-ext, TORQUE resource syntax, anaconda 2020.7 + cuda 11.1, learn_reg.
+#
+# Walltime is 36h (not 72h) on purpose: the MNIST MLP sweep should finish in
+# well under that, and a shorter request usually means a shorter queue wait.
+# Everything is resumable -- if it is killed at walltime, resubmit the SAME
+# command and it continues from where it stopped, losing at most one run.
+#
+# SUBMIT:
+#   qsub -v CONFIG=configs/mnist_lambda_fast.yaml,STAGE=1,PROCS_PER_GPU=4 \
+#        scripts/agastya_sweep.pbs
+#
+#   qsub -v CONFIG=configs/mnist_lambda_fast.yaml,STAGE=2,PROCS_PER_GPU=4 \
+#        scripts/agastya_sweep.pbs
+#
+# NOTE: pass variables with -v, NOT as VAR=x qsub ... . A leading
+# "CONFIG=... qsub" sets them only in your shell, and PBS never sees them.
+# ---------------------------------------------------------------------------
+set -uo pipefail
+cd "$PBS_O_WORKDIR"
+mkdir -p logs results
+
+module load compilers/anaconda/python3/2020.7
+module load compilers/cuda/11.1
+source activate learn_reg
+
+CONFIG=${CONFIG:-configs/mnist_lambda_fast.yaml}
+STAGE=${STAGE:-1}
+WINNERS=${WINNERS:-configs/winners.yaml}
+PROCS_PER_GPU=${PROCS_PER_GPU:-4}
+
+echo "==== sharpbench ===="
+echo "host   : $(hostname)"
+echo "config : $CONFIG"
+echo "stage  : $STAGE"
+echo "procs  : $PROCS_PER_GPU"
+echo "start  : $(date)"
+nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader || true
+python -c "import torch; print('torch', torch.__version__, '| cuda', torch.cuda.is_available())"
+
+export PYTHONUNBUFFERED=1
+export OMP_NUM_THREADS=2
+
+case "$STAGE" in
+  1) STAGE_ARGS=(--stage1) ;;
+  2) STAGE_ARGS=(--stage2 "${WINNERS}") ;;
+  *) STAGE_ARGS=() ;;
+esac
+
+# The MNIST MLP is kernel-launch-bound: one process leaves a V100 ~90% idle,
+# so we pack several onto the card by splitting the sweep into shards.
+if [ "$PROCS_PER_GPU" -le 1 ]; then
+  python -m sharpbench sweep --config "$CONFIG" --shard "0/1" \
+      --out "results/stage${STAGE}.jsonl" "${STAGE_ARGS[@]}"
+else
+  pids=()
+  for ((k=0; k<PROCS_PER_GPU; k++)); do
+    python -m sharpbench sweep --config "$CONFIG" \
+        --shard "${k}/${PROCS_PER_GPU}" \
+        --out "results/stage${STAGE}_${k}.jsonl" "${STAGE_ARGS[@]}" \
+        > "logs/stage${STAGE}_${k}.log" 2>&1 &
+    pids+=($!)
+    sleep 3
+  done
+  echo "launched ${#pids[@]} shards; tail logs/stage${STAGE}_0.log to watch"
+  for p in "${pids[@]}"; do wait "$p"; done
+fi
+
+echo "done : $(date)"

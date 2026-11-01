@@ -1,0 +1,2 @@
+# No regularizer — used by M1 and M3, and by the Stage-1 run that trains M3's LSTM.
+name: none

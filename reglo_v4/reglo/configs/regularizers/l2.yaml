@@ -1,0 +1,18 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  L2 penalty        R(θ) = ½‖θ‖₂²                       — weight-norm shrinkage
+# ════════════════════════════════════════════════════════════════════════════
+name: l2
+exclude: [bias, norm]
+
+explicit:                    # M2 — AdamW + L2, computed at every training step
+  coef: 5.0e-4               # λ in  L(θ) + ½λ·‖θ‖₂²
+  mode: penalty              # penalty:   add ½λ·‖θ‖₂² to the loss (the same R that M4 uses)
+                             # decoupled: AdamW's own weight decay instead, with decoupled_coef
+  decoupled_coef: 0.05       # AdamW weight_decay when mode is decoupled (it is multiplied by the lr)
+
+meta:                        # M4
+  coef: 0.1                  # λ_reg, the same for every r (the reference code's value; worth a short sweep)
+  space: phi                 # phi: on the LSTM's own weights φ (biases excluded) — the proposed method
+                             # theta: on the optimizee's end point θ_T(φ)
+  normalize: explicit        # explicit: L_reg = ½λ‖φ‖₂² with M2's λ above
+                             # mean: ½‖φ‖₂² / N      sum: the bare ½‖φ‖₂²

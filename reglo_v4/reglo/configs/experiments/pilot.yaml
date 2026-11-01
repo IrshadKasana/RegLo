@@ -1,0 +1,19 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  Pilot — optional, as soon as round A's m3_lstm (Stage 1) finishes, before the full grids.
+#  The LSTM is meta-trained on trajectories of at most 1,000 steps but must keep training
+#  for ~14K steps in Stage 2 and ~39K on CIFAR-10. Ten epochs of M3 next to M1 show early
+#  whether it holds up. Own namespace (runs/pilot/), so it never mixes with the study's results.
+# ════════════════════════════════════════════════════════════════════════════
+name: pilot
+study: pilot
+rounds: [A]                  # M3 with round A's φ (ConvNet-4 / SVHN, the pair it was meta-trained on)
+
+train:
+  pairs: [[convnet4, svhn]]
+  methods:
+    m1_adamw: [none]
+    m3_lstm: [none]
+  seeds: [42]
+  overrides: []
+  profile_overrides:         # the pilot's own budget; smoke keeps the smoke profile's
+    production: [training.epochs=10]

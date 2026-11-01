@@ -1,0 +1,91 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "check environment",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["check"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "fetch MNIST",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["fetch"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "train: AdamW (short)",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["train", "--regularizer", "none", "--epochs", "3"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "train: SAM (short)",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["train", "--regularizer", "sam", "--rho", "0.05", "--epochs", "3"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "train: ASAM (short)",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["train", "--regularizer", "sam", "--adaptive", "--rho", "1.0",
+               "--epochs", "3"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "train: GSAM (short)",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["train", "--regularizer", "gsam", "--rho", "0.05",
+               "--alpha", "0.1", "--epochs", "3"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "train: GAM (short)",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["train", "--regularizer", "gam", "--epochs", "3"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "sweep: dry run (main grid)",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["sweep", "--config", "configs/sweep_grid.yaml", "--stage1",
+               "--dry-run", "--out", "results/stage1_0.jsonl"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "sweep: quick config (5 min)",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["sweep", "--config", "configs/quick.yaml",
+               "--out", "results/quick.jsonl"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "sweep: stage 1 shard 0/4",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["sweep", "--config", "configs/sweep_grid.yaml", "--stage1",
+               "--shard", "0/4", "--out", "results/stage1_0.jsonl"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "analyze: stage 1",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["analyze", "--results", "results/stage1_*.jsonl",
+               "--emit-winners", "configs/winners.yaml", "--top-k", "5"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "analyze: stage 2 + export",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["analyze", "--results", "results/stage2_*.jsonl",
+               "--latex", "tables/main.tex", "--csv", "tables/main.csv"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "plot: all figures",
+      "type": "debugpy", "request": "launch", "module": "sharpbench",
+      "args": ["plot", "--results", "results/stage1_*.jsonl",
+               "results/stage2_*.jsonl", "--outdir", "figures"],
+      "console": "integratedTerminal", "cwd": "${workspaceFolder}"
+    }
+  ]
+}

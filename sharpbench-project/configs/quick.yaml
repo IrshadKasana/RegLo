@@ -1,0 +1,38 @@
+# Pipeline validation config: ~5 minutes total, results are NOT meaningful.
+# Purpose is to confirm every stage runs end to end before you commit hours
+# to the real grid: sweep -> analyze -> winners -> stage2 -> plots.
+fixed:
+  hidden: 20
+  act: relu
+  batch_size: 128
+  epochs: 4
+  weight_decay: 0.01
+  lr_schedule: cosine
+  label_noise: 0.0
+  data_root: ./data
+  deterministic: true
+  allow_tf32: false
+  measure_sharpness: true
+  sharpness_radii: [0.05]
+  keep_history: true
+
+seeds: [0, 1, 2]
+lr_grid: [1.0e-3, 3.0e-3]
+
+arms:
+  - name: adamw
+    regularizer: none
+    grid: {}
+  - name: sam
+    regularizer: sam
+    grid: {adaptive: [false], rho: [0.02, 0.05, 0.2]}
+  - name: asam
+    regularizer: sam
+    grid: {adaptive: [true], rho: [0.5, 2.0]}
+  - name: gam
+    regularizer: gam
+    grid: {adaptive: [true], _scale: [0.5, 1.0], grad_gamma: [0.03]}
+    derive: {grad_rho: "0.04 * _scale", grad_norm_rho: "0.20 * _scale"}
+  - name: gsam
+    regularizer: gsam
+    grid: {adaptive: [false], rho: [0.05, 0.1], alpha: [0.05, 0.4]}

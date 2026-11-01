@@ -1,0 +1,7 @@
+learn-regg five-method sweep v3 (SVHN, CIFAR-10, MNIST, FashionMNIST; ID + OOD) -- bundle for PARAM Rudra (SLURM)
+Layout mirrors the repo:  experiments/convnet4_sweep_v3_4datasets/ (code + slurm/),  src/learning_regularizers/dmo/ (reused LO +
+regularizers),  project_paths.py,  datasets/ (filled by ASSEMBLE.sh).
+Read experiments/convnet4_sweep_v3_4datasets/README_RUDRA.md, then:
+  bash experiments/convnet4_sweep_v3_4datasets/slurm/setup_env.sh
+  mkdir -p logs && sbatch experiments/convnet4_sweep_v3_4datasets/slurm/gpu_check.sbatch
+  DATASETS="mnist fmnist" bash experiments/convnet4_sweep_v3_4datasets/slurm/submit_rudra.sh full 1 4 96:00:00

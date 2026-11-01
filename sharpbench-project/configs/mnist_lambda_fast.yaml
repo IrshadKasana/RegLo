@@ -1,0 +1,105 @@
+# =====================================================================
+# FAST VARIANT (60 epochs) -- THE MAIN EXPERIMENT: best rho / lambda / alpha for
+#   AdamW + SAM,  AdamW + GAM,  AdamW + GSAM,  AdamW + lambda*SAM (WSAM)
+# on MNIST with the MLP 784-20-10 (15,910 params).
+# =====================================================================
+# Grid design follows standard two-stage practice: this is the COARSE
+# stage, deliberately wide enough to bracket the optimum and show where
+# each method breaks. Once `analyze` reports the winner, use
+# configs/mnist_refine.yaml to densify around it.
+#
+# rho grids are anchored to the SAM literature (Foret et al. ICLR'21 use
+# {0.01,0.02,0.05,0.1,0.2,0.5}); 0.005 is added below their range so the
+# optimum cannot sit on the lower boundary.
+#
+# WHAT rho MEANS HERE (this MLP, ||w|| ~ 3.2 at init):
+#   rho=0.01 -> perturbation is 0.31% of ||w||
+#   rho=0.05 -> 1.57%
+#   rho=0.1  -> 3.13%
+#   rho=0.5  -> 15.7%   <- this is why SAM collapses at 0.5
+# So rho=0.1 is NOT "10%". It is a 3% Euclidean radius in weight space.
+# ---------------------------------------------------------------------
+
+fixed:
+  dataset: mnist
+  model: mlp
+  hidden: 20
+  act: relu
+  batch_size: 128
+  epochs: 60                 # 60, not 100: on this MLP the val curve is flat
+                             # well before epoch 50 (see 03_training_curves),
+                             # so 60 keeps the ranking of methods while cutting
+                             # ~40% of the wall clock. State the budget in the
+                             # paper; every arm gets the same 60.
+  max_steps: null
+  weight_decay: 0.01
+  lr_schedule: cosine
+  warmup_steps: 0
+  label_noise: 0.0
+  grad_clip: null
+  m_sharpness: null
+  data_root: ./data
+  deterministic: true
+  allow_tf32: false
+  measure_sharpness: true
+  sharpness_radii: [0.05, 0.5]
+  measure_hessian: false
+  keep_history: true
+
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+lr_grid: [1.0e-4, 3.0e-4, 1.0e-3]
+
+arms:
+
+  - name: adamw
+    regularizer: none
+    grid: {}
+
+  # ---- SAM: one knob, rho ------------------------------------------- #
+  - name: sam
+    regularizer: sam
+    grid:
+      adaptive: [false]
+      rho: [0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5]
+
+  # ---- ASAM: rho on a 10-50x LARGER scale (perturbation is |w|-scaled) #
+  - name: asam
+    regularizer: sam
+    grid:
+      adaptive: [true]
+      rho: [0.1, 0.25, 0.5, 1.0, 2.0, 4.0]
+
+  # ---- GSAM: radius x surrogate-gap weight -------------------------- #
+  - name: gsam
+    regularizer: gsam
+    grid:
+      adaptive: [false]
+      rho: [0.01, 0.02, 0.05, 0.1]
+      alpha: [0.01, 0.02, 0.05, 0.1, 0.2, 0.3]
+
+  # ---- WSAM: THE LAMBDA SWEEP --------------------------------------- #
+  # L(w) + lambda * L_sharp(w),  lambda = gamma/(1-gamma).
+  # gamma=0.5 is EXACTLY SAM, so this arm directly tests whether SAM's
+  # implicit weight of 1 is the right weight.
+  - name: wsam
+    regularizer: wsam
+    grid:
+      adaptive: [false]
+      decouple: [true]
+      rho: [0.02, 0.05, 0.1]
+      gamma: [0.2, 0.5, 0.7, 0.8, 0.88, 0.94]
+      #  lam:  0.25  1.0   2.33  4.0   7.33   15.67
+
+  # ---- GAM: radius x penalty weight --------------------------------- #
+  # grad_gamma IS GAM's alpha. Leaving it pinned starves the penalty term;
+  # the published betas (1,1,-1,1) stay fixed -- they define the method.
+  - name: gam
+    regularizer: gam
+    lr_grid: [1.0e-4, 3.0e-4]
+    grid:
+      adaptive: [true]
+      _scale: [0.5, 1.0, 2.0, 4.0]
+      grad_gamma: [0.03, 0.1, 0.3]
+    derive:
+      grad_rho: "0.04 * _scale"
+      grad_norm_rho: "0.20 * _scale"

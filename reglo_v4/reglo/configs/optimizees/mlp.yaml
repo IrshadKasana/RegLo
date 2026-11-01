@@ -1,0 +1,9 @@
+# MLP — Flatten → 2 × [Linear 128 → ReLU] → Linear       ≈0.12 M parameters (28×28×1), ≈0.41 M (32×32×3)
+# The source network of meta-training round B (MLP on Fashion-MNIST: the "FashionMnistRelu128x128"
+# task of the learned-optimizer literature) and an unseen optimizee of round A (configs/rounds.yaml).
+name: mlp
+hidden: [128, 128]           # units per hidden layer; smaller only for smoke tests
+activation: relu
+num_classes: ${dataset.num_classes}       # follow the dataset automatically
+in_channels: ${dataset.channels}
+image_size: ${dataset.image_size}

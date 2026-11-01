@@ -1,0 +1,14 @@
+# ViT-Lite-7/4 (Hassani et al. 2021, "Escaping the Big Data Paradigm with Compact Transformers")
+# Vision Transformer for 32×32 inputs — GELU, ≈3.7 M parameters
+name: vit_lite7
+patch_size: 4
+embed_dim: 256
+depth: 7
+num_heads: 4
+mlp_ratio: 2.0
+activation: gelu
+dropout: 0.0                 # dropout and attention dropout off: they are regularizers
+attention_dropout: 0.0
+num_classes: ${dataset.num_classes}
+in_channels: ${dataset.channels}
+image_size: ${dataset.image_size}

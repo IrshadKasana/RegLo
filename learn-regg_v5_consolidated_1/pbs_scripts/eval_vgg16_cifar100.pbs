@@ -1,0 +1,32 @@
+#!/bin/bash
+#PBS -N ev_vgg16_c100
+#PBS -q gpu-ext
+#PBS -l nodes=1:ppn=40
+#PBS -l walltime=24:00:00
+#PBS -l mem=60gb
+#PBS -o eval_vgg16_cifar100.out
+#PBS -e eval_vgg16_cifar100.err
+#PBS -V
+
+cd $PBS_O_WORKDIR
+module load compilers/cuda/11.1
+~/.conda/envs/learn_reg/bin/python -c "import torch; assert torch.cuda.is_available(), 'CUDA not visible - env/module mismatch (Change.MD item 25)'" || exit 1
+
+echo "==== VGG-16 / CIFAR-100 LO evaluation started at $(date) on $(hostname) ===="
+nvidia-smi || echo "no GPU visible"
+
+# Scaling experiment on the hardest combo in the revision plan:
+# VGG-16 (~14.7M params) on CIFAR-100 (100 classes), standard augmentation.
+~/.conda/envs/learn_reg/bin/python experiments/dmo/evaluate_optimizee.py \
+    --saved_model AdSAM_sgd_LO_140424 \
+    --dataset cifar100 \
+    --optimizee_model vgg16 \
+    --lo_train_dataset mnist \
+    --param_chunk_size 2000000 \
+    --augment \
+    --eval_tag scale_vgg16 \
+    --set batch_size=128 optimizee_epochs=3000 n_training=3 calc_hessian=True num_ev_hess=20
+
+echo "==== Job ended at $(date) ===="
+# --- production settings (uncomment at deploy; Change.MD item 79) ---
+#    --set n_training=10 optimizee_epochs=1000 patience=100 calc_hessian=True hyper_eps=True allow_cpu=False

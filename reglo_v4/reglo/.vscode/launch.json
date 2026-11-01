@@ -1,0 +1,127 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "1 · Download the datasets (once, needs internet)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/prepare_data.py",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "2 · Smoke test: the whole study, real datasets (minutes)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_study.py",
+      "args": ["--profile", "smoke"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Smoke test offline: the whole study, no downloads",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_study.py",
+      "args": ["--profile", "smoke_offline"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Smoke test: report again (tables and figures)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/make_report.py",
+      "args": ["--profile", "smoke"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Smoke test: check the study (connectivity, progress)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/check_study.py",
+      "args": ["--profile", "smoke"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Production: the plan of the real study (dry run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_study.py",
+      "args": ["--profile", "production", "--dry-run"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Debug Stage 1: M4's LSTM with SAM, round B — MLP / FMNIST (smoke numbers)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/meta_train.py",
+      "args": ["meta_training=m4_lstm_reg", "regularizer=sam", "optimizee=mlp", "dataset=fmnist",
+               "profile=smoke_offline", "meta_tag=debug"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Debug Stage 1: M2 = AdamW + SAM, ConvNet-4 / SVHN (smoke numbers)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/train_optimizee.py",
+      "args": ["method=m2_adamw_reg", "regularizer=sam", "optimizee=convnet4", "dataset=svhn",
+               "profile=smoke_offline", "study=debug"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Debug Stages 2–3: M1, MLP / CIFAR-10 (smoke numbers)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/train_optimizee.py",
+      "args": ["method=m1_adamw", "optimizee=mlp", "dataset=cifar10", "profile=smoke_offline", "study=debug"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Excel workbook of the experiment plan (production, results filled in where finished)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/make_workbook.py",
+      "args": ["--profile", "production", "--fill"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Show config: M4 + GSAM, ResNet-18 / CIFAR-10 (production numbers)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/show_config.py",
+      "args": ["method=m4_lstm_reg", "regularizer=gsam", "optimizee=resnet18", "dataset=cifar10", "profile=production"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Run all tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+train_arguments:
+  adaptive: True             # Turns on for adaptiveSAM
+  SAMonOptimizer: False          # If SAM on optimizer parameters
+  base_optimizer: 'sgd'         # Base optimizer for LO type
+  lr: 0.001   # EQUALIZED meta-lr (was 0.01). gam/gsam meta-train at 0.001; a 10x lr mismatch between arms confounds every LO-vs-LO comparison. Checkpoints trained at 0.01 must be RE-TRAINED for a matched-budget comparison.
+  weight_decay: 0.0            # Weight decay of base_optimizer for LO 
+  momentum: 0.9                 # Momentum of base_optimizer for LO 
+  rho: 0.5
+  optzee_wd: 0.0     # was 0.005 — L2 mixed into the SAM-opzee ablation made it impure (item 11)              # L2 Weight decay of optimizee (in case SAMonOptimizer == False)
+  model_name: 'AdSAMopzee_sgd_LO_140424'  # name of the optimizer model with specs
+  regularizer: 'sam_opzee'
+  if_avreg: True                               # turn on regularization on Optimizer
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+

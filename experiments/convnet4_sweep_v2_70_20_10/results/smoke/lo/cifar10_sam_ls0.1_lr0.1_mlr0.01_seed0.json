@@ -1,0 +1,128 @@
+{
+ "dataset": "cifar10",
+ "reg": "sam",
+ "ls": 0.1,
+ "lr": 0.1,
+ "mlr": 0.01,
+ "seed": 0,
+ "evals": [
+  {
+   "train_loss": 2.28079072265625,
+   "train_acc": 0.2535,
+   "val_loss": 2.274763671875,
+   "val_acc": 0.2615,
+   "test_loss": 2.298475992838542,
+   "test_acc": 0.25183333333333335,
+   "ood": {
+    "svhn": {
+     "loss": 3.416497488614475,
+     "acc": 0.07820525732702185,
+     "auroc_msp": 0.5921971161916272
+    }
+   },
+   "l1_norm": 1090.3526611328125,
+   "l2_sq": 260.79486083984375,
+   "diverged": false,
+   "seconds": 21.05943727493286,
+   "curve": [
+    {
+     "step": 20,
+     "train_loss": 2.216890573501587,
+     "val_loss": 2.0848267415364585,
+     "val_acc": 0.21166666666666667
+    },
+    {
+     "step": 40,
+     "train_loss": 1.9649406671524048,
+     "val_loss": 2.274763671875,
+     "val_acc": 0.2615
+    }
+   ]
+  }
+ ],
+ "meta_train": {
+  "best_ckpt_score": 1.83909010887146,
+  "history": [
+   {
+    "stage": 20,
+    "block": 0,
+    "ckpt_score": 1.9019660949707031,
+    "saved": true,
+    "elapsed": 6.436413049697876
+   },
+   {
+    "stage": 40,
+    "block": 0,
+    "ckpt_score": 1.83909010887146,
+    "saved": true,
+    "elapsed": 12.17212462425232
+   }
+  ],
+  "meta_lr": 0.01,
+  "meta_train_seconds": 12.189856767654419
+ },
+ "cfg": {
+  "width": 16,
+  "rho_sam": 0.001,
+  "rho_gam": 0.04,
+  "rho_gsam": 0.005,
+  "smooth_eps": 0.01,
+  "smooth_pga": 10,
+  "hidden_size": 20,
+  "num_layers": 2,
+  "meta_opt": "adam",
+  "meta_lr": 0.001,
+  "meta_batch": 64,
+  "tbptt": 10,
+  "stages": [
+   20,
+   40
+  ],
+  "blocks_per_stage": 1,
+  "train_period": 1,
+  "ckpt_epochs": 1,
+  "eval_steps": 40,
+  "eval_batch": 64,
+  "lo_inits": 1,
+  "adamw_lrs": [
+   0.001,
+   0.01
+  ],
+  "adamw_wd": 0.01,
+  "adamw_inits": 1,
+  "curve_every": 20,
+  "grid": [
+   0.01,
+   0.1
+  ],
+  "meta_lrs": [
+   0.001,
+   0.01
+  ],
+  "rho_grid": [
+   [
+    "gam",
+    [
+     0.04,
+     0.1
+    ]
+   ],
+   [
+    "gsam",
+    [
+     0.005,
+     0.02
+    ]
+   ],
+   [
+    "sam",
+    [
+     0.001,
+     0.01
+    ]
+   ]
+  ],
+  "radius": 1
+ },
+ "device": "cpu"
+}

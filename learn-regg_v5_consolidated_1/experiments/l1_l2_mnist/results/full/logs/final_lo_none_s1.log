@@ -1,0 +1,13 @@
+[none lam=0 seed=1] stage T= 100 block 1/3 task=0.8582 R=0.0 heldout=0.6820 *  (202s)
+[none lam=0 seed=1] stage T= 100 block 2/3 task=0.7324 R=0.0 heldout=0.2343 *  (383s)
+[none lam=0 seed=1] stage T= 100 block 3/3 task=0.6073 R=0.0 heldout=0.2369  (581s)
+[none lam=0 seed=1] stage T= 200 block 1/3 task=0.4297 R=0.0 heldout=0.1737 *  (850s)
+[none lam=0 seed=1] stage T= 200 block 2/3 task=0.4026 R=0.0 heldout=0.1609 *  (1120s)
+[none lam=0 seed=1] stage T= 200 block 3/3 task=0.3700 R=0.0 heldout=0.1744  (1389s)
+[none lam=0 seed=1] stage T= 500 block 1/3 task=0.2736 R=0.0 heldout=0.1617  (1930s)
+[none lam=0 seed=1] stage T= 500 block 2/3 task=0.2544 R=0.0 heldout=0.1767  (2471s)
+[none lam=0 seed=1] stage T= 500 block 3/3 task=0.2524 R=0.0 heldout=0.1640  (3013s)
+[none lam=0 seed=1] stage T=1000 block 1/3 task=0.2121 R=0.0 heldout=0.1719  (4007s)
+[none lam=0 seed=1] stage T=1000 block 2/3 task=0.2051 R=0.0 heldout=0.1775  (4996s)
+[none lam=0 seed=1] stage T=1000 block 3/3 task=0.2107 R=0.0 heldout=0.2103  (5990s)
+lo_none_seed1: val_acc=0.9240 test_acc=0.9284

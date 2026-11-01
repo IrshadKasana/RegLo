@@ -1,0 +1,11 @@
+train_arguments:
+  base_optimizer: 'adam'         # Base optimizer used to update the LO parameters
+  lr: 0.01                       # Learning rate of base_optimizer
+  weight_decay: 0.0              # Weight decay of base_optimizer (kept 0; L2 is applied on the optimizee inside the meta-loss)
+  momentum: 0.0                  # Momentum of base_optimizer
+  model_name: 'L2_adam_LO_140424'   # name of the optimizer model with specs
+  regularizer: 'l2'
+  optzee_wd: 0.005               # L2 weight-decay coefficient applied to optimizee params in meta-loss
+  if_avreg: True                 # turn on regularization on Optimizer (so train.py routes to L2 branch)
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

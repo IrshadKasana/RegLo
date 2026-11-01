@@ -1,0 +1,16 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  GSAM (Zhuang et al. 2022)                       — surrogate-gap minimisation
+#      surrogate gap  h(θ) = L(θ+ε̂) − L(θ),   ε̂ = ρ·∇L/‖∇L‖
+#  Descends the perturbed loss L(θ+ε̂) and ascends L only along the component of ∇L(θ)
+#  orthogonal to ∇L(θ+ε̂), so h shrinks without raising the perturbed loss.
+#  (As a penalty value h equals SAM's R; the difference is this update direction.)
+# ════════════════════════════════════════════════════════════════════════════
+name: gsam
+rho: 0.05
+alpha: 0.1                   # weight of the orthogonal ascent step (tune, e.g. 0.01–0.3)
+
+explicit: {}                 # M2 — two passes per step, like SAM
+
+meta:                        # M4 — GSAM's direction on φ: ∇_φL_meta(φ+ε̂) − α·∇⊥_φL_meta(φ)
+  coef: 0.1                  # λ_reg, the same for every r (the reference code's value; worth a short sweep)
+  space: phi                 # theta: the direction at the optimizee's end point θ_T, backpropagated into φ

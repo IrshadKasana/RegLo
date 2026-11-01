@@ -1,0 +1,21 @@
+#!/bin/bash
+#PBS -N train_noreg
+#PBS -q gpu-test
+#PBS -l nodes=1:ppn=40
+#PBS -l walltime=23:00:00
+#PBS -l mem=60gb
+#PBS -o train_noreg.out
+#PBS -e train_noreg.err
+#PBS -V
+
+cd $PBS_O_WORKDIR
+
+module load compilers/cuda/11.1
+~/.conda/envs/learn_reg/bin/python -c "import torch; assert torch.cuda.is_available(), 'CUDA not visible - env/module mismatch (Change.MD item 25)'" || exit 1
+
+echo "==== Job started at $(date) on $(hostname) ===="
+nvidia-smi || echo "no GPU visible"
+
+~/.conda/envs/learn_reg/bin/python experiments/dmo/train.py --regularizer=no_reg
+
+echo "==== Job ended at $(date) ===="

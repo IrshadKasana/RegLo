@@ -1,0 +1,18 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  L1 penalty        R(θ) = ‖θ‖₁                                     — sparsity
+# ════════════════════════════════════════════════════════════════════════════
+name: l1
+exclude: [bias, norm]        # never penalised: biases and BatchNorm / LayerNorm parameters
+
+explicit:                    # M2 — AdamW + L1, computed at every training step
+  coef: 1.0e-5               # λ in  L(θ) + λ·‖θ‖₁
+  mode: penalty              # penalty:  add λ·‖θ‖₁ to the loss
+                             # proximal: soft-threshold the weights after each AdamW step (exact zeros)
+
+meta:                        # M4 — the λ_reg·L_reg term of Algorithm 1's meta-objective
+  coef: 0.1                  # λ_reg, the same for every r (the reference code's value; worth a short sweep)
+  space: phi                 # phi: on the LSTM's own weights φ (biases excluded) — the proposed method
+                             # theta: on the optimizee's end point θ_T(φ)
+  normalize: explicit        # explicit: L_reg = λ‖φ‖₁ with M2's λ above (per-coordinate pressure
+                             #           independent of the network's size)
+                             # mean: ‖φ‖₁ / N      sum: the bare ‖φ‖₁ (~6·10² for the LSTM at initialisation)

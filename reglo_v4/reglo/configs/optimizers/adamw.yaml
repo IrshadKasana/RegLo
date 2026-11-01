@@ -1,0 +1,16 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  AdamW — the conventional optimizer of M1 and M2
+# ════════════════════════════════════════════════════════════════════════════
+name: adamw
+kind: conventional
+lr: 1.0e-3
+betas: [0.9, 0.999]
+eps: 1.0e-8
+weight_decay: 0.0            # keep 0: AdamW's decoupled decay is itself a regularizer, and M1 must be
+                             # unregularised (with 0 the update equals Adam's). M2-L2 adds its own term,
+                             # or uses this slot when configs/regularizers/l2.yaml says mode: decoupled.
+scheduler:
+  name: cosine               # cosine | constant — stepped once per optimizer step
+  warmup_epochs: 0           # linear warm-up (the ViT grids use 5)
+  min_lr: 0.0
+grad_clip: null              # max gradient norm; null = off

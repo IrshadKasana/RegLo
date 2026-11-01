@@ -1,0 +1,62 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  Base of every run. One file per group (dataset, optimizee, optimizer,
+#  regularizer, method or meta_training) is merged on top of this, then the
+#  profile (configs/profiles/<profile>.yaml), then command-line overrides:
+#
+#      group=name        choose a file        method=m2_adamw_reg regularizer=sam
+#      key.path=value    change a value       training.epochs=100
+#      +key.path=value   add a new key        +notes=first_try
+#      profile=name      smoke | smoke_offline | production (default: $REGLO_PROFILE, else production)
+#
+#  ??? marks a number that the profile sets (smoke vs production), so it is never
+#  defined twice. Changing a key that does not exist is an error — typos never run
+#  silently. Print any composed config with:  python scripts/show_config.py <overrides>
+# ════════════════════════════════════════════════════════════════════════════
+
+defaults:                    # every run picks these two (an entry file may preset them)
+  dataset: ???               # fmnist | svhn | cifar10 | cifar100   (synthetic: unit tests only)
+  optimizee: ???             # convnet4 | mlp | resnet18 | wrn28 | vit_lite7
+
+profile: production          # set from profile=… / $REGLO_PROFILE when the config is composed
+study: adhoc                 # namespace of the runs, artifacts/<profile>/runs/<study>/: main (the thesis
+                             # study), pilot, debug — set by the experiment files
+meta_tag: A                  # the round of the Stage-1 LSTM optimizers (configs/rounds.yaml): meta_train.py
+                             # writes, and M3/M4 read, artifacts/<profile>/meta_training/<meta_tag>/. A round
+                             # also fixes the source pair meta-training uses; any other name is an ad-hoc
+                             # family on the pair given (default ConvNet-4 / SVHN)
+seed: 42
+device: ???                  # auto | cuda | cpu — profile: production cuda (no silent CPU fallback), smoke auto
+deterministic: false         # true → deterministic cuDNN kernels (slower, bit-reproducible)
+max_hours: ${oc.env:REGLO_MAX_HOURS,0}   # > 0: stop cleanly before this many hours — checkpoint, exit
+                             # code 75 — and continue when started again (cluster walltimes; the
+                             # cluster submit scripts set it from the walltime). 0: no limit
+
+paths:                       # environment variables win, so one config runs on a laptop and on the HPC
+  root: ${reglo_root:}                                         # repository root ($REGLO_ROOT if set)
+  data: ${oc.env:REGLO_DATA,${paths.root}/datasets}            # shared by every profile
+  artifacts_root: ${oc.env:REGLO_ARTIFACTS,${paths.root}/artifacts}
+  artifacts: ${paths.artifacts_root}/${profile}                # smoke and production never mix
+
+training:                    # Stages 2–3: training one optimizee with M1 / M2 / M3 / M4
+  epochs: ???                # profile (production: 50; CIFAR-10/100: 100)
+  batch_size: 128            # protocol value for every stage
+  eval_batch_size: 512
+  max_steps: null            # hard cap on optimizer steps (debugging)
+  eval_every: 1              # epochs between test-set evaluations (and always the last epoch)
+  train_eval_every: ???      # epochs between clean training-set evaluations — the train half of the
+                             # generalization gap; always the last epoch (profile)
+  convergence_patience: ???  # steps without a new best training loss → save the "at convergence"
+                             # snapshot used by the paper's PoC tests (profile; the paper: 100)
+  sparsity_threshold: 1.0e-3 # |w| below this counts as zero (protocol)
+  validation_fraction: 0.0   # > 0: hold out this share of the run's training images and evaluate on them
+                             # instead of the test set — for hyperparameter sweeps (workbook Table 3); the
+                             # study grids keep 0, so every reported number is a test-set number
+  count_flops: true          # FLOPs of one training step, measured once at the start
+  checkpoint_every: ???      # epochs between resumable checkpoints (profile). M3/M4 checkpoints hold the
+                             # LSTM state: 320 bytes per parameter, ≈3.6 GB for ResNet-18
+  resume: true               # continue from last.pt after a walltime kill
+  rerun: false               # true → start over even if final.json says the run finished
+
+logging:
+  log_every: 50              # optimizer steps between metric lines
+  tensorboard: false

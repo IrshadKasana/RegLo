@@ -1,0 +1,7 @@
+# ResNet-18, CIFAR variant (3×3 stem, no max-pool) — ReLU, ≈11.2 M parameters
+name: resnet18
+activation: relu
+width: 64                    # channels of the first stage (64, 128, 256, 512); smaller only for smoke tests
+num_classes: ${dataset.num_classes}
+in_channels: ${dataset.channels}
+image_size: ${dataset.image_size}

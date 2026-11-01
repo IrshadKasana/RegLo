@@ -1,0 +1,17 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  Stage 1 (protocol Exp 0.0) — the LSTM optimizer used by M3 (vanilla L2O)
+#
+#      min_φ  L_meta(φ) = Σ_t w_t·L(θ_t)
+#
+#      python scripts/meta_train.py meta_training=m3_lstm
+# ════════════════════════════════════════════════════════════════════════════
+extends: base
+
+defaults:
+  regularizer: none
+
+name: m3_lstm
+allowed_regularizers: [none]
+objective:
+  smooth: false
+  regularizer: false

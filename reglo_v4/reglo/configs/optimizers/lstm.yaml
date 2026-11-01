@@ -1,0 +1,28 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  LSTM learned optimizer F_φ — the optimizer of M3 and M4
+#
+#  Coordinate-wise (Andrychowicz et al. 2016): one small network is shared by every
+#  parameter coordinate, and each coordinate keeps its own hidden state.
+#      u_t = F_φ(g_t, h_t)              θ_{t+1} = θ_t + u_t        (Algorithm 1, lines 12–14)
+#
+#  Its weights φ come from Stage 1 (configs/meta_training/); the checkpoint path is
+#  set in configs/methods/m3_lstm.yaml and m4_lstm_reg.yaml.
+#  State memory: 2 layers × (h, c) × 20 floats = 320 bytes per optimizee parameter.
+# ════════════════════════════════════════════════════════════════════════════
+name: lstm
+kind: learned
+num_layers: 2                # 2-layer LSTM with 20 hidden units — the DM optimizer of Andrychowicz et al.,
+hidden_size: 20              # also used by Chen et al. (2020) and Xiong & Hsieh (2022)
+head_layers: 2               # 2-layer MLP projection head (20 → 20 → 1)
+head_hidden: 20
+features: [grad]             # per-coordinate inputs. Algorithm 1 feeds the gradient g_t;
+                             # optional extras: momentum (EMA of g), param (θ_t, as in the paper's Eq. 2)
+normalization: rms           # rms:        each tensor's gradient ÷ its RMS — scale-free across layers
+                             #             and architectures (Xiong & Hsieh normalise the same way)
+                             # global_rms: one RMS over all parameters (exactly Xiong & Hsieh's code)
+                             # log_sign:   Andrychowicz et al. log/sign preprocessing
+momentum_beta: 0.9           # used only when 'momentum' is in features
+output_scale: 1.0e-3         # u_t = output_scale · head(h_t): starts in AdamW's step-size regime
+head_init_scale: 0.1         # last head layer ×0.1 at initialisation (as in Xiong & Hsieh's code)
+chunk_size: 2097152          # coordinates per LSTM call when an optimizee is trained (Stages 2–3):
+                             # bounds the temporary memory on ResNet-18 / WRN-28

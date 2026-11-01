@@ -1,0 +1,9 @@
+/home/hp/miniconda3/envs/new_env/lib/python3.10/site-packages/torch/cuda/__init__.py:182: UserWarning: CUDA initialization: Unexpected error from cudaGetDeviceCount(). Did you run some cuda functions before calling NumCudaDevices() that might have already set an error? Error 804: forward compatibility was attempted on non supported HW (Triggered internally at /pytorch/c10/cuda/CUDAFunctions.cpp:119.)
+  return torch._C._cuda_getDeviceCount() > 0
+/home/hp/miniconda3/envs/new_env/lib/python3.10/site-packages/torch/cuda/__init__.py:827: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+[ls=0.004 lr=0 seed=0] T= 100 blk 1/1 ckpt=0.4638 * (103s)
+[ls=0.004 lr=0 seed=0] T= 200 blk 1/1 ckpt=0.5004 (342s)
+[ls=0.004 lr=0 seed=0] T= 500 blk 1/1 ckpt=0.3723 * (931s)
+[ls=0.004 lr=0 seed=0] T=1000 blk 1/1 ckpt=0.3264 * (2018s)
+ls0.004_lr0_seed0: val_acc=0.8552

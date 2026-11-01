@@ -1,0 +1,17 @@
+c99cafc152244af753f735de768cd75f  datasets/cifar-10-batches-py/data_batch_1
+d4bba439e000b95fd0a9bffe97cbabec  datasets/cifar-10-batches-py/data_batch_2
+54ebc095f3ab1f0389bbae665268c751  datasets/cifar-10-batches-py/data_batch_3
+634d18415352ddfa80567beed471001a  datasets/cifar-10-batches-py/data_batch_4
+482c414d41f54cd18b22e5b47cb7c3cb  datasets/cifar-10-batches-py/data_batch_5
+40351d587109b95175f43aff81a1287e  datasets/cifar-10-batches-py/test_batch
+5ff9c542aee3614f3951f8cda6e48888  datasets/cifar-10-batches-py/batches.meta
+e26dedcc434d2e4c54c9b2d4a06d8373  datasets/train_32x32.mat
+eb5a983be6a315427106f1b164d9cef3  datasets/test_32x32.mat
+2646ac647ad5339dbf082846283269ea  datasets/MNIST/raw/t10k-images-idx3-ubyte
+27ae3e4e09519cfbb04c329615203637  datasets/MNIST/raw/t10k-labels-idx1-ubyte
+6bbc9ace898e44ae57da46a324031adb  datasets/MNIST/raw/train-images-idx3-ubyte
+a25bea736e30d166cdddb491f175f624  datasets/MNIST/raw/train-labels-idx1-ubyte
+8181f5470baa50b63fa0f6fddb340f0a  datasets/FashionMNIST/raw/t10k-images-idx3-ubyte
+15d484375f8d13e6eb1aabb0c3f46965  datasets/FashionMNIST/raw/t10k-labels-idx1-ubyte
+f4a8712d7a061bf5bd6d2ca38dc4d50a  datasets/FashionMNIST/raw/train-images-idx3-ubyte
+9018921c3c673c538a1fc5bad174d6f9  datasets/FashionMNIST/raw/train-labels-idx1-ubyte

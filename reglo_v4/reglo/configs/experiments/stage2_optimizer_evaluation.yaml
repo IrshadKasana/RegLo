@@ -1,0 +1,37 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  STAGE 2 — Optimizer evaluation                                       147 runs
+#
+#  Does each trained optimizer still work on a network it never saw? The dataset is held at
+#  the round's source dataset (the half NOT used in meta-training); only the optimizee changes.
+#  This file trains the SVHN pairs — round A's Stage 2. Every round evaluates every pair
+#  (cross-evaluation), and the setting follows from the round's source (configs/rounds.yaml):
+#
+#                         round A: ConvNet-4 / SVHN        round B: MLP / FMNIST
+#      ConvNet-4 / SVHN   seen optimizee   (Stage 2)       unseen optimizee + dataset (Stage 3)
+#      MLP / SVHN         unseen optimizee (Stage 2)       unseen dataset             (Stage 3)
+#      ResNet-18 / SVHN   unseen optimizee (Stage 2)       unseen optimizee + dataset (Stage 3)
+#
+#  Round B's Stage 2 (MLP, ConvNet-4, ResNet-18 on FMNIST) is trained by the Stage-3 file.
+#  Per pair: M1, M2 × 5 r (AdamW + r, computed at every step), plus M3 and M4 × 5 r with the
+#  optimizers of each round — 1 + 5 + 2 × 6 = 18 variants × 3 seeds = 54 runs; 3 pairs = 162, minus
+#  the 15 M2 runs on ConvNet-4 / SVHN that Stage 1 already trains (round A's source pair: from_stage1)
+#  = 147. M3/M4 run their frozen Stage-1 LSTM: no r is computed for them.
+#  Epochs, data and seeds per profile: configs/profiles/ (production: 50 epochs, 3 seeds).
+# ════════════════════════════════════════════════════════════════════════════
+name: stage2_optimizer_evaluation
+stage: 2
+study: main
+rounds: [A, B]               # M3/M4 run once with each round's optimizers
+
+train:
+  pairs: [[convnet4, svhn], [mlp, svhn], [resnet18, svhn]]
+  methods:                   # method → regularizers it is run with
+    m1_adamw: [none]
+    m2_adamw_reg: [l1, l2, sam, gam, gsam]  # AdamW + r, r computed at every step
+    m3_lstm: [none]
+    m4_lstm_reg: [l1, l2, sam, gam, gsam]   # which φ*_r to load; no r is computed
+  from_stage1: [m2_adamw_reg] # on a round's source pair these runs are Stage 1's (reused, not repeated)
+  seeds: [42, 43, 44]
+  overrides: []              # every run (hyperparameters only: scale numbers belong in the profiles)
+  pair_overrides: {}         # <optimizee> or <optimizee>-<dataset> → overrides
+  optimizer_overrides: {}    # optimizer → optimizee → overrides (runs using that optimizer only)

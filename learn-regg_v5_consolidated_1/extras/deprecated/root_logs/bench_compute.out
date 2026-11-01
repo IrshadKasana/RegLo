@@ -1,0 +1,30 @@
+==== Compute benchmark started at Mon Jun 22 19:29:20 IST 2026 on hcc50 ====
+no GPU visible
+CUDA available: False, MPS available: False, Device: cpu
+Benchmarking on device: cpu
+
+=== AdamW + SAM (explicit, no LO) ===
+
+=== No Reg LO (learned optimizer) ===
+  loaded checkpoint: /iitjfs/home/2025pcs0034/learn-reg/artifacts/dmo/checkpoints/DMO_adam_280424.pt
+
+=== SAM LO (learned optimizer) ===
+  loaded checkpoint: /iitjfs/home/2025pcs0034/learn-reg/artifacts/dmo/checkpoints/AdSAM_sgd_LO_140424.pt
+
+====================================================================================================
+Method            fwd/step  bwd/step    ms/step    steps/s    fwd FLOPs/batch      ~FLOPs/step
+----------------------------------------------------------------------------------------------------
+AdamW + SAM              2         2      2.713      368.7          2,032,640       12,195,840
+No Reg LO                1         1      7.818      127.9          2,032,640        6,097,920
+SAM LO                   1         1      7.740      129.2          2,032,640        6,097,920
+====================================================================================================
+
+Notes:
+  - AdamW+SAM needs 2 forward + 2 backward passes per step (ascent + descent).
+  - Learned optimizers need 1 forward + 1 backward on the optimizee, PLUS an
+    LSTM meta-optimizer forward pass (per-parameter) not captured by fvcore.
+  - FLOP estimates use bwd ~ 2x fwd. Treat as order-of-magnitude, not exact.
+
+Saved to: /iitjfs/home/2025pcs0034/learn-reg/artifacts/dmo/results/compute_benchmark.json
+          /iitjfs/home/2025pcs0034/learn-reg/artifacts/dmo/results/compute_benchmark.txt
+==== Job ended at Mon Jun 22 19:30:19 IST 2026 ====

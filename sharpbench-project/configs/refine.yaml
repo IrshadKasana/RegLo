@@ -1,0 +1,110 @@
+# =====================================================================
+# REFINEMENT PASS -- run this AFTER stage 1 flagged grid boundaries.
+# =====================================================================
+# Point it at your EXISTING stage-1 JSONL files. The sweep is resumable and
+# keyed on the full hyperparameter tuple, so every combination you already ran
+# is skipped automatically. Only the newly added points cost you time.
+#
+# WHAT THIS FIXES, and why each one matters
+# -----------------------------------------
+# 1. LEARNING RATE (all four regularized arms selected lr=3e-4, the grid
+#    minimum). That is a systematic signal, not noise: SAM/GAM/GSAM change the
+#    effective gradient scale, so they prefer a smaller step than the AdamW
+#    control (which selected 1e-3, comfortably interior). Every regularized arm
+#    in the first run was therefore LR-limited and under-tuned. Extended down
+#    to 1e-4 and 3e-5.
+#
+# 2. GAM grad_gamma -- THE REAL FIX FOR GAM.
+#    grad_gamma IS the alpha in GAM's objective  L(w) + alpha * R(w).
+#    It was pinned at the published default 0.03, meaning the entire
+#    gradient-norm penalty entered the update at 3% weight. GAM then pushed
+#    grad_rho to the grid maximum trying to compensate with radius alone --
+#    which is exactly what a method does when its strength knob is frozen too
+#    low. Radius and weight are not interchangeable, so this was a design flaw
+#    in the original grid, not a property of GAM.
+#    NOTE: this is different from the betas. grad_beta_0..3 define the method
+#    and must stay fixed; grad_gamma is a legitimate tunable.
+#
+# 3. GAM radius extended upward (grad_rho selected 0.16, the maximum).
+#
+# 4. GSAM alpha extended downward (selected 0.01, the minimum).
+#
+# 5. ASAM radius: 1.0 was interior, so no change needed there.
+# ---------------------------------------------------------------------
+
+fixed:
+  hidden: 20
+  act: relu
+  batch_size: 128
+  epochs: 100
+  max_steps: null
+  weight_decay: 0.01
+  lr_schedule: cosine
+  warmup_steps: 0
+  label_noise: 0.0
+  grad_clip: null
+  m_sharpness: null
+  data_root: ./data
+  deterministic: true
+  allow_tf32: false
+  measure_sharpness: true
+  sharpness_radii: [0.05, 0.5]
+  measure_hessian: false
+  keep_history: true
+
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# Global default. Individual arms override it below -- the expensive arms only
+# search the region the first pass already showed they want, which is what
+# keeps this refinement affordable.
+lr_grid: [1.0e-4, 3.0e-4, 1.0e-3]
+
+arms:
+
+  - name: adamw
+    regularizer: none
+    grid: {}
+
+  - name: sam
+    regularizer: sam
+    lr_grid: [3.0e-5, 1.0e-4, 3.0e-4, 1.0e-3]
+    grid:
+      adaptive: [false]
+      rho: [0.01, 0.02, 0.05, 0.1, 0.2, 0.5]
+
+  - name: asam
+    regularizer: sam
+    lr_grid: [3.0e-5, 1.0e-4, 3.0e-4, 1.0e-3]
+    grid:
+      adaptive: [true]
+      rho: [0.1, 0.5, 1.0, 2.0, 4.0]
+
+  # GAM: radius extended up AND the penalty weight finally swept.
+  - name: gam
+    regularizer: gam
+    lr_grid: [1.0e-4, 3.0e-4]        # narrowed: 4 passes/step, and pass 1
+    grid:                            # already showed it wants the low end
+      adaptive: [true]
+      _scale: [1.0, 2.0, 4.0, 8.0]   # grad_rho 0.04 -> 0.32
+      grad_gamma: [0.03, 0.1, 0.3, 1.0]   # <-- the real fix
+    derive:
+      grad_rho: "0.04 * _scale"
+      grad_norm_rho: "0.20 * _scale"
+
+  # GSAM: alpha extended downward past the selected boundary.
+  - name: gsam
+    regularizer: gsam
+    lr_grid: [3.0e-5, 1.0e-4, 3.0e-4, 1.0e-3]
+    grid:
+      adaptive: [false]
+      rho: [0.02, 0.05, 0.1, 0.2]
+      alpha: [0.001, 0.003, 0.01, 0.05]
+
+# ---------------------------------------------------------------------
+# Cost (stage 1, 3 seeds, resume skips everything already run):
+#   the cheap arms finish in about an hour on 4 shards; GAM is the long pole
+#   at 4 passes per step. If time is tight, split it:
+#
+#   --arms adamw sam asam gsam        (cheap, do first)
+#   --arms gam                        (expensive, run overnight)
+# ---------------------------------------------------------------------

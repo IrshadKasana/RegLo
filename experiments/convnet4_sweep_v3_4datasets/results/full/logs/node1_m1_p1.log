@@ -1,0 +1,47 @@
+[worker] torch 1.9.0+cu111 device=cuda:0 gpu=Tesla V100-PCIE-32GB
+[worker] phase=m1 shard 3/4: 20 jobs, 0 done, 20 to run
+/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torchvision/datasets/mnist.py:498: UserWarning: The given NumPy array is not writeable, and PyTorch does not support non-writeable tensors. This means you can write to the underlying (supposedly non-writeable) NumPy array using the tensor. You may want to copy the array to protect its data or make it writeable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at  /pytorch/torch/csrc/utils/tensor_numpy.cpp:180.)
+  return torch.from_numpy(parsed.astype(m[2], copy=False)).view(*s)
+/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+M1 cifar10_lr0.004 val=0.7316
+[worker] ok m1_cifar10_lr0.004 (66s)
+M1 cifar10_lr0.008 val=0.7244
+[worker] ok m1_cifar10_lr0.008 (36s)
+M1 cifar10_lr0.03 val=0.6589
+[worker] ok m1_cifar10_lr0.03 (36s)
+M1 cifar10_lr0.1 val=0.3681
+[worker] ok m1_cifar10_lr0.1 (36s)
+M1 cifar10_lr0.5 val=0.1743
+[worker] ok m1_cifar10_lr0.5 (36s)
+M1 fmnist_lr0.004 val=0.9042
+[worker] ok m1_fmnist_lr0.004 (40s)
+M1 fmnist_lr0.008 val=0.9001
+[worker] ok m1_fmnist_lr0.008 (37s)
+M1 fmnist_lr0.03 val=0.8666
+[worker] ok m1_fmnist_lr0.03 (37s)
+M1 fmnist_lr0.1 val=0.8449
+[worker] ok m1_fmnist_lr0.1 (37s)
+M1 fmnist_lr0.5 val=0.7541
+[worker] ok m1_fmnist_lr0.5 (37s)
+M1 mnist_lr0.004 val=0.9855
+[worker] ok m1_mnist_lr0.004 (40s)
+M1 mnist_lr0.008 val=0.9839
+[worker] ok m1_mnist_lr0.008 (37s)
+M1 mnist_lr0.03 val=0.9833
+[worker] ok m1_mnist_lr0.03 (37s)
+M1 mnist_lr0.1 val=0.9546
+[worker] ok m1_mnist_lr0.1 (37s)
+M1 mnist_lr0.5 val=0.8337
+[worker] ok m1_mnist_lr0.5 (37s)
+M1 svhn_lr0.004 val=0.9028
+[worker] ok m1_svhn_lr0.004 (43s)
+M1 svhn_lr0.008 val=0.8954
+[worker] ok m1_svhn_lr0.008 (40s)
+M1 svhn_lr0.03 val=0.8561
+[worker] ok m1_svhn_lr0.03 (40s)
+M1 svhn_lr0.1 val=0.1932
+[worker] ok m1_svhn_lr0.1 (40s)
+M1 svhn_lr0.5 val=0.1781
+[worker] ok m1_svhn_lr0.5 (40s)
+[worker] shard finished; 0 failed: []

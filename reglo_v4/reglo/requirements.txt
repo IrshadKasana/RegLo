@@ -1,0 +1,19 @@
+# Install PyTorch first, built for your GPU driver (see README → Installation), then:
+#   pip install -r requirements.txt        or        pip install -e ".[dev,analysis]"
+
+# Core
+torch>=2.1
+torchvision>=0.16
+omegaconf>=2.3,<2.5
+pyyaml>=6.0
+numpy>=1.22
+scipy>=1.9          # SVHN's .mat files (torchvision) and the report's Welch p-values
+
+# Analysis and reporting (tables, figures, FLOP cross-check)
+pandas>=1.5
+matplotlib>=3.7
+fvcore>=0.1.5
+openpyxl>=3.1         # the Excel workbook of the experiment plan (scripts/make_workbook.py)
+
+# Tests
+pytest>=7.0

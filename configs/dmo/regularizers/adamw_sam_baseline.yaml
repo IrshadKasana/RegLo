@@ -1,0 +1,19 @@
+train_arguments:
+  # ============================================================
+  # Baseline: explicit AdamW + SAM applied DIRECTLY to the optimizee
+  # at meta-test time. This does NOT use the learned optimizer.
+  # Requested by reviewer to compare against the LO approach.
+  # ============================================================
+  adaptive: True                 # adaptive SAM (matches your LO-SAM setting)
+  SAMonOptimizer: True           # SAM steps the base optimizer (here it IS the optimizer)
+  base_optimizer: 'AdamW'        # <-- AdamW base (the baseline the reviewer named)
+  lr: 0.001                      # typical AdamW lr; tune if needed
+  rho: 0.05                      # SAM neighbourhood radius (standard SAM default)
+  weight_decay: 0.01             # AdamW decoupled weight decay (standard)
+  momentum: 0.0                  # unused by AdamW but read by SAM ctor
+  optzee_wd: 0.0                 # no separate optimizee L2 (SAM provides the regularization)
+  model_name: 'AdamW_SAM_baseline'   # label only; baseline has no saved LO checkpoint
+  regularizer: 'sam'             # routes through the SAM branch in fit_w_normal_optimizer
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

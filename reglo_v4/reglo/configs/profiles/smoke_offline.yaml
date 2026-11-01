@@ -1,0 +1,19 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  SMOKE, OFFLINE — the smoke test without downloading anything
+#
+#      python scripts/run_study.py --profile smoke_offline
+#
+#  Identical to smoke.yaml, except that every dataset is replaced by random class
+#  patterns with that dataset's shape and number of classes (32×32×3 for SVHN and
+#  CIFAR, 28×28×1 for FMNIST; 2,048 training and 512 test images). It checks the code
+#  and the pipeline, not the data loading — run the real smoke test once the datasets
+#  are on disk. Results: artifacts/smoke_offline/.
+# ════════════════════════════════════════════════════════════════════════════
+extends: smoke
+
+description: The smoke test on random stand-in images — no downloads
+allow_synthetic_data: true
+
+runs:
+  dataset:
+    source: synthetic

@@ -1,0 +1,19 @@
+train_arguments:
+  # ====================================================================
+  # SMOKE meta-training — pipeline check, NOT science.
+  #   train.py --profile smoke
+  # Values are the ACTIVE (small) entries documented in
+  # configs/dmo/base/meta_train.yaml, e.g. "optimizee_steps: 40 #1000".
+  # ====================================================================
+  optimizee_steps: 40          # base active value (#1000 = production)
+  truncated_bptt_step: 20      # 40 % 20 == 0 (asserted by train.py)
+  max_epochs: 4                # base active value (#10000 = production)
+  train_period: 2              # -> outer loop runs 4/2 = 2 times
+  n_period: 3
+  if_cl: False                 # base active value (#True = production)
+  curriculum_steps: [20, 40]   # only used if you force if_cl=True at smoke
+  eval_epochs: 5
+  batch_size: 128
+  allow_cpu: True              # smoke may run on CPU
+  resume: True
+  cl_patience: 1               # smoke: fail fast, we only test plumbing

@@ -1,0 +1,19 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  M3 — Optimizee + LSTM optimizer                            (protocol C3, vanilla L2O)
+#
+#  φ comes from Stage 1 (meta_training=m3_lstm meta_tag=<round>): meta-trained on L_meta only.
+#  It is frozen here; one forward–backward pass per step. meta_tag picks the round (configs/rounds.yaml).
+#
+#      python scripts/train_optimizee.py method=m3_lstm optimizee=convnet4 dataset=svhn            # round A's φ
+#      python scripts/train_optimizee.py method=m3_lstm optimizee=convnet4 dataset=svhn meta_tag=B
+# ════════════════════════════════════════════════════════════════════════════
+defaults:
+  optimizer: lstm
+  regularizer: none
+
+label: M3
+name: m3_lstm
+optimizer_kind: learned
+regularizer_applied: never
+allowed_regularizers: [none]
+checkpoint: ${paths.artifacts}/meta_training/${meta_tag}/m3_lstm/phi_best.pt   # meta_tag = round

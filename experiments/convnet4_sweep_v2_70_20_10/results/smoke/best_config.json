@@ -1,0 +1,424 @@
+{
+ "protocol": {
+  "split": [
+   0.7,
+   0.2,
+   0.1
+  ],
+  "split_seed": 42,
+  "selection": "validation split of the source dataset, meta-seed 0 (M1/M2: mean over 1 inits)",
+  "id_test": "source dataset 10 % test split",
+  "ood": "target dataset 20 % partition (source -> target)",
+  "plus_minus": "std. error: over optimizee inits for M1/M2, over meta-seeds for M3/M4a/M5",
+  "preset": "smoke",
+  "cfg": {
+   "width": 16,
+   "rho_sam": 0.001,
+   "rho_gam": 0.04,
+   "rho_gsam": 0.005,
+   "smooth_eps": 0.01,
+   "smooth_pga": 10,
+   "hidden_size": 20,
+   "num_layers": 2,
+   "meta_opt": "adam",
+   "meta_lr": 0.001,
+   "meta_batch": 64,
+   "tbptt": 10,
+   "stages": [
+    20,
+    40
+   ],
+   "blocks_per_stage": 1,
+   "train_period": 1,
+   "ckpt_epochs": 1,
+   "eval_steps": 40,
+   "eval_batch": 64,
+   "lo_inits": 1,
+   "adamw_lrs": [
+    0.001,
+    0.01
+   ],
+   "adamw_wd": 0.01,
+   "adamw_inits": 1,
+   "curve_every": 20,
+   "grid": [
+    0.01,
+    0.1
+   ],
+   "meta_lrs": [
+    0.001,
+    0.01
+   ],
+   "rho_grid": [
+    [
+     "gam",
+     [
+      0.04,
+      0.1
+     ]
+    ],
+    [
+     "gsam",
+     [
+      0.005,
+      0.02
+     ]
+    ],
+    [
+     "sam",
+     [
+      0.001,
+      0.01
+     ]
+    ]
+   ],
+   "radius": 1
+  }
+ },
+ "results": {
+  "cifar10": {
+   "M1": {
+    "config": {
+     "adamw_lr": 0.01
+    },
+    "val": 0.37425,
+    "n": 1,
+    "n_kind": "inits",
+    "train_acc": [
+     0.3832,
+     NaN
+    ],
+    "test_acc": [
+     0.38766666666666666,
+     NaN
+    ],
+    "ood": {
+     "svhn": {
+      "acc": [
+       0.09754255212005238,
+       NaN
+      ],
+      "auroc_msp": [
+       0.6661121756135227,
+       NaN
+      ]
+     }
+    },
+    "curve": [
+     {
+      "step": 20,
+      "train_loss": 2.118344658613205,
+      "val_loss": 2.056153747558594,
+      "val_acc": 0.24141666666666667
+     },
+     {
+      "step": 40,
+      "train_loss": 1.8210735976696015,
+      "val_loss": 1.6873603108723958,
+      "val_acc": 0.37425
+     }
+    ]
+   },
+   "M2:l2": {
+    "config": {
+     "reg": "l2",
+     "lam": 0.01,
+     "rho": null,
+     "adamw_lr": 0.01
+    },
+    "val": 0.24,
+    "n": 1,
+    "n_kind": "inits",
+    "n_cells": 2,
+    "train_acc": [
+     0.2333,
+     NaN
+    ],
+    "test_acc": [
+     0.2415,
+     NaN
+    ],
+    "ood": {
+     "svhn": {
+      "acc": [
+       0.09588075334877631,
+       NaN
+      ],
+      "auroc_msp": [
+       0.5658841902507805,
+       NaN
+      ]
+     }
+    },
+    "curve": [
+     {
+      "step": 20,
+      "train_loss": 2.1469886124134065,
+      "val_loss": 2.024228800455729,
+      "val_acc": 0.2624166666666667
+     },
+     {
+      "step": 40,
+      "train_loss": 1.8472734451293946,
+      "val_loss": 1.9553459879557291,
+      "val_acc": 0.24
+     }
+    ]
+   },
+   "M2:sam": {
+    "config": {
+     "reg": "sam",
+     "lam": 0.01,
+     "rho": 0.01,
+     "adamw_lr": 0.01
+    },
+    "val": 0.37675,
+    "n": 1,
+    "n_kind": "inits",
+    "n_cells": 4,
+    "train_acc": [
+     0.3799,
+     NaN
+    ],
+    "test_acc": [
+     0.37783333333333335,
+     NaN
+    ],
+    "ood": {
+     "svhn": {
+      "acc": [
+       0.0967368315036761,
+       NaN
+      ],
+      "auroc_msp": [
+       0.6558419276865747,
+       NaN
+      ]
+     }
+    },
+    "curve": [
+     {
+      "step": 20,
+      "train_loss": 2.1169255137443543,
+      "val_loss": 2.0440302937825523,
+      "val_acc": 0.24283333333333335
+     },
+     {
+      "step": 40,
+      "train_loss": 1.7930926203727722,
+      "val_loss": 1.6851057535807292,
+      "val_acc": 0.37675
+     }
+    ]
+   },
+   "M3": {
+    "config": {
+     "reg": null,
+     "ls": 0.0,
+     "lam_reg": 0.0,
+     "meta_lr": 0.01
+    },
+    "val": 0.3174166666666667,
+    "n": 3,
+    "n_kind": "meta-seeds",
+    "n_cells": 2,
+    "train_acc": [
+     0.2675666666666667,
+     0.03294967543256097
+    ],
+    "test_acc": [
+     0.26461111111111113,
+     0.03317871547383695
+    ],
+    "ood": {
+     "svhn": {
+      "acc": [
+       0.08275422164031289,
+       0.0049921174253315225
+      ],
+      "auroc_msp": [
+       0.6716349707926277,
+       0.05296282239691851
+      ]
+     }
+    },
+    "curve": [
+     {
+      "step": 20,
+      "train_loss": 2.1804914474487305,
+      "val_loss": 2.2117110188802083,
+      "val_acc": 0.20341666666666666
+     },
+     {
+      "step": 40,
+      "train_loss": 1.9254980087280273,
+      "val_loss": 1.8636333414713542,
+      "val_acc": 0.3174166666666667
+     }
+    ],
+    "meta_train_seconds": 5.561858256657918,
+    "files": [
+     "lo/cifar10_none_ls0_lr0_mlr0.01_seed1.json",
+     "lo/cifar10_none_ls0_lr0_mlr0.01_seed0.json",
+     "lo/cifar10_none_ls0_lr0_mlr0.01_seed2.json"
+    ]
+   },
+   "M4a": {
+    "config": {
+     "reg": null,
+     "ls": 0.1,
+     "lam_reg": 0.0,
+     "meta_lr": 0.01
+    },
+    "val": 0.31808333333333333,
+    "n": 3,
+    "n_kind": "meta-seeds",
+    "n_cells": 2,
+    "train_acc": [
+     0.2770333333333333,
+     0.02018186754930716
+    ],
+    "test_acc": [
+     0.2772222222222222,
+     0.01703409797515443
+    ],
+    "ood": {
+     "svhn": {
+      "acc": [
+       0.08789069056971162,
+       0.0039988381292048476
+      ],
+      "auroc_msp": [
+       0.5794326132205324,
+       0.07939791457656382
+      ]
+     }
+    },
+    "curve": [
+     {
+      "step": 20,
+      "train_loss": 2.183515787124634,
+      "val_loss": 2.171771728515625,
+      "val_acc": 0.21891666666666668
+     },
+     {
+      "step": 40,
+      "train_loss": 1.9135017395019531,
+      "val_loss": 1.8498502604166667,
+      "val_acc": 0.31808333333333333
+     }
+    ],
+    "meta_train_seconds": 7.008543570836385,
+    "files": [
+     "lo/cifar10_none_ls0.1_lr0_mlr0.01_seed1.json",
+     "lo/cifar10_none_ls0.1_lr0_mlr0.01_seed0.json",
+     "lo/cifar10_none_ls0.1_lr0_mlr0.01_seed2.json"
+    ]
+   },
+   "M5:l2": {
+    "config": {
+     "reg": "l2",
+     "ls": 0.1,
+     "lam_reg": 0.1,
+     "meta_lr": 0.01
+    },
+    "val": 0.29141666666666666,
+    "n": 3,
+    "n_kind": "meta-seeds",
+    "n_cells": 4,
+    "train_acc": [
+     0.2703333333333333,
+     0.005600694401391477
+    ],
+    "test_acc": [
+     0.2732777777777778,
+     0.009572981526600898
+    ],
+    "ood": {
+     "svhn": {
+      "acc": [
+       0.10439117735925067,
+       0.003137696288604104
+      ],
+      "auroc_msp": [
+       0.5905620041181275,
+       0.10508374588168577
+      ]
+     }
+    },
+    "curve": [
+     {
+      "step": 20,
+      "train_loss": 2.1951828002929688,
+      "val_loss": 2.1182747395833332,
+      "val_acc": 0.20041666666666666
+     },
+     {
+      "step": 40,
+      "train_loss": 1.9965941905975342,
+      "val_loss": 1.9206685180664063,
+      "val_acc": 0.29141666666666666
+     }
+    ],
+    "meta_train_seconds": 6.855499664942424,
+    "files": [
+     "lo/cifar10_l2_ls0.1_lr0.1_mlr0.01_seed1.json",
+     "lo/cifar10_l2_ls0.1_lr0.1_mlr0.01_seed2.json",
+     "lo/cifar10_l2_ls0.1_lr0.1_mlr0.01_seed0.json"
+    ]
+   },
+   "M5:sam": {
+    "config": {
+     "reg": "sam",
+     "ls": 0.01,
+     "lam_reg": 0.01,
+     "meta_lr": 0.01
+    },
+    "val": 0.33975,
+    "n": 3,
+    "n_kind": "meta-seeds",
+    "n_cells": 4,
+    "train_acc": [
+     0.29016666666666663,
+     0.03987465081700124
+    ],
+    "test_acc": [
+     0.287,
+     0.03889765774153732
+    ],
+    "ood": {
+     "svhn": {
+      "acc": [
+       0.08629603518313357,
+       0.009475844331859704
+      ],
+      "auroc_msp": [
+       0.6479599307863609,
+       0.012615715033062743
+      ]
+     }
+    },
+    "curve": [
+     {
+      "step": 20,
+      "train_loss": 2.167405605316162,
+      "val_loss": 2.2195030110677085,
+      "val_acc": 0.17833333333333334
+     },
+     {
+      "step": 40,
+      "train_loss": 1.874734878540039,
+      "val_loss": 1.7898402099609374,
+      "val_acc": 0.33975
+     }
+    ],
+    "meta_train_seconds": 9.412910381952921,
+    "files": [
+     "lo/cifar10_sam_ls0.01_lr0.01_mlr0.01_seed1.json",
+     "lo/cifar10_sam_ls0.01_lr0.01_mlr0.01_seed0.json",
+     "lo/cifar10_sam_ls0.01_lr0.01_mlr0.01_seed2.json"
+    ]
+   }
+  }
+ }
+}

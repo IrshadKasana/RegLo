@@ -1,0 +1,33 @@
+train_arguments:
+    batch_size: 512
+    seed: 10
+    optimizee_epochs: 60 #1000         # was 2 — too short for PGD to be meaningful
+    hidden_size: 20
+    num_layers: 2
+    save: "artifacts/dmo/results"
+    cuda_: True
+    dataset: "mnist"
+    optimizee_model: "mlp"
+    n_training: 2 #5                # was 1 — 2 instances for std-dev on bars
+    patience: 20 #100                 # was 5
+    calc_hessian: False
+    num_ev_hess: 100
+    base_optimizer: "sgd"
+    saved_model: "AdSAM_sgd_LO_140424"   # overridden by --saved_model CLI arg
+    eps: 0.1
+    hyper_eps: False #True
+    # ---- added (Change.MD 78; dead keys if_normal_optim/if_adaptive/r_norm removed) ----
+    split_seed: 42
+    allow_cpu: True         # smoke-mode; set False for cluster runs
+    eval_every: 1           # full test-set eval every k steps (item 51); raise for resnet18
+    completion_at: 'final'  # Alg. 2 fixed-iteration measured at the FINAL model
+    # ---- Step-1 additions: uniform metrics + radii + robustness ----
+    val_fraction: 0.1            # validation split carved from the task-train pool
+    eps_list: [0.001, 0.002, 0.005, 0.01]   # PGD radius set (hyper_eps=True)
+    eval_cifar10c: False         # Experiment 6: robustness on CIFAR-10-C (final model)
+    cifar10c_root: null          # default: datasets/CIFAR-10-C
+    cifar10c_severities: [1, 2, 3, 4, 5]
+    resume: True            # auto-continue from the per-run partial json when present
+    max_hours: 0            # >0: exit cleanly between instances before HPC walltime
+    sharpness_every: 0           # >0: measure PGD sharpness every k steps (Exp 12 companion)
+    sharpness_track_eps: [0.001, 0.005, 0.01, 0.05, 0.1]

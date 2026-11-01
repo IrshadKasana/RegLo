@@ -1,0 +1,8 @@
+# ConvNet-4 — 3 × [Conv 3×3 → BatchNorm → ReLU → MaxPool 2] → Linear         ≈0.11 M parameters
+# The LSTM optimizers are meta-trained on this network (Stage 1).
+name: convnet4
+channels: [32, 64, 128]
+activation: relu
+num_classes: ${dataset.num_classes}       # follow the dataset automatically
+in_channels: ${dataset.channels}
+image_size: ${dataset.image_size}

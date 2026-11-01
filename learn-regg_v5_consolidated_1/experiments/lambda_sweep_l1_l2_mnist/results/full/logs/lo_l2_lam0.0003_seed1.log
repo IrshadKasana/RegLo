@@ -1,0 +1,9 @@
+[l2 lam=0.0003 seed=1] T= 100 blk 1/2 task=1.0294 R=214.5 ckpt=0.2436 * (18s)
+[l2 lam=0.0003 seed=1] T= 100 blk 2/2 task=1.4398 R=462.8 ckpt=0.3527 (35s)
+[l2 lam=0.0003 seed=1] T= 200 blk 1/2 task=0.8128 R=729.8 ckpt=0.1609 * (64s)
+[l2 lam=0.0003 seed=1] T= 200 blk 2/2 task=0.6233 R=694.4 ckpt=0.1479 * (91s)
+[l2 lam=0.0003 seed=1] T= 500 blk 1/2 task=0.4937 R=925.3 ckpt=0.1490 (150s)
+[l2 lam=0.0003 seed=1] T= 500 blk 2/2 task=0.4462 R=695.5 ckpt=0.2061 (205s)
+[l2 lam=0.0003 seed=1] T=1000 blk 1/2 task=0.3867 R=826.3 ckpt=1.1075 (314s)
+[l2 lam=0.0003 seed=1] T=1000 blk 2/2 task=0.3863 R=669.3 ckpt=0.2869 (425s)
+lo_l2_lam0.0003_seed1: val_acc=0.9286

@@ -1,0 +1,36 @@
+#!/bin/bash
+#PBS -N ev_rn18_c10
+#PBS -q gpu-ext
+#PBS -l nodes=1:ppn=40
+#PBS -l walltime=24:00:00
+#PBS -l mem=60gb
+#PBS -o eval_resnet18_cifar10.out
+#PBS -e eval_resnet18_cifar10.err
+#PBS -V
+
+cd $PBS_O_WORKDIR
+module load compilers/cuda/11.1
+~/.conda/envs/learn_reg/bin/python -c "import torch; assert torch.cuda.is_available(), 'CUDA not visible - env/module mismatch (Change.MD item 25)'" || exit 1
+
+echo "==== ResNet-18 / CIFAR-10 LO evaluation started at $(date) on $(hostname) ===="
+nvidia-smi || echo "no GPU visible"
+
+# Scaling experiment: meta-test an LO (meta-trained on a small proxy task)
+# on ResNet-18 / CIFAR-10 with standard augmentation.
+#   --param_chunk_size 2000000 : chunked coordinate-wise LSTM (fits 16GB V100)
+#   --lo_train_dataset mnist   : records the LO's meta-train dataset for the
+#                                cross-dataset generalization heatmap
+# Adjust --saved_model to the LO checkpoint you want to test.
+~/.conda/envs/learn_reg/bin/python experiments/dmo/evaluate_optimizee.py \
+    --saved_model AdSAM_sgd_LO_140424 \
+    --dataset cifar10 \
+    --optimizee_model resnet18 \
+    --lo_train_dataset mnist \
+    --param_chunk_size 2000000 \
+    --augment \
+    --eval_tag scale_rn18 \
+    --set batch_size=128 optimizee_epochs=3000 n_training=3 calc_hessian=True num_ev_hess=20
+
+echo "==== Job ended at $(date) ===="
+# --- production settings (uncomment at deploy; Change.MD item 79) ---
+#    --set n_training=10 optimizee_epochs=1000 patience=100 calc_hessian=True hyper_eps=True allow_cpu=False

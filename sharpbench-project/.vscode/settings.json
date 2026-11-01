@@ -1,0 +1,17 @@
+{
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.extraPaths": ["${workspaceFolder}"],
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/data/MNIST": true,
+    "**/*.pyc": true
+  },
+  "search.exclude": {
+    "results/**": true,
+    "data/**": true,
+    "figures/**": true
+  }
+}

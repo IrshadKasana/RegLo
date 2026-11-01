@@ -1,0 +1,9 @@
+[smooth lam=0 seed=1] T= 100 blk 1/2 task=1.0182 R=0.0 ckpt=0.2969 * (18s)
+[smooth lam=0 seed=1] T= 100 blk 2/2 task=1.4400 R=0.0 ckpt=0.4786 (35s)
+[smooth lam=0 seed=1] T= 200 blk 1/2 task=0.7283 R=0.0 ckpt=0.2553 * (63s)
+[smooth lam=0 seed=1] T= 200 blk 2/2 task=0.7283 R=0.0 ckpt=0.1588 * (90s)
+[smooth lam=0 seed=1] T= 500 blk 1/2 task=0.6112 R=0.0 ckpt=0.2058 (149s)
+[smooth lam=0 seed=1] T= 500 blk 2/2 task=0.4764 R=0.0 ckpt=1.0871 (203s)
+[smooth lam=0 seed=1] T=1000 blk 1/2 task=0.4082 R=0.0 ckpt=0.1728 (311s)
+[smooth lam=0 seed=1] T=1000 blk 2/2 task=0.3703 R=0.0 ckpt=0.3223 (424s)
+lo_smooth_lam0_seed1: val_acc=0.9214

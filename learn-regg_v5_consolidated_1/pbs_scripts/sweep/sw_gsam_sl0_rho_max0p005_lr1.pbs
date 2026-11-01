@@ -1,0 +1,68 @@
+#!/bin/bash
+#==========================
+# PBS Configuration
+#==========================
+#PBS -N swgsams0rm005l1
+#PBS -q gpu-ext
+#PBS -l select=1:ncpus=8:mem=60gb
+#PBS -l walltime=24:00:00
+#PBS -o logs/sw_gsam_sl0_rho_max0p005_lr1.out
+#PBS -e logs/sw_gsam_sl0_rho_max0p005_lr1.err
+#PBS -V
+
+#==========================
+# Enter Project Directory
+#==========================
+cd "$PBS_O_WORKDIR"
+mkdir -p logs
+
+#==========================
+# Environment
+#==========================
+module purge
+module load compilers/cuda/11.1
+export PYTHONUNBUFFERED=1
+PY="$HOME/.conda/envs/learn_reg/bin/python"
+
+#==========================
+# GPU Validation
+#==========================
+echo "========================================"
+echo "Sweep Cell  : sw_gsam_sl0_rho_max0p005_lr1"
+echo "Job Started : $(date)"
+echo "Host        : $(hostname)"
+echo "Directory   : $PWD"
+echo "========================================"
+nvidia-smi || echo "WARNING : nvidia-smi not found"
+
+$PY - <<'PYCHECK'
+import torch
+print("Torch :", torch.__version__)
+print("CUDA  :", torch.version.cuda)
+print("Available :", torch.cuda.is_available())
+assert torch.cuda.is_available(), "CUDA not visible - torch/CUDA module mismatch. Fix the env on the LOGIN node before resubmitting."
+print("GPU :", torch.cuda.get_device_name(0))
+print("Device Count :", torch.cuda.device_count())
+PYCHECK
+if [ $? -ne 0 ]; then
+    echo "GPU validation FAILED - aborting before walltime is consumed."
+    exit 1
+fi
+
+#==========================
+# Run Sweep Cell (meta-train -> evaluate)
+#==========================
+"$PY" experiments/dmo/train.py --regularizer gsam --profile production --set dataset=mnist optimizee_model_name=mlp model_name=SWEEP_sw_gsam_sl0_rho_max0p005_lr1_mnist_mlp smooth_lamb=0.0 if_smooth=False rho_max=0.005 max_hours=23.0 resume=True lambda_reg=1.0 reg_mode=penalty rho=0.005 rho_min=0.00125 \
+  && "$PY" experiments/dmo/evaluate_optimizee.py --saved_model SWEEP_sw_gsam_sl0_rho_max0p005_lr1_mnist_mlp --dataset mnist --optimizee_model mlp --eval_tag sw_gsam_sl0_rho_max0p005_lr1 --lo_train_dataset mnist --profile production
+rc=$?
+
+#==========================
+# Exit
+#==========================
+echo "========================================"
+echo "Finished    : $(date)"
+echo "Return Code : $rc"
+echo "========================================"
+echo "NOTE: if the log ends with WALLTIME_EXIT, qsub this SAME script again."
+echo "      When ALL cells are done: python pick_best_lambdas.py --apply"
+exit $rc

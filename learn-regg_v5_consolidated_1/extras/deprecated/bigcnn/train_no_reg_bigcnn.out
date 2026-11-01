@@ -1,0 +1,96 @@
+==== Job started at Fri Jun 26 20:58:19 IST 2026 on hcc24 ====
+==== no_reg-LO  |  CIFAR-10 + BigCNN (~1.28M params) ====
+no GPU visible
+CUDA available: False, MPS available: False, Device: cpu
+****----------extracting yaml files------------****
+batch_size: 128
+seed: 1
+optimizee_steps: 1000
+truncated_bptt_step: 20
+max_epochs: 10000
+hidden_size: 20
+num_layers: 2
+save: artifacts/dmo/checkpoints
+cuda_: True
+if_cl: True
+dataset: cifar10
+optimizee_model_name: big_conv
+n_period: 3
+train_period: 20
+eval_epochs: 5
+smooth_eps: 1.0
+smooth_lamb: 1.0
+if_smooth: False
+smooth_num_pga_steps: 10
+base_optimizer: adam
+lr: 0.01
+weight_decay: 0.0
+momentum: 0.0
+model_name: DMO_adam_bigcnn
+regularizer: no_reg
+optzee_wd: 0.0
+if_avreg: False
+if_pretrained: False
+pretrained_model_name: no_name
+Cuda available: False , MPS available: False, device name : cpu
+Checkpoints will be saved to: /iitjfs/home/2025pcs0034/learn-reg/artifacts/dmo/checkpoints
+Files already downloaded and verified
+Files already downloaded and verified
+Current model checkpoint will be saved to: /iitjfs/home/2025pcs0034/learn-reg/artifacts/dmo/checkpoints/DMO_adam_bigcnn.pt
+N_train : 100, epochs = 20
+optimizee initialization no. 0
+epoch>> 0, unrolling>>> 0, loss on last iteration : 186.99856567382812 
+epoch>> 0, unrolling>>> 1, loss on last iteration : 2.3033082485198975 
+epoch>> 0, unrolling>>> 2, loss on last iteration : 2.303654909133911 
+epoch>> 0, unrolling>>> 3, loss on last iteration : 2.3059518337249756 
+epoch>> 0, unrolling>>> 4, loss on last iteration : 2.302568197250366 
+optimizee initialization no. 1
+epoch>> 1, unrolling>>> 0, loss on last iteration : 2.301924228668213 
+epoch>> 1, unrolling>>> 1, loss on last iteration : 2.3004651069641113 
+epoch>> 1, unrolling>>> 2, loss on last iteration : 2.301786422729492 
+epoch>> 1, unrolling>>> 3, loss on last iteration : 2.3038747310638428 
+epoch>> 1, unrolling>>> 4, loss on last iteration : 2.3013813495635986 
+optimizee initialization no. 2
+epoch>> 2, unrolling>>> 0, loss on last iteration : 2.305335283279419 
+epoch>> 2, unrolling>>> 1, loss on last iteration : 2.3059113025665283 
+epoch>> 2, unrolling>>> 2, loss on last iteration : 2.2985570430755615 
+epoch>> 2, unrolling>>> 3, loss on last iteration : 2.3101894855499268 
+epoch>> 2, unrolling>>> 4, loss on last iteration : 2.3075456619262695 
+optimizee initialization no. 3
+epoch>> 3, unrolling>>> 0, loss on last iteration : 2.2977166175842285 
+epoch>> 3, unrolling>>> 1, loss on last iteration : 2.311943292617798 
+epoch>> 3, unrolling>>> 2, loss on last iteration : 2.314208507537842 
+epoch>> 3, unrolling>>> 3, loss on last iteration : 2.2991113662719727 
+epoch>> 3, unrolling>>> 4, loss on last iteration : 2.313429117202759 
+optimizee initialization no. 4
+epoch>> 4, unrolling>>> 0, loss on last iteration : 2.309715747833252 
+epoch>> 4, unrolling>>> 1, loss on last iteration : 2.2956626415252686 
+epoch>> 4, unrolling>>> 2, loss on last iteration : 2.300950765609741 
+epoch>> 4, unrolling>>> 3, loss on last iteration : 2.2940549850463867 
+epoch>> 4, unrolling>>> 4, loss on last iteration : 2.309969186782837 
+optimizee initialization no. 5
+epoch>> 5, unrolling>>> 0, loss on last iteration : 2.3018062114715576 
+epoch>> 5, unrolling>>> 1, loss on last iteration : 2.298112630844116 
+epoch>> 5, unrolling>>> 2, loss on last iteration : 2.3143057823181152 
+epoch>> 5, unrolling>>> 3, loss on last iteration : 2.307079792022705 
+epoch>> 5, unrolling>>> 4, loss on last iteration : 2.314464569091797 
+optimizee initialization no. 6
+epoch>> 6, unrolling>>> 0, loss on last iteration : 2.300229072570801 
+epoch>> 6, unrolling>>> 1, loss on last iteration : 2.1813580989837646 
+epoch>> 6, unrolling>>> 2, loss on last iteration : 2.2224984169006348 
+epoch>> 6, unrolling>>> 3, loss on last iteration : 2.2105815410614014 
+epoch>> 6, unrolling>>> 4, loss on last iteration : 2.2420425415039062 
+optimizee initialization no. 7
+epoch>> 7, unrolling>>> 0, loss on last iteration : 2.3094897270202637 
+epoch>> 7, unrolling>>> 1, loss on last iteration : 2.299619197845459 
+epoch>> 7, unrolling>>> 2, loss on last iteration : 2.3115200996398926 
+epoch>> 7, unrolling>>> 3, loss on last iteration : 2.3121895790100098 
+epoch>> 7, unrolling>>> 4, loss on last iteration : 2.298647880554199 
+optimizee initialization no. 8
+epoch>> 8, unrolling>>> 0, loss on last iteration : 2.3009631633758545 
+epoch>> 8, unrolling>>> 1, loss on last iteration : 2.3028945922851562 
+epoch>> 8, unrolling>>> 2, loss on last iteration : 2.316331624984741 
+epoch>> 8, unrolling>>> 3, loss on last iteration : 2.2875242233276367 
+epoch>> 8, unrolling>>> 4, loss on last iteration : 2.3048095703125 
+optimizee initialization no. 9
+epoch>> 9, unrolling>>> 0, loss on last iteration : 2.2588846683502197 

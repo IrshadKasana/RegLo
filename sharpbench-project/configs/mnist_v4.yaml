@@ -1,0 +1,112 @@
+# =====================================================================
+# MNIST / MLP 784-20-10 -- hyperparameter search, TEST SET NEVER TOUCHED
+# =====================================================================
+# WHAT CHANGED AND WHY
+#
+# eval_test: false
+#   The test split is never loaded to the device and never evaluated.
+#   Selection is on validation; the OUTPUT of this study is the
+#   hyperparameter values, not an accuracy number, so no test set is
+#   needed. If you later want a headline accuracy for a paper, rerun the
+#   winners once with eval_test: true -- that is the only legitimate use.
+#
+# batch_size: 128
+#   Standard for MNIST MLPs. NOTE this gives MORE optimisation than the
+#   previous batch-512 run: 30 x 429 = 12,870 steps vs 100 x 107 = 10,700.
+#
+# epochs: 30
+#   Measured from the previous run's histories: at batch 512 the median run
+#   reached within 0.1pp of its final validation accuracy by epoch 32, i.e.
+#   ~3,400 steps. At batch 128 that is ~8 epochs, so 30 epochs is roughly
+#   4x past convergence with room to spare. Peak-to-final validation drop
+#   was only 0.14pp, so overfitting is not a concern, and best-epoch
+#   selection absorbs what little there is.
+#
+# seeds: 42..51
+#   Ten seeds starting at the conventional 42. Ten is what brings the
+#   minimum detectable effect down to ~0.2pp on this problem.
+#
+# GRIDS: every arm's optimum should be INTERIOR, with the curve falling on
+# BOTH sides. Previous run gave interior optima for asam (1.0), gsam
+# (0.05), gam (0.08) and wsam (0.8), but SAM selected 0.005 -- the grid
+# minimum -- so the left side was never shown. Extended down to 0.001.
+# As rho -> 0 SAM converges to plain AdamW, so the left arm of the curve
+# should descend toward the AdamW baseline; that is the shape to look for.
+# ---------------------------------------------------------------------
+
+fixed:
+  dataset: mnist
+  model: mlp
+  hidden: 20
+  act: relu
+  batch_size: 128
+  epochs: 30
+  max_steps: null
+  weight_decay: 0.01
+  lr_schedule: cosine
+  warmup_steps: 0
+  label_noise: 0.0
+  grad_clip: null
+  m_sharpness: null
+  eval_test: false           # <-- test set is never read
+  data_root: ./data
+  deterministic: true
+  allow_tf32: false
+  measure_sharpness: true
+  sharpness_radii: [0.05, 0.5]
+  measure_hessian: false
+  keep_history: true
+
+seeds: [42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
+
+lr_grid: [0.0003, 0.001, 0.003]
+
+arms:
+
+  - name: adamw
+    regularizer: none
+    grid: {}
+
+  # extended DOWN to 0.001 so the left side of the peak is visible
+  - name: sam
+    regularizer: sam
+    grid:
+      adaptive: [false]
+      rho: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2]
+
+  # 1.0 was interior last run; 0.1 keeps the left arm on the plot
+  - name: asam
+    regularizer: sam
+    grid:
+      adaptive: [true]
+      rho: [0.1, 0.25, 0.5, 1.0, 2.0]
+
+  # alpha extended to 0.4 because that value appears in the baseline YAMLs
+  # and had never been tested in the final grid
+  - name: gsam
+    regularizer: gsam
+    grid:
+      adaptive: [false]
+      rho: [0.01, 0.02, 0.05, 0.1, 0.2]
+      alpha: [0.01, 0.02, 0.05, 0.1, 0.2, 0.4]
+
+  # gamma 0.8 was interior last run; 0.3 added for the left arm
+  - name: wsam
+    regularizer: wsam
+    grid:
+      adaptive: [false]
+      decouple: [true]
+      rho: [0.02, 0.05, 0.1]
+      gamma: [0.3, 0.5, 0.7, 0.8, 0.88, 0.94]
+
+  # grad_rho 0.08 was interior; 0.01 added for the left arm
+  - name: gam
+    regularizer: gam
+    lr_grid: [0.0003, 0.001]
+    grid:
+      adaptive: [true]
+      _scale: [0.25, 0.5, 1.0, 2.0, 4.0]
+      grad_gamma: [0.01, 0.03, 0.1, 0.3]
+    derive:
+      grad_rho: "0.04 * _scale"
+      grad_norm_rho: "0.20 * _scale"

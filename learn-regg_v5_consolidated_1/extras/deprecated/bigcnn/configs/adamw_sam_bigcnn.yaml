@@ -1,0 +1,16 @@
+train_arguments:
+  adaptive: True
+  SAMonOptimizer: True
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  rho: 0.05
+  weight_decay: 0.01
+  momentum: 0.0
+  optzee_wd: 0.0
+  model_name: 'AdamW_SAM_bigcnn'
+  regularizer: 'sam'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+  dataset: 'cifar10'
+  optimizee_model_name: 'big_conv'

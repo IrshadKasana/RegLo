@@ -1,0 +1,7 @@
+# Shell and cluster job scripts must keep LF line endings, even when edited on Windows
+# (a CRLF script fails on the cluster with "$'\r': command not found").
+*.sh    text eol=lf
+*.pbs   text eol=lf
+*.slurm text eol=lf
+*.py    text eol=lf
+*.yaml  text eol=lf

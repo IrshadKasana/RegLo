@@ -1,0 +1,69 @@
+from argparse import Namespace
+from pathlib import Path
+
+import yaml
+
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+EXPERIMENT_DIR = REPO_ROOT
+CONFIG_DIR = REPO_ROOT / "configs" / "dmo"
+BASE_CONFIG_DIR = CONFIG_DIR / "base"
+REGULARIZER_CONFIG_DIR = CONFIG_DIR / "regularizers"
+
+REGULARIZER_CONFIGS = {
+    "no_reg": "no_reg.yaml",
+    "sam": "sam.yaml",
+    "sam_opzee": "sam_opzee.yaml",
+    "gam": "gam.yaml",
+    "gsam": "gsam.yaml",
+    "l2": "l2.yaml",
+    "adamw_sam_baseline": "adamw_sam_baseline.yaml",
+    "no_reg_bigcnn": "no_reg_bigcnn.yaml",
+    "sam_bigcnn": "sam_bigcnn.yaml",
+    "adamw_sam_bigcnn": "adamw_sam_bigcnn.yaml",
+}
+
+
+def load_yaml_arguments(filename):
+    with open(filename, "r") as file:
+        config = yaml.safe_load(file)
+    return config["train_arguments"]
+
+
+def merge_arguments(*argument_groups):
+    merged = {}
+    for arguments in argument_groups:
+        merged.update(arguments)
+    return Namespace(**merged)
+
+
+def regularizer_yaml(regularizer):
+    try:
+        return REGULARIZER_CONFIG_DIR / REGULARIZER_CONFIGS[regularizer]
+    except KeyError as exc:
+        valid = ", ".join(sorted(REGULARIZER_CONFIGS))
+        raise ValueError(f"Unknown regularizer '{regularizer}'. Expected one of: {valid}") from exc
+
+
+def load_train_args(regularizer):
+    return merge_arguments(
+        load_yaml_arguments(BASE_CONFIG_DIR / "meta_train.yaml"),
+        load_yaml_arguments(REGULARIZER_CONFIG_DIR / "smooth.yaml"),
+        load_yaml_arguments(regularizer_yaml(regularizer)),
+    )
+
+
+def load_optimizee_args(cli_args):
+    argument_groups = [load_yaml_arguments(BASE_CONFIG_DIR / "optimizee_eval.yaml")]
+
+    if cli_args.if_normal_optim:
+        reg_config = REGULARIZER_CONFIGS.get(cli_args.regularizer, "no_reg.yaml")
+        argument_groups.append(load_yaml_arguments(REGULARIZER_CONFIG_DIR / reg_config))
+
+    argument_groups.append(vars(cli_args))
+    return merge_arguments(*argument_groups)
+
+
+def print_arguments(args):
+    for key, value in vars(args).items():
+        print(f"{key}: {value}")

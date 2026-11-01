@@ -1,0 +1,37 @@
+# Compute-matched control.
+#
+# SAM and GSAM use 2 forward-backward passes per step; GAM uses 4. An
+# epoch-matched table therefore hands the regularizers 2-4x the gradient
+# computation of the AdamW control. A reviewer who notices will ask whether the
+# benefit is the method or just the extra compute.
+#
+# This config runs the control at 200 and 400 epochs, matching the total
+# fwd_bwd_passes of the 2x and 4x arms respectively. Analyze it together with
+# your stage-2 results: if AdamW at 200 epochs still does not close the gap to
+# SAM at 100 epochs, the effect is the method and not the budget.
+#
+# Volunteering this row is much stronger than having it extracted from you.
+fixed:
+  hidden: 20
+  act: relu
+  batch_size: 128
+  weight_decay: 0.01
+  lr_schedule: cosine
+  label_noise: 0.0
+  data_root: ./data
+  deterministic: true
+  allow_tf32: false
+  measure_sharpness: true
+  sharpness_radii: [0.05, 0.5]
+  keep_history: true
+
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+lr_grid: [1.0e-4, 3.0e-4, 1.0e-3]
+
+arms:
+  - name: adamw_2x
+    regularizer: none
+    grid: {epochs: [200]}
+  - name: adamw_4x
+    regularizer: none
+    grid: {epochs: [400]}

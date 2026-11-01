@@ -1,0 +1,23 @@
+train_arguments:
+  batch_size: 128
+  seed: 1
+  optimizee_steps: 40 #1000         # was 5 — needs to be a clean multiple of truncated_bptt_step
+  truncated_bptt_step: 20      # was 5 — keep at the codebase default
+  max_epochs: 4 #10000                # was 1 — MUST be >= train_period
+  hidden_size: 20
+  num_layers: 2
+  save: 'artifacts/dmo/checkpoints'
+  cuda_: True
+  if_cl: False #True                 # was True — disable curriculum for smoke test
+  dataset: 'mnist'
+  optimizee_model_name: 'mlp'
+  n_period: 3                  # was 3
+  train_period: 2 #20              # was 20 — CRITICAL: outer loop now runs 4/2 = 2 times
+  eval_epochs: 5
+  # ---- added for the consolidated-algorithm pipeline (Change.MD 78) ----
+  split_seed: 42          # fixes the 50/50 data split; NEVER tie to run seed
+  param_chunk_size: 0     # 0 = unchunked LSTM; ~2000000 for resnet18-scale
+  use_meta_val: True      # eval_opt_func selects on the held-out half
+  allow_cpu: True         # smoke-mode; set False for cluster runs (item 25)
+  resume: True            # auto-continue from <model>_resume.pt when present
+  max_hours: 0            # >0: exit cleanly before HPC walltime; resubmit to continue

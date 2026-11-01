@@ -1,0 +1,7 @@
+[cifar10 l2 ls=0.01 lr=0.01 mlr=0.5 seed=0] T=  20 ckpt=874329.5000 * (7s)
+[cifar10 l2 ls=0.01 lr=0.01 mlr=0.5 seed=0] T=  40 ckpt=47582.8086 * (17s)
+LO cifar10_l2_ls0.01_lr0.01_mlr0.5_seed0: val_acc=0.1012
+/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torchvision/datasets/mnist.py:498: UserWarning: The given NumPy array is not writeable, and PyTorch does not support non-writeable tensors. This means you can write to the underlying (supposedly non-writeable) NumPy array using the tensor. You may want to copy the array to protect its data or make it writeable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at  /pytorch/torch/csrc/utils/tensor_numpy.cpp:180.)
+  return torch.from_numpy(parsed.astype(m[2], copy=False)).view(*s)
+/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)

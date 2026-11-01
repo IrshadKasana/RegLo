@@ -1,0 +1,92 @@
+# =====================================================================
+# Main sweep: AdamW +/- {SAM, ASAM, GAM, GSAM}, MLP 784-20-10 on MNIST
+# =====================================================================
+# See README.md section "What to tune and what to fix" for the reasoning
+# behind every choice below.
+# ---------------------------------------------------------------------
+
+fixed:
+  hidden: 20
+  act: relu
+  batch_size: 128
+  epochs: 100
+  max_steps: null              # set to step-match instead of epoch-match
+  weight_decay: 0.01
+  lr_schedule: cosine
+  warmup_steps: 0
+  label_noise: 0.0             # try 0.2 for the stress condition
+  grad_clip: null
+  m_sharpness: null            # null = perturb using the full batch
+  data_root: ./data
+  deterministic: true
+  allow_tf32: false
+  measure_sharpness: true
+  sharpness_radii: [0.05, 0.5]
+  measure_hessian: false       # true is ~3x slower; enable for the final run
+  keep_history: true           # needed for the training-curve figure
+
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# Shared LR grid: EVERY arm including the control searches the same grid.
+lr_grid: [3.0e-4, 1.0e-3, 3.0e-3]
+
+arms:
+
+  # ---- control ------------------------------------------------------ #
+  - name: adamw
+    regularizer: none
+    grid: {}
+
+  # ---- vanilla SAM: one hyperparameter, rho -------------------------- #
+  - name: sam
+    regularizer: sam
+    grid:
+      adaptive: [false]
+      rho: [0.01, 0.02, 0.05, 0.1, 0.2, 0.5]
+
+  # ---- adaptive SAM (ASAM): rho on a COMPLETELY DIFFERENT SCALE ------ #
+  # ASAM rescales the perturbation by |w|, so the useful radius is
+  # 10-50x larger. Using the vanilla grid here would silently give you
+  # an unregularized model.
+  - name: asam
+    regularizer: sam
+    grid:
+      adaptive: [true]
+      rho: [0.1, 0.5, 1.0, 2.0, 4.0]
+
+  # ---- GAM: sweep one scalar, preserving the published radius ratio -- #
+  # The reference configs keep grad_norm_rho = 5 * grad_rho. Preserving
+  # that turns a 2-D search into 1-D at negligible cost in coverage.
+  # The betas are NOT swept -- they define the method.
+  - name: gam
+    regularizer: gam
+    grid:
+      adaptive: [true]
+      _scale: [0.25, 0.5, 1.0, 2.0, 4.0]
+      grad_gamma: [0.03]
+    derive:
+      grad_rho: "0.04 * _scale"
+      grad_norm_rho: "0.20 * _scale"
+
+  # ---- GSAM: two genuinely interacting hyperparameters --------------- #
+  - name: gsam
+    regularizer: gsam
+    grid:
+      adaptive: [false]
+      rho: [0.02, 0.05, 0.1, 0.2]
+      alpha: [0.01, 0.05, 0.1, 0.4]
+
+# ---------------------------------------------------------------------
+# Grid size (3 lrs x 10 seeds):
+#   adamw   1 combo  ->   30 runs   x1 pass
+#   sam     6        ->  180        x2
+#   asam    5        ->  150        x2
+#   gam     5        ->  150        x4
+#   gsam   16        ->  480        x2
+#   total             =  990 runs
+#
+# Use the two-stage protocol instead (see README):
+#   stage 1: 3 seeds  -> ~297 runs, finds the winning hyperparameters
+#   stage 2: winners only, 10 seeds -> ~50 runs, produces the table
+# Same statistical validity, roughly a third of the compute.
+# ---------------------------------------------------------------------

@@ -1,0 +1,56 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  STAGE 4 — Evaluation metrics
+#
+#  The three reported metrics need no extra runs: every run records its test accuracy,
+#  generalization gap and FLOPs per step, and scripts/make_report.py assembles them into one
+#  3D table per round and metric (method × regularizer × evaluation setting; M2 trained with r
+#  on every pair), the Stage-1 benchmark on each round's source pair (M1 against M2 with
+#  r, beside M3 and M4), and the cross-evaluation of the rounds' optimizers on every pair.
+#
+#  This file adds the supplementary analyses:
+#    diagnostics   one audit per finished run of the study: Hessian λ_max (power iteration)
+#                  and Tr(H) (Hutchinson); the paper's point-of-convergence tests (max loss,
+#                  surrogate gap, max ‖∇L‖ in ε-balls, at convergence and at completion);
+#                  weight norms and sparsity — the property each regularizer targets
+#    compute       all 12 variants timed back-to-back on ONE GPU per pair, so wall-clock
+#                  comparisons are fair (FLOPs need no GPU: they are in every run already).
+#                  M2 is timed with r on, as it trains in every stage
+#  ??? = set by the profile (configs/profiles/*.yaml → grids).
+# ════════════════════════════════════════════════════════════════════════════
+name: stage4_analysis
+stage: 4
+study: main
+
+diagnostics:                 # → artifacts/<profile>/diagnostics/<study>/…/diagnostics.json
+  study: main                # audit every finished run of this study …
+  per_method: ???            # … or at most N runs per pair and method (profile: production every run; smoke 1)
+  hessian:
+    snapshots: [final]       # final = model_final.pt, converged = model_converged.pt
+    power_iterations: ???    # production 30
+    hutchinson_samples: ???  # production 50
+    num_batches: ???         # clean training batches averaged for each Hessian-vector product
+  sharpness:                 # the paper's point-of-convergence tests
+    snapshots: [converged, final]
+    radii: [0.001, 0.005, 0.01, 0.05, 0.1]
+    pga_steps: ???           # production 10
+    step_ratio: 0.1          # ascent step = radius / 10 (paper)
+    relative: false          # true: ball scaled per weight by |θ| (fairer on large networks)
+    grad_norm: true          # also the GAM property (max ‖∇L‖ in the ball)
+    num_batches: ???         # held-out test batches
+  norms:
+    sparsity_threshold: 1.0e-3
+
+compute:                     # → artifacts/<profile>/diagnostics/compute/<optimizee>-<dataset>.json
+  pairs:                     # the nine pairs of the core design (M3/M4 with round A's φ: same cost)
+    - [convnet4, svhn]
+    - [mlp, svhn]
+    - [resnet18, svhn]
+    - [convnet4, fmnist]
+    - [mlp, fmnist]
+    - [resnet18, fmnist]
+    - [convnet4, cifar10]
+    - [mlp, cifar10]
+    - [resnet18, cifar10]
+  overrides: []
+  warmup_steps: ???
+  timed_steps: ???

@@ -1,0 +1,18 @@
+train_arguments:
+  # AdamW + GSAM. Two real hyperparameters: rho and alpha.
+  # Grids: rho [0.01, 0.02, 0.05, 0.1] ; alpha [0.01, 0.02, 0.03, 0.1, 0.2, 0.3]
+  # Published optimum is alpha ~ 0.02, NOT 0.4.
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  weight_decay: 0.01
+  adaptive: False
+  rho: 0.05
+  alpha: 0.02              # WSAM paper: 0.02 on ResNet18/CIFAR-10
+  regularizer: 'gsam'
+  model_name: 'AdamW_GSAM_baseline'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+  # REMOVED: rho_min / rho_max -- the LR-tied rho schedule is NOT implemented
+  # in this codebase, so those keys were silently ignored while a constant
+  # `rho` did the work. build_optimizer now raises if they are present.

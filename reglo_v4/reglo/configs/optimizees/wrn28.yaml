@@ -1,0 +1,11 @@
+# Wide ResNet-28-k (Zagoruyko & Komodakis 2016) — ReLU
+#   widen_factor 4  → ≈5.9 M parameters  (M3/M4 fit on a 32 GB GPU)
+#   widen_factor 10 → ≈36.5 M parameters (the SAM papers' standard; the LSTM's state alone is ≈19 GB)
+name: wrn28
+depth: 28
+widen_factor: 4
+dropout: 0.0                 # kept at 0: dropout is a regularizer and would blur M1–M4 differences
+activation: relu
+num_classes: ${dataset.num_classes}
+in_channels: ${dataset.channels}
+image_size: ${dataset.image_size}

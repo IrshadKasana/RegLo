@@ -1,0 +1,42 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  STAGE 1 — Training: meta-train the optimizers, train M2 with its regularizer
+#                                       per round: 6 meta-training runs + 15 M2 runs (2 rounds: 12 + 30)
+#
+#  For every round of configs/rounds.yaml (A: ConvNet-4 / SVHN, B: MLP / FMNIST), on its source pair:
+#
+#      φ      for M3  ← m3_lstm                        L_meta only
+#      φ*_r   for M4  ← m4_lstm_reg, one per r        L_meta + λ_smooth·L_smooth + λ_reg·L_reg(r)
+#                       r ∈ {L1, L2, SAM, GAM, GSAM}    (Algorithm 1)
+#      M2(r)          ← AdamW + r at every step        the explicit-regularization benchmark;
+#                                                      M1 (AdamW alone) on the same pair is its reference
+#
+#  The LSTMs meta-train on the meta-training half of the source dataset: 20-step truncated BPTT,
+#  outer Adam 3e-4, identical budgets for every arm and round (configs/meta_training/base.yaml;
+#  the manifest check enforces the sameness). M2 trains on the other half — the images every
+#  Stage-2/3 run trains on — so M2(r), with r, and M4(r), without it, are compared on identical
+#  data and seeds. M1's run on the source pair is the seen-setting run of Stage 2 (not repeated).
+#  M2 keeps its regularizer in Stages 2–3 (AdamW + r on every evaluation pair); these source-pair
+#  runs are also its seen-setting runs there (the evaluation files' from_stage1), not repeated.
+#  Output: artifacts/<profile>/meta_training/<round>/<m3_lstm | m4_lstm_reg-r>/phi_best.pt (loaded
+#  by the M3/M4 runs of that round) and runs/main/<source pair>/m2_adamw_reg-r/seed<k>/.
+# ════════════════════════════════════════════════════════════════════════════
+name: stage1_meta_training
+stage: 1
+study: main
+rounds: [A, B]               # configs/rounds.yaml — one family of optimizers per round
+
+meta_train:
+  runs:                      # meta_training config → regularizers
+    m3_lstm: [none]
+    m4_lstm_reg: [l1, l2, sam, gam, gsam]
+  seeds: [0]
+  overrides: []
+
+train:                       # M2 = AdamW + r, on each round's source pair
+  pairs: sources             # = [[convnet4, svhn], [mlp, fmnist]] for rounds A, B
+  methods:
+    m2_adamw_reg: [l1, l2, sam, gam, gsam]
+  seeds: [42, 43, 44]
+  overrides: []              # every run (hyperparameters only: scale numbers belong in the profiles)
+  pair_overrides: {}         # <optimizee> or <optimizee>-<dataset> → overrides
+  optimizer_overrides: {}    # optimizer → optimizee → overrides

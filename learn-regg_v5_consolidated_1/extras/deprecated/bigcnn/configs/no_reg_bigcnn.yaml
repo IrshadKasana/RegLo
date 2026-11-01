@@ -1,0 +1,13 @@
+train_arguments:
+  base_optimizer: 'adam'
+  lr: 0.01
+  weight_decay: 0.0
+  momentum: 0.0
+  model_name: 'DMO_adam_bigcnn'
+  regularizer: 'no_reg'
+  optzee_wd: 0.0
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+  dataset: 'cifar10'
+  optimizee_model_name: 'big_conv'

@@ -1,0 +1,122 @@
+[orchestrator] 0 done, 39 to run, 3 workers
+[orchestrator] ok   adamw_none (86s)
+[orchestrator] ok   lo_none_lam0_seed0 (376s)
+[orchestrator] ok   adamw_l1 (523s)
+[orchestrator] ok   adamw_l2 (531s)
+[orchestrator] ok   lo_smooth_lam0_seed0 (982s)
+[orchestrator] ok   lo_l1_lam1e-06_seed0 (1114s)
+[orchestrator] ok   lo_l1_lam3e-06_seed0 (1131s)
+[orchestrator] ok   lo_l1_lam1e-05_seed0 (1589s)
+[orchestrator] ok   lo_l1_lam3e-05_seed0 (1588s)
+[orchestrator] ok   lo_l1_lam0.0001_seed0 (1593s)
+[orchestrator] ok   lo_l1_lam0.0003_seed0 (1535s)
+[orchestrator] ok   lo_l1_lam0.001_seed0 (1530s)
+[orchestrator] ok   lo_l1_lam0.003_seed0 (1523s)
+[orchestrator] ok   lo_l2_lam1e-05_seed0 (1572s)
+[orchestrator] ok   lo_l2_lam3e-05_seed0 (1579s)
+[orchestrator] ok   lo_l2_lam0.0001_seed0 (1571s)
+[orchestrator] ok   lo_l2_lam0.0003_seed0 (1113s)
+[orchestrator] ok   lo_l2_lam0.001_seed0 (968s)
+[orchestrator] ok   lo_l2_lam0.003_seed0 (962s)
+[orchestrator] ok   lo_none_lam0_seed1 (236s)
+[orchestrator] ok   lo_l2_lam0.01_seed0 (446s)
+[orchestrator] ok   lo_l2_lam0.03_seed0 (445s)
+[orchestrator] ok   lo_smooth_lam0_seed1 (436s)
+[orchestrator] ok   lo_l1_lam1e-06_seed1 (436s)
+[orchestrator] ok   lo_l1_lam3e-06_seed1 (437s)
+[orchestrator] ok   lo_l1_lam1e-05_seed1 (438s)
+[orchestrator] ok   lo_l1_lam3e-05_seed1 (440s)
+[orchestrator] ok   lo_l1_lam0.0001_seed1 (436s)
+[orchestrator] ok   lo_l1_lam0.0003_seed1 (437s)
+[orchestrator] ok   lo_l1_lam0.001_seed1 (437s)
+[orchestrator] ok   lo_l1_lam0.003_seed1 (439s)
+[orchestrator] ok   lo_l2_lam1e-05_seed1 (436s)
+[orchestrator] ok   lo_l2_lam3e-05_seed1 (438s)
+[orchestrator] ok   lo_l2_lam0.0001_seed1 (436s)
+[orchestrator] ok   lo_l2_lam0.0003_seed1 (438s)
+[orchestrator] ok   lo_l2_lam0.001_seed1 (435s)
+[orchestrator] ok   lo_l2_lam0.003_seed1 (440s)
+[orchestrator] ok   lo_l2_lam0.01_seed1 (370s)
+[orchestrator] ok   lo_l2_lam0.03_seed1 (268s)
+# λ sweep — MNIST, MLP 784-20-10, L1 and L2 regularizers
+
+Selection criterion: **mean validation accuracy** (3 000 held-out images, never trained on); ties broken by validation NLL. `±` is the standard error over runs. Test accuracy is listed for the selected configuration only, as a sanity check.
+
+## L1
+
+### Method 2 — AdamW + λ·L1  (best lr, wd per λ; 96 configs)
+
+| λ | best lr | best wd | val acc % | ± SE | val NLL | ‖θ‖₁ | frac(|θ|<1e-3) |
+|---|---|---|---|---|---|---|---|
+| 1e-06 | 0.01 | 0.1 | 92.78 | 0.17 | 0.2391 | 2240 | 0.009 |
+| 3e-06 | 0.01 | 0.01 | 92.66 | 0.12 | 0.2439 | 3028 | 0.011 |
+| 1e-05 | 0.01 | 0.1 | 92.76 | 0.20 | 0.2403 | 1844 | 0.029 |
+| 3e-05 | 0.01 | 0.1 | 93.05 | 0.11 | 0.2308 | 1384 | 0.052 |
+| 0.0001 | 0.01 | 0 | 93.65 | 0.19 | 0.2105 | 1057 | 0.085 | ◀ best
+| 0.0003 | 0.01 | 0 | 93.47 | 0.18 | 0.2173 | 635 | 0.142 |
+| 0.001 | 0.01 | 0 | 92.23 | 0.11 | 0.2813 | 370 | 0.208 |
+| 0.003 | 0.01 | 0 | 89.49 | 0.18 | 0.4259 | 219 | 0.304 |
+
+### Method 4 — LO + λ·L1 (+ smoothing)  (pooled over meta-seeds)
+
+| λ | meta-seeds | val acc % | ± SE | val NLL | ‖θ‖₁ | frac(|θ|<1e-3) |
+|---|---|---|---|---|---|---|
+| 1e-06 | 2 | 93.01 | 0.15 | 0.2358 | 2151 | 0.010 | ◀ best
+| 3e-06 | 2 | 92.21 | 0.51 | 0.2632 | 2257 | 0.008 |
+| 1e-05 | 2 | 92.63 | 0.28 | 0.2519 | 2851 | 0.007 |
+| 3e-05 | 2 | 92.48 | 0.19 | 0.2685 | 3205 | 0.005 |
+| 0.0001 | 2 | 92.32 | 0.13 | 0.2822 | 2759 | 0.007 |
+| 0.0003 | 2 | 92.92 | 0.19 | 0.2398 | 1674 | 0.011 |
+| 0.001 | 2 | 92.52 | 0.19 | 0.2445 | 2016 | 0.010 |
+| 0.003 | 2 | 92.64 | 0.15 | 0.2480 | 885 | 0.019 |
+
+**Best λ**
+
+- Method 2: **λ = 0.0001** (lr=0.01, wd=0) — val 93.65 ± 0.19 %; within 1 SE: 0.0001, 0.0003
+- Method 4: **λ = 1e-06** — val 93.01 ± 0.15 %; within 1 SE: 1e-06, 0.0003
+  - ⚠ best λ is at the **edge** of the grid — extend the grid before trusting it.
+
+## L2
+
+### Method 2 — AdamW + λ·L2  (best lr, wd per λ; 96 configs)
+
+| λ | best lr | best wd | val acc % | ± SE | val NLL | ‖θ‖₁ | frac(|θ|<1e-3) |
+|---|---|---|---|---|---|---|---|
+| 1e-05 | 0.01 | 0.1 | 92.94 | 0.18 | 0.2391 | 2151 | 0.008 |
+| 3e-05 | 0.01 | 0.01 | 92.87 | 0.19 | 0.2392 | 2502 | 0.007 |
+| 0.0001 | 0.01 | 0 | 92.94 | 0.15 | 0.2365 | 1826 | 0.012 |
+| 0.0003 | 0.01 | 0 | 93.19 | 0.16 | 0.2302 | 1218 | 0.018 | ◀ best
+| 0.001 | 0.01 | 0 | 92.55 | 0.18 | 0.2779 | 779 | 0.027 |
+| 0.003 | 0.003 | 0 | 91.16 | 0.10 | 0.3861 | 524 | 0.039 |
+| 0.01 | 0.003 | 0 | 89.18 | 0.19 | 0.6224 | 367 | 0.076 |
+| 0.03 | 0.003 | 0 | 84.21 | 0.43 | 1.1058 | 235 | 0.125 |
+
+### Method 4 — LO + λ·L2 (+ smoothing)  (pooled over meta-seeds)
+
+| λ | meta-seeds | val acc % | ± SE | val NLL | ‖θ‖₁ | frac(|θ|<1e-3) |
+|---|---|---|---|---|---|---|
+| 1e-05 | 2 | 91.80 | 0.12 | 0.2889 | 4219 | 0.003 |
+| 3e-05 | 2 | 92.54 | 0.53 | 0.2614 | 3393 | 0.007 |
+| 0.0001 | 2 | 91.57 | 0.47 | 0.3067 | 4155 | 0.003 |
+| 0.0003 | 2 | 92.98 | 0.26 | 0.2410 | 2243 | 0.010 |
+| 0.001 | 2 | 92.79 | 0.16 | 0.2358 | 1564 | 0.012 |
+| 0.003 | 2 | 92.99 | 0.12 | 0.2307 | 1595 | 0.010 | ◀ best
+| 0.01 | 2 | 92.36 | 0.13 | 0.2466 | 1965 | 0.009 |
+| 0.03 | 2 | 92.29 | 0.11 | 0.2581 | 1360 | 0.011 |
+
+**Best λ**
+
+- Method 2: **λ = 0.0003** (lr=0.01, wd=0) — val 93.19 ± 0.16 %; within 1 SE: 0.0003
+- Method 4: **λ = 0.003** — val 92.99 ± 0.12 %; within 1 SE: 0.0003, 0.003
+
+## λ = 0 references (no explicit regularizer)
+
+| Method | config | val acc % | ± SE | val NLL | test acc % |
+|---|---|---|---|---|---|
+| 1. AdamW | lr=0.01, wd=0.1 | 92.76 | 0.22 | 0.2415 | 93.27 |
+| 3. LO | 2 meta-seeds | 92.80 | 0.14 | 0.2509 | 93.35 |
+| (diagnostic) LO + smoothing only | 2 meta-seeds | 92.21 | 0.17 | 0.2812 | 92.95 |
+
+Method 4 contains the smoothing term (as the proposed model does); the diagnostic row is its λ = 0 limit, so *method 4 vs diagnostic* isolates R.
+
+[orchestrator] total 169.2 min

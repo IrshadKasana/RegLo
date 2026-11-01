@@ -1,0 +1,68 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  SMOKE — the whole study in miniature: every stage, every method and regularizer,
+#  every evaluation setting, the real datasets — in minutes, on a laptop CPU or GPU
+#                                                             (mirror: production.yaml)
+#
+#      python scripts/prepare_data.py                       once: download FMNIST, SVHN, CIFAR
+#      python scripts/run_study.py --profile smoke          Stage 1 → 4, report, connectivity check
+#
+#  It runs the very experiment files of the real study; only the numbers below are
+#  small. If it finishes without an error, the production run differs only in scale.
+#  Results: artifacts/smoke/ (delete the folder to start over). Without a download:
+#  --profile smoke_offline.
+# ════════════════════════════════════════════════════════════════════════════
+description: Every stage end to end in minutes — tiny numbers, real datasets
+allow_synthetic_data: false
+
+runs:
+  device: auto                         # the GPU if there is one, else the CPU
+  dataset:
+    train_subset: 512                  # first 512 training images (4 steps per epoch at batch 128)
+    test_subset: 256
+  training:
+    epochs: 2
+    train_eval_every: 1
+    convergence_patience: 2            # so the "at convergence" snapshot exists and is audited
+    checkpoint_every: 1                # exercise checkpointing
+  meta_training:
+    schedule:
+      num_trajectories: 4
+      trajectory_steps: 40             # = 2 truncations of the 20-step unroll
+      curriculum:
+        trajectory_steps: [20, 40]
+        patience: 1
+    validation:
+      every: 2
+      optimizees: 2
+      steps: 20
+    checkpoint_every: 1
+
+by_dataset: {}                         # one budget for every dataset
+
+by_optimizee:                          # same layouts, narrower: seconds per run on a CPU
+  convnet4:
+    optimizee: {channels: [8, 16, 32]}
+  mlp:
+    optimizee: {hidden: [16, 16]}      # ≈13 K weights on FMNIST, about ConvNet-4's smoke size
+  resnet18:
+    optimizee: {width: 8}              # stages of 8, 16, 32, 64 channels
+  wrn28:
+    optimizee: {depth: 10, widen_factor: 1}
+  vit_lite7:
+    optimizee: {embed_dim: 64, depth: 2, num_heads: 2}
+
+grids:
+  max_seeds: 1                         # the first seed of every grid
+  diagnostics:
+    per_method: 1                      # one audit per pair and method: every code path, a fraction of the time
+    hessian:
+      power_iterations: 2
+      hutchinson_samples: 2
+      num_batches: 1
+    sharpness:
+      radii: [0.01, 0.1]             # two of the five (0.01: the report's default radius)
+      pga_steps: 2
+      num_batches: 1
+  compute:
+    warmup_steps: 1
+    timed_steps: 2

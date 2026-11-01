@@ -1,0 +1,26 @@
+train_arguments:
+  # AdamW + GAM. Radius (grad_rho) AND penalty weight (grad_gamma) are both
+  # real hyperparameters -- grad_gamma is the alpha in L(w) + alpha*R(w).
+  # Pinning it at 0.03 while sweeping only the radius starves the penalty
+  # and makes GAM look inert.
+  #
+  # Grids: grad_rho [0.02, 0.04, 0.08, 0.16]  (grad_norm_rho = 5 x grad_rho)
+  #        grad_gamma [0.03, 0.1, 0.3, 1.0]
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  weight_decay: 0.01
+  adaptive: True
+  grad_rho: 0.04
+  grad_norm_rho: 0.2       # published ratio: 5 x grad_rho
+  grad_gamma: 0.03         # SWEEP THIS
+  # Published coefficients that DEFINE the method -- never sweep:
+  grad_beta_0: 1.0
+  grad_beta_1: 1.0
+  grad_beta_2: -1.0
+  grad_beta_3: 1.0
+  regularizer: 'gam'
+  model_name: 'AdamW_GAM_baseline'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+  # REMOVED: grad_rho_min/max, grad_norm_rho_min/max -- not implemented.

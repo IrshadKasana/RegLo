@@ -1,0 +1,116 @@
+{
+ "ls": 0.1,
+ "lr": 0.01,
+ "seed": 2,
+ "evals": [
+  {
+   "train_loss": 0.33382713035300926,
+   "train_acc": 0.8801481481481481,
+   "val_loss": 0.4069293619791667,
+   "val_acc": 0.851,
+   "test_loss": 0.43915556640625,
+   "test_acc": 0.8426
+  },
+  {
+   "train_loss": 0.33079984989872685,
+   "train_acc": 0.8802962962962962,
+   "val_loss": 0.4181929931640625,
+   "val_acc": 0.851,
+   "test_loss": 0.43029326171875,
+   "test_acc": 0.8487
+  },
+  {
+   "train_loss": 0.32777551721643516,
+   "train_acc": 0.883,
+   "val_loss": 0.4055078531901042,
+   "val_acc": 0.8433333333333334,
+   "test_loss": 0.438528271484375,
+   "test_acc": 0.8414
+  }
+ ],
+ "meta_train": {
+  "best_ckpt_score": 0.35365936160087585,
+  "history": [
+   {
+    "stage": 100,
+    "block": 0,
+    "ckpt_score": 0.48593613505363464,
+    "saved": true,
+    "elapsed": 169.52294063568115
+   },
+   {
+    "stage": 200,
+    "block": 0,
+    "ckpt_score": 0.4636191129684448,
+    "saved": true,
+    "elapsed": 516.0418763160706
+   },
+   {
+    "stage": 500,
+    "block": 0,
+    "ckpt_score": 0.374024361371994,
+    "saved": true,
+    "elapsed": 1340.9298632144928
+   },
+   {
+    "stage": 1000,
+    "block": 0,
+    "ckpt_score": 0.35365936160087585,
+    "saved": true,
+    "elapsed": 2987.2115840911865
+   }
+  ],
+  "meta_train_seconds": 2987.213803052902
+ },
+ "cfg": {
+  "grid": [
+   0.0,
+   0.001,
+   0.002,
+   0.004,
+   0.006,
+   0.007,
+   0.01,
+   0.02,
+   0.03,
+   0.04,
+   0.05,
+   0.07,
+   0.1,
+   0.2,
+   0.3,
+   0.4,
+   0.5
+  ],
+  "rho": 0.005,
+  "smooth_eps": 0.01,
+  "smooth_pga": 10,
+  "hidden_size": 20,
+  "num_layers": 2,
+  "meta_opt": "adam",
+  "meta_lr": 0.001,
+  "meta_batch": 128,
+  "tbptt": 20,
+  "stages": [
+   100,
+   200,
+   500,
+   1000
+  ],
+  "blocks_per_stage": 1,
+  "train_period": 6,
+  "ckpt_epochs": 1,
+  "eval_steps": 1000,
+  "eval_batch": 512,
+  "lo_inits": 3,
+  "adamw_lrs": [
+   0.001,
+   0.003,
+   0.01,
+   0.03
+  ],
+  "adamw_wd": 0.01,
+  "adamw_inits": 6
+ },
+ "device": "cpu"
+}

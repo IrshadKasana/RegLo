@@ -1,0 +1,15 @@
+source,method,reg,full_cartesian_cells,planned,ran,passed,passed_after_retry,failed,missing,planned_pct_of_full,sweep_design
+mnist,M1,-,2,2,2,2,0,0,0,100.0,full grid
+mnist,M3,-,2,2,2,2,0,0,0,100.0,full grid
+mnist,M4a,-,4,4,4,4,0,0,0,100.0,full meta_lr x lambda_smooth grid
+mnist,M2,l2,4,4,4,4,0,0,0,100.0,full lr x lambda grid
+mnist,M2,sam,8,6,6,6,0,0,0,75.0,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+mnist,M5,l2,8,5,5,5,0,0,0,62.5,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+mnist,M5,sam,16,6,6,6,0,0,0,37.5,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+cifar10,M1,-,2,2,2,2,0,0,0,100.0,full grid
+cifar10,M3,-,2,2,2,2,0,0,0,100.0,full grid
+cifar10,M4a,-,4,4,4,4,0,0,0,100.0,full meta_lr x lambda_smooth grid
+cifar10,M2,l2,4,4,4,4,0,0,0,100.0,full lr x lambda grid
+cifar10,M2,sam,8,6,6,6,0,0,0,75.0,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+cifar10,M5,l2,8,5,5,5,0,0,0,62.5,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+cifar10,M5,sam,16,6,6,6,0,0,0,37.5,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"

@@ -1,0 +1,28 @@
+/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torch/cuda/__init__.py:128: UserWarning: CUDA initialization: The NVIDIA driver on your system is too old (found version 11010). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver. (Triggered internally at ../c10/cuda/CUDAFunctions.cpp:108.)
+  return torch._C._cuda_getDeviceCount() > 0
+Traceback (most recent call last):
+  File "experiments/dmo/train.py", line 9, in <module>
+    runpy.run_path(str(DMO_SRC / "train.py"), run_name="__main__")
+  File "/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/runpy.py", line 265, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/runpy.py", line 97, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/iitjfs/home/2025pcs0034/learn-reg/src/learning_regularizers/dmo/train.py", line 236, in <module>
+    train_optimizer()
+  File "/iitjfs/home/2025pcs0034/learn-reg/src/learning_regularizers/dmo/train.py", line 179, in train_optimizer
+    loss_eval = eval_opt_func(num_unroll_eval,
+  File "/iitjfs/home/2025pcs0034/learn-reg/src/learning_regularizers/dmo/utils.py", line 888, in eval_opt_func
+    meta_optimizer.meta_update(model)
+  File "/iitjfs/home/2025pcs0034/learn-reg/src/learning_regularizers/dmo/meta_optimizer.py", line 93, in meta_update
+    update = self(inputs)
+  File "/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/iitjfs/home/2025pcs0034/learn-reg/src/learning_regularizers/dmo/meta_optimizer.py", line 74, in forward
+    output1, (hn1, cn1) = self.first_order(x, (self.h0, self.c0))
+  File "/home/2025pcs0034/.conda/envs/learn_reg/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1729, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'MetaOptimizerLSTM' object has no attribute 'h0'

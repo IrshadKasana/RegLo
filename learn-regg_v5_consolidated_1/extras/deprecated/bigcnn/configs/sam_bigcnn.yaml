@@ -1,0 +1,16 @@
+train_arguments:
+  adaptive: True
+  SAMonOptimizer: True
+  base_optimizer: 'sgd'
+  lr: 0.01
+  rho: 0.05
+  model_name: 'AdSAM_sgd_bigcnn'
+  regularizer: 'sam'
+  optzee_wd: 0.0
+  weight_decay: 0.0
+  momentum: 0.0
+  if_avreg: True
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+  dataset: 'cifar10'
+  optimizee_model_name: 'big_conv'

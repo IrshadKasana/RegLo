@@ -1,0 +1,34 @@
+[
+  {
+    "method": "AdamW + SAM",
+    "uses_learned_optimizer": false,
+    "forward_passes_per_step": 2,
+    "backward_passes_per_step": 2,
+    "ms_per_step": 2.7125491201877594,
+    "steps_per_sec": 368.6569185264307,
+    "approx_fwd_flops_per_batch": 2032640,
+    "approx_total_flops_per_step": 12195840
+  },
+  {
+    "method": "No Reg LO",
+    "uses_learned_optimizer": true,
+    "forward_passes_per_step": 1,
+    "backward_passes_per_step": 1,
+    "ms_per_step": 7.818367630243301,
+    "steps_per_sec": 127.90393689492966,
+    "approx_fwd_flops_per_batch": 2032640,
+    "approx_total_flops_per_step": 6097920,
+    "note": "Plus LSTM meta-optimizer forward (per-parameter); not included in optimizee FLOPs."
+  },
+  {
+    "method": "SAM LO",
+    "uses_learned_optimizer": true,
+    "forward_passes_per_step": 1,
+    "backward_passes_per_step": 1,
+    "ms_per_step": 7.739924639463425,
+    "steps_per_sec": 129.2002243666969,
+    "approx_fwd_flops_per_batch": 2032640,
+    "approx_total_flops_per_step": 6097920,
+    "note": "Plus LSTM meta-optimizer forward (per-parameter); not included in optimizee FLOPs."
+  }
+]

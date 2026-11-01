@@ -1,0 +1,44 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  STAGE 3 — Optimizee evaluation                                       309 runs
+#
+#  Do the trained networks generalize when the data changes? This file trains every network on
+#  FMNIST and CIFAR-10 — round A's Stage 3 (its seen dataset, ConvNet-4 / SVHN, is trained in
+#  Stage 2). Every round evaluates every pair; the setting follows from the round's source:
+#
+#                            round A: ConvNet-4 / SVHN          round B: MLP / FMNIST
+#      ConvNet-4 / FMNIST    unseen dataset             (S3)    unseen optimizee           (S2)
+#      MLP / FMNIST          unseen optimizee + dataset (S3)    seen                    (S2, S3)
+#      ResNet-18 / FMNIST    unseen optimizee + dataset (S3)    unseen optimizee           (S2)
+#      ConvNet-4 / CIFAR-10  unseen dataset             (S3)    unseen optimizee + dataset (S3)
+#      MLP / CIFAR-10        unseen optimizee + dataset (S3)    unseen dataset             (S3)
+#      ResNet-18 / CIFAR-10  unseen optimizee + dataset (S3)    unseen optimizee + dataset (S3)
+#
+#  FMNIST is round B's source dataset, so every run on it trains on the half that B's optimizers
+#  were not meta-trained on (configs/datasets/fmnist.yaml). Per pair: 18 variants (M1, M2 × 5 r,
+#  M3 and M4 × 5 r per round) × 3 seeds = 54; 6 pairs = 324, minus the 15 M2 runs on MLP / FMNIST
+#  that Stage 1 already trains (round B's source pair: from_stage1) = 309.
+#  Epochs per profile and dataset: configs/profiles/ (production: FMNIST 50, CIFAR-10 100).
+# ════════════════════════════════════════════════════════════════════════════
+name: stage3_optimizee_evaluation
+stage: 3
+study: main
+rounds: [A, B]
+
+train:
+  pairs:
+    - [convnet4, fmnist]
+    - [mlp, fmnist]
+    - [resnet18, fmnist]
+    - [convnet4, cifar10]
+    - [mlp, cifar10]
+    - [resnet18, cifar10]
+  methods:
+    m1_adamw: [none]
+    m2_adamw_reg: [l1, l2, sam, gam, gsam]
+    m3_lstm: [none]
+    m4_lstm_reg: [l1, l2, sam, gam, gsam]
+  from_stage1: [m2_adamw_reg] # on a round's source pair these runs are Stage 1's (reused, not repeated)
+  seeds: [42, 43, 44]
+  overrides: []
+  pair_overrides: {}
+  optimizer_overrides: {}

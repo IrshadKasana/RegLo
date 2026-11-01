@@ -1,0 +1,28 @@
+train_arguments:
+  # ============================================================
+  # Design-v2 cell: SAM-LO for the CIFAR-10 column, meta-trained
+  # on the resnet8 PROXY (BPTT through ResNet-18's 11.2M params
+  # is infeasible on a V100); meta-TESTED on ResNet-18 via
+  # --optimizee_model resnet18 --set param_chunk_size=262144.
+  # ============================================================
+  dataset: 'cifar10'
+  optimizee_model_name: 'resnet8'
+  augment: True
+  adaptive: True
+  SAMonOptimizer: True
+  base_optimizer: 'sgd'
+  lr: 0.001   # EQUALIZED meta-lr (was 0.01). gam/gsam meta-train at 0.001; a 10x lr mismatch between arms confounds every LO-vs-LO comparison. Checkpoints trained at 0.01 must be RE-TRAINED for a matched-budget comparison.
+  rho: 0.05
+  model_name: 'SAMLO_c10_r8_dev'
+  regularizer: 'sam'
+  optzee_wd: 0.0
+  weight_decay: 0.0
+  momentum: 0.0
+  if_avreg: True
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+  reg_mode: 'penalty'
+  lambda_reg: 0.1
+  xi: 1.0e-12
+  if_smooth: True
+  param_chunk_size: 0     # resnet8 (78k params) needs no chunking at meta-train

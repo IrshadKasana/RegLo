@@ -1,0 +1,21 @@
+train_arguments:
+  # AdamW + lambda*SAM  ==  WSAM (Yue et al., KDD 2023).
+  # THIS is the file matching the objective "AdamW + lambda * SAM".
+  #
+  #   L(w) + lambda * L_sharp(w),   lambda = gamma / (1 - gamma)
+  #   gamma = 0.5 -> lambda = 1 -> EXACTLY vanilla SAM
+  #   gamma = 0.88 -> lambda = 7.33 -> paper's best on ResNet18/CIFAR-10
+  #
+  # Grid (paper Sec 6.1): [0.5, 0.6, 0.7, 0.8, 0.82 ... 0.96]
+  base_optimizer: 'AdamW'
+  lr: 0.001
+  weight_decay: 0.01
+  adaptive: False
+  rho: 0.05
+  gamma: 0.88              # SWEEP; equivalently pass lam: 7.33
+  decouple: True           # weight-decouple (paper's recommended variant)
+  regularizer: 'wsam'
+  model_name: 'AdamW_WSAM_baseline'
+  if_avreg: False
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

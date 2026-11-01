@@ -1,0 +1,66 @@
+==== Job started at Mon Jun 29 02:01:51 IST 2026 on hgc08 ====
+==== sam-LO  |  CIFAR-10 + BigCNN (~1.28M params) ====
+Mon Jun 29 02:01:52 2026       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 455.32.00    Driver Version: 455.32.00    CUDA Version: 11.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla V100-PCIE...  Off  | 00000000:86:00.0 Off |                    0 |
+| N/A   48C    P0    36W / 250W |      0MiB / 32510MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+CUDA available: False, MPS available: False, Device: cpu
+****----------extracting yaml files------------****
+batch_size: 128
+seed: 1
+optimizee_steps: 1000
+truncated_bptt_step: 20
+max_epochs: 10000
+hidden_size: 20
+num_layers: 2
+save: artifacts/dmo/checkpoints
+cuda_: True
+if_cl: True
+dataset: cifar10
+optimizee_model_name: big_conv
+n_period: 3
+train_period: 20
+eval_epochs: 5
+smooth_eps: 1.0
+smooth_lamb: 1.0
+if_smooth: False
+smooth_num_pga_steps: 10
+adaptive: True
+SAMonOptimizer: True
+base_optimizer: sgd
+lr: 0.01
+rho: 0.05
+model_name: AdSAM_sgd_bigcnn
+regularizer: sam
+optzee_wd: 0.0
+weight_decay: 0.0
+momentum: 0.0
+if_avreg: True
+if_pretrained: False
+pretrained_model_name: no_name
+Cuda available: False , MPS available: False, device name : cpu
+Checkpoints will be saved to: /iitjfs/home/2025pcs0034/learn-reg/artifacts/dmo/checkpoints
+Files already downloaded and verified
+Files already downloaded and verified
+Current model checkpoint will be saved to: /iitjfs/home/2025pcs0034/learn-reg/artifacts/dmo/checkpoints/AdSAM_sgd_bigcnn.pt
+Evaluating optimizer:
+
+loss: 2.3016207218170166
+
+==== Job ended at Mon Jun 29 02:03:07 IST 2026 ====

@@ -1,0 +1,236 @@
+#################################################################
+
+#           Train the optimizer model     
+
+#################################################################
+import numpy as np
+import tqdm
+import argparse
+import os
+import random
+import sys
+from pathlib import Path
+import torch
+import torch.nn.functional as F
+import torch.optim as optim
+import copy
+from torch.autograd import Variable
+from torchvision import datasets, transforms
+from tqdm import tqdm
+
+from utils import *
+from meta_optimizer import *
+from model import *
+from dataloaders import *
+from regularizers import *
+from artifact_manager import get_checkpoint_path, get_checkpoints_dir
+
+sys.path.append(str(Path(__file__).resolve().parents[3]))
+
+from project_paths import ensure_dir, remap_workspace_path
+from experiment_config import EXPERIMENT_DIR, load_train_args, print_arguments
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--regularizer", type=str, default='no_reg', help="regularization type (no_reg, sam, sam_opzee, gam, gsam, l2)")
+reg_info = parser.parse_args()
+
+
+print('****----------extracting yaml files------------****')
+
+args = load_train_args(reg_info.regularizer)
+print_arguments(args)
+
+# print(f'printing to check {args.batch_size}')
+################################################################################################################################
+
+
+# Device setup: CUDA > Apple Silicon (MPS) > CPU
+if args.cuda_ and torch.cuda.is_available():
+    device = torch.device('cuda:0')
+elif torch.backends.mps.is_available():
+    device = torch.device('mps')
+    print("\nUsing Apple Silicon GPU (Metal Performance Shaders)")
+else:
+    device = torch.device('cpu')
+
+print(f"Cuda available: {torch.cuda.is_available()} , MPS available: {torch.backends.mps.is_available()}, device name : {device}")
+
+assert args.optimizee_steps % args.truncated_bptt_step == 0
+
+random.seed(args.seed)
+torch.manual_seed(args.seed)
+
+# Use professional artifact manager for checkpoints
+save_root = get_checkpoints_dir(experiment="dmo")
+print(f"Checkpoints will be saved to: {save_root}")
+
+
+#dataloaders
+train_data_loader, test_data_loader = data_loader(args.dataset, batch_size=args.batch_size, random_seed=args.seed)
+
+torch.cuda.empty_cache()
+
+def train_optimizer():
+
+    loss_min = 99999.9999
+    n = 1
+
+    if args.if_cl == True:
+        N_train_steps = [100, 200, 500, 1000]
+        N_eval_steps = N_train_steps[1:]
+        curriculum_idx = 0
+        num_unroll_train = N_train_steps[curriculum_idx]
+        num_unroll_eval = N_eval_steps[curriculum_idx]
+    
+    else:
+        num_unroll_train = args.optimizee_steps
+        num_unroll_eval = args.optimizee_steps
+
+    # # Start recording memory snapshot history
+    # start_record_memory_history()
+
+
+    meta_model = initialize_model(args.dataset, args.optimizee_model_name)
+    meta_model = meta_model.to(device)
+
+
+    meta_optimizer = MetaOptimizerLSTM(MetaModel(meta_model), args.num_layers, args.hidden_size, preproc_factor = 10.0, preproc =True)
+    meta_optimizer = meta_optimizer.to(device)
+
+    # finetuning pretrained model
+    if args.if_pretrained:
+        PT_model_dir = get_checkpoint_path(args.pretrained_model_name, experiment="dmo")
+        print(f"Loading pretrained model from: {PT_model_dir}")
+        meta_optimizer.load_state_dict(torch.load(PT_model_dir))
+        meta_optimizer.reset_lstm(keep_states=False, model=meta_model)
+    
+    optimizer_path = get_checkpoint_path(args.model_name, experiment="dmo")
+    print(f"Current model checkpoint will be saved to: {optimizer_path}")
+
+
+
+    
+    #############_________________________
+
+    smooth_reg_object = smooth_regularize(args.smooth_lamb, args.smooth_eps, args.smooth_num_pga_steps, meta_optimizer)
+    
+
+    improved = False
+    for eph in range(args.max_epochs//args.train_period):
+        
+        if args.if_avreg:
+            if reg_info.regularizer == 'sam':
+                SAMoptimizer_reg_train_opt_func(
+                                    num_unroll_train,
+                                    train_data_loader,
+                                    device,
+                                    meta_optimizer,
+                                    smooth_reg_object,
+                                    args) #all other arguments are included in args.
+            elif reg_info.regularizer == 'sam_opzee':
+                SAMoptimizee_reg_train_opt_func(
+                                    num_unroll_train,
+                                    train_data_loader,
+                                    device,
+                                    meta_optimizer,
+                                    smooth_reg_object,
+                                    args)
+                    
+            elif reg_info.regularizer == 'gam':
+                GAM_reg_train_opt_func(
+                                    num_unroll_train,
+                                    train_data_loader,
+                                    device,
+                                    meta_optimizer,
+                                    smooth_reg_object,
+                                    args)
+            elif reg_info.regularizer == 'gsam':
+                GSAM_reg_train_opt_func(
+                                    num_unroll_train,
+                                    train_data_loader,
+                                    device,
+                                    meta_optimizer,
+                                    smooth_reg_object,
+                                    args)
+            elif reg_info.regularizer == 'l2':
+                L2_reg_train_opt_func(
+                                    num_unroll_train,
+                                    train_data_loader,
+                                    device,
+                                    meta_optimizer,
+                                    smooth_reg_object,
+                                    args)
+
+        else:    
+            train_opt_func(num_unroll_train,
+                        train_data_loader,
+                        device,
+                        meta_optimizer,
+                        args)
+        
+        torch.cuda.empty_cache()
+
+
+        #evaluation of the optimizer
+        n = n + 1
+
+        
+        loss_eval = eval_opt_func(num_unroll_eval,
+                                train_data_loader,
+                                device,
+                                meta_optimizer,
+                                args)
+        torch.cuda.empty_cache()
+        
+        if not args.if_cl:
+            if loss_eval < loss_min:
+                loss_min = loss_eval
+                torch.save(meta_optimizer.state_dict(), optimizer_path)
+                print('Model Saved in : ', optimizer_path)
+
+            continue
+        
+
+
+        # Curriculum Learning
+
+        if loss_eval < loss_min:
+            
+            loss_min = loss_eval
+            improved = True
+
+            # Save model (artifact manager ensures directory exists)
+            best_meta_optimizer = copy.deepcopy(meta_optimizer)
+            torch.save(meta_optimizer.state_dict(), optimizer_path)
+            print(f"Best model saved to: {optimizer_path}")
+            print('Model Saved in : ', optimizer_path)
+
+        if args.if_cl == True:
+            if n >= args.n_period and improved:
+
+                print(f"\n\nCurriculum stage {curriculum_idx} completed !!\n\n\n")
+                n = 1
+                curriculum_idx += 1
+                if curriculum_idx >= len(N_train_steps):
+                    curriculum_idx = -1
+                num_unroll_train = N_train_steps[curriculum_idx]
+                num_unroll_eval = N_train_steps[curriculum_idx]
+
+
+                #initial evaluation for next curriculum
+                loss_min =  eval_opt_func(num_unroll_eval,
+                                        train_data_loader,
+                                        device,
+                                        best_meta_optimizer,
+                                        args)
+                torch.cuda.empty_cache()
+
+
+            elif n >= args.n_period and not improved:
+                print(f"No improvement with curriculum {curriculum_idx} : STOPPING Here!")
+                break
+
+
+if __name__ == "__main__":
+    train_optimizer()

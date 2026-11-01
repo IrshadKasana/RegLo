@@ -1,0 +1,46 @@
+#!/bin/bash
+#PBS -N reglo
+#PBS -q gpu-ext
+#PBS -l select=1:ncpus=8:ngpus=1:mem=24gb
+#PBS -l walltime=48:00:00
+#PBS -j oe
+# ════════════════════════════════════════════════════════════════════════════
+#  One manifest line per job: PBS array element i runs line i.
+#  Submit through cluster/pbs/submit.sh, which builds the manifest and passes
+#
+#      MANIFEST          artifacts/<profile>/manifests/submitted/<experiment>[…].txt
+#      REGLO_ROOT        the repository
+#      REGLO_MAX_HOURS   stop cleanly before the walltime (exit 75, resumable)
+#      INDEX             the line to run when the job is not an array (one-line manifests)
+#
+#  The #PBS lines above are only defaults: submit.sh sets queue, resources and
+#  walltime on the qsub command line (which wins). If qsub rejects a resource
+#  (e.g. "ngpus" where GPUs come per node), submit with --select 1:ncpus=8:mem=24gb.
+#
+#  A run stopped at max_hours or by the walltime loses nothing: submit the same command
+#  again — finished runs return at once, interrupted ones resume from their checkpoint.
+# ════════════════════════════════════════════════════════════════════════════
+
+REGLO_ROOT="${REGLO_ROOT:-${PBS_O_WORKDIR:-$PWD}}"
+cd "$REGLO_ROOT" || { echo "cannot cd to $REGLO_ROOT"; exit 2; }
+source cluster/env.sh
+
+INDEX="${PBS_ARRAY_INDEX:-${INDEX:-0}}"
+if [ -z "${MANIFEST:-}" ] || [ ! -f "$MANIFEST" ]; then
+  echo "MANIFEST is not set or missing: '${MANIFEST:-}' (submit with cluster/pbs/submit.sh)"
+  exit 2
+fi
+
+echo "== $(date '+%F %T') | job ${PBS_JOBID:-interactive} | $(hostname) | line $INDEX of $MANIFEST"
+echo "== python $REGLO_PYTHON | profile $REGLO_PROFILE | artifacts $REGLO_ARTIFACTS | max_hours ${REGLO_MAX_HOURS:-0}"
+if command -v nvidia-smi >/dev/null 2>&1; then
+  nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
+fi
+
+status=0
+"$REGLO_PYTHON" scripts/run_manifest.py "$MANIFEST" "$INDEX" || status=$?
+if [ "$status" -eq 75 ]; then
+  echo "== stopped at max_hours: submit the same command again to continue (finished runs are skipped)"
+fi
+echo "== $(date '+%F %T') | exit $status"
+exit "$status"

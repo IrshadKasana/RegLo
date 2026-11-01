@@ -1,0 +1,21 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  Stage 1 (protocol Exp 0.1–0.5) — the LSTM optimizers used by M4 (proposed), one run per regularizer
+#
+#      min_φ  L_meta(φ) + λ_smooth·L_smooth(φ) + λ_reg·L_reg(θ_T(φ)),
+#             L_reg ∈ {L1, L2, SAM, GAM, GSAM}                                 (Algorithm 1)
+#
+#  λ_smooth comes from regularizers/smooth.yaml, λ_reg from regularizers/<r>.yaml → meta.coef.
+#
+#      python scripts/meta_train.py meta_training=m4_lstm_reg regularizer=sam
+# ════════════════════════════════════════════════════════════════════════════
+extends: base
+
+defaults:
+  regularizer: ???           # l1 | l2 | sam | gam | gsam
+  smooth: smooth
+
+name: m4_lstm_reg
+allowed_regularizers: [l1, l2, sam, gam, gsam]
+objective:
+  smooth: true
+  regularizer: true
