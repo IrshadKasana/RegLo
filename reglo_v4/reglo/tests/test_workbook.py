@@ -28,8 +28,9 @@ def test_the_plan_has_every_run_once(plan):
     for run in plan.runs:
         by_file[run.experiment] = by_file.get(run.experiment, 0) + 1
     assert by_file == {"stage1_meta_training": 30, "stage2_optimizer_evaluation": 147,
-                       "stage3_optimizee_evaluation": 309, "extended_evaluation": 252, "pilot": 2}
-    assert len(plan.runs) == 740
+                       "stage3_optimizee_evaluation": 309, "extended_evaluation": 252, "pilot": 2,
+                       "imagenet_evaluation": 54}
+    assert len(plan.runs) == 740 + 54  # the core design, extended and pilot; plus ResNet-18 / ImageNet
     assert len({run.key for run in plan.runs}) == len(plan.runs) and plan.runs[0].run_id == "R0001"
     assert len(plan.arms) == 12 and {a.round for a in plan.arms} == {"A", "B"}
     assert plan.seeds == [42, 43, 44]

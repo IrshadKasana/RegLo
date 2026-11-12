@@ -68,6 +68,45 @@ def test_converters_produce_nchw():
     assert from_hw(hw, torch.arange(5), 10).images.shape == (5, 1, 28, 28)
 
 
+def test_imagenet_reads_parquet_and_shuffles_the_class_sorted_training_set(tmp_path):
+    pa = pytest.importorskip("pyarrow")
+    pq = pytest.importorskip("pyarrow.parquet")
+    import io
+
+    from PIL import Image
+
+    from reglo.data.datasets import IMAGENET_FILES
+
+    def write(name, labels):
+        blobs = []
+        for label in labels:
+            buffer = io.BytesIO()
+            Image.fromarray(np.full((32, 32, 3), label * 20, dtype=np.uint8)).save(buffer, format="PNG")
+            blobs.append({"bytes": buffer.getvalue(), "path": None})
+        table = pa.table({"image": blobs, "label": pa.array(labels, type=pa.int64())})
+        (tmp_path / "imagenet32").mkdir(exist_ok=True)
+        pq.write_table(table, tmp_path / "imagenet32" / f"{name}.parquet")
+
+    for k, name in enumerate(IMAGENET_FILES[True]):  # sorted by class, as the real files are
+        write(name, [k] * 4)
+    write(IMAGENET_FILES[False][0], [2, 0, 1])
+    cfg = load_group_file("dataset", "imagenet")
+    train = load_image_data(cfg, tmp_path, True)
+    assert train.images.shape == (12, 3, 32, 32) and train.num_classes == 1000
+    assert sorted(train.labels.tolist()) == [0] * 4 + [1] * 4 + [2] * 4
+    assert train.labels.tolist() != sorted(train.labels.tolist())  # one fixed random order …
+    assert torch.equal(train.images[:, 0, 0, 0], (train.labels * 20).to(torch.uint8))  # … images still with their labels
+    assert (tmp_path / "cache" / "imagenet_train.pt").is_file()
+    test = load_image_data(cfg, tmp_path, False)
+    assert test.labels.tolist() == [2, 0, 1]  # the validation images keep their order
+
+
+def test_imagenet_without_its_files_explains_how_to_get_them(tmp_path):
+    pytest.importorskip("pyarrow")
+    with pytest.raises(DatasetNotPrepared, match="prepare_data.py imagenet"):
+        load_image_data(load_group_file("dataset", "imagenet"), tmp_path, True)
+
+
 def test_cache_is_written_once_and_reused(tmp_path):
     calls = []
 

@@ -45,7 +45,7 @@ def test_available_choices():
     assert available("method") == METHODS
     assert available("optimizer") == ["adamw", "lstm"]
     assert available("optimizee") == ["convnet4", "mlp", "resnet18", "vit_lite7", "wrn28"]
-    assert available("dataset") == ["cifar10", "cifar100", "fmnist", "svhn", "synthetic"]
+    assert available("dataset") == ["cifar10", "cifar100", "fmnist", "imagenet", "svhn", "synthetic"]
     assert set(available("regularizer")) == set(REGULARIZERS) | {"none"}  # L_smooth is not a choice of r
     assert available("smooth") == ["smooth"]
     assert available("meta_training") == ["m3_lstm", "m4_lstm_reg"]  # base.yaml is not a choice
@@ -311,6 +311,7 @@ def test_save_and_reload(tmp_path):
 def test_experiment_names():
     assert experiment_names() == [
         "extended_evaluation",
+        "imagenet_evaluation",
         "pilot",
         "stage1_meta_training",
         "stage2_optimizer_evaluation",

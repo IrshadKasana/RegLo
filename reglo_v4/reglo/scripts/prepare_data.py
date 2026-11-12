@@ -6,6 +6,7 @@ Run it on your laptop before the smoke test, and on a cluster's login node befor
 
     python scripts/prepare_data.py                        # fmnist, svhn, cifar10, cifar100
     python scripts/prepare_data.py svhn cifar10 fmnist    # the core study (and its smoke test)
+    python scripts/prepare_data.py imagenet               # optional: ImageNet-1k 32×32 (~0.6 GB, needs pyarrow)
     python scripts/prepare_data.py --data-root /scratch/$USER/datasets
 
 Afterwards every run — smoke or production — reads ``<data>/cache/*.pt`` (seconds to load) and

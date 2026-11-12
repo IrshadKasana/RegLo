@@ -60,7 +60,7 @@ def test_study_main_and_its_settings_per_round():
     names = [s["name"] for s in study_experiments("main")]
     assert names[:4] == ["stage1_meta_training", "stage2_optimizer_evaluation", "stage3_optimizee_evaluation",
                          "stage4_analysis"]
-    assert names[-1] == "extended_evaluation"  # extended files come last
+    assert names[-2:] == ["extended_evaluation", "imagenet_evaluation"]  # extended files come last
     assert [r.name for r in study_rounds("main")] == ["A", "B"]
     settings = study_settings("main")
 
@@ -81,6 +81,8 @@ def test_study_main_and_its_settings_per_round():
     assert ("convnet4", "svhn") in pairs("B", "unseen_dataset") and not pairs("B", "unseen_optimizee", extended=True)
     roles = {(sp.pair.optimizee, sp.pair.dataset): sp.role for sp in settings["B"]["unseen_dataset"]}
     assert roles[("mlp", "svhn")] == "unseen_dataset" and roles[("convnet4", "svhn")] == "unseen_both"
+    for round_name in ("A", "B"):  # the optional ImageNet grid: evaluated with both rounds' optimizers
+        assert ("resnet18", "imagenet") in pairs(round_name, "unseen_dataset", extended=True)
 
 
 @pytest.mark.parametrize("profile", ["production", "smoke", "smoke_offline"])

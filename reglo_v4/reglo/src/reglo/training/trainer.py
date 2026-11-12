@@ -157,8 +157,9 @@ class OptimizeeTrainer:
         write_json(final_path, final)
         if last_path.is_file():
             last_path.unlink()  # large for M3/M4; the run is complete
-        self.log.info("Done: test top-1 %.4f, gap %.4f, %.1f s → %s", final["test_top1"] or math.nan,
-                      final["gen_gap"] or math.nan, final["wall_clock_s"], final_path)
+        number = lambda key: math.nan if final[key] is None else final[key]  # noqa: E731 - 0.0 is a value
+        self.log.info("Done: test top-1 %.4f, gap %.4f, %.1f s → %s", number("test_top1"), number("gen_gap"),
+                      final["wall_clock_s"], final_path)
         return final
 
     # ------------------------------------------------------------------ pieces

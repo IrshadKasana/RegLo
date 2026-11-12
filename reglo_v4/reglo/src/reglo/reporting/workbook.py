@@ -52,8 +52,8 @@ SHEETS = ("Read me", "T1 Optimizees & Optimizers", "T2 Regularizers", "T3 Sweeps
 T4, RUNS, META = "T4 Experiments", "Runs", "Stage 1 meta-training"
 
 #: training-set sizes of the real datasets (torchvision); the test sets: SVHN 26,032, the others 10,000
-TRAIN_SIZES = {"svhn": 73_257, "fmnist": 60_000, "cifar10": 50_000, "cifar100": 50_000}
-TEST_SIZES = {"svhn": 26_032, "fmnist": 10_000, "cifar10": 10_000, "cifar100": 10_000}
+TRAIN_SIZES = {"svhn": 73_257, "fmnist": 60_000, "cifar10": 50_000, "cifar100": 50_000, "imagenet": 1_281_167}
+TEST_SIZES = {"svhn": 26_032, "fmnist": 10_000, "cifar10": 10_000, "cifar100": 10_000, "imagenet": 50_000}
 METHOD_ROWS = ([("m1_adamw", "none")] + [("m2_adamw_reg", r) for r in REGULARIZERS] + [("m3_lstm", "none")]
                + [("m4_lstm_reg", r) for r in REGULARIZERS])
 ROLE_ORDER = ("seen", "unseen_optimizee", "unseen_dataset", "unseen_both")
@@ -473,7 +473,7 @@ def _optimizer_block() -> Tuple[List[str], List[str], List[List[str]]]:
 
 
 def _dataset_block(rounds: Sequence[Round]) -> Tuple[List[str], List[str], List[List[str]]]:
-    names = ["svhn", "fmnist", "cifar10", "cifar100"]
+    names = ["svhn", "fmnist", "cifar10", "cifar100", "imagenet"]
     attributes = ["Images (train / test)", "Shape · classes", "Normalisation mean · std", "Augmentation (training)",
                   "Meta split (meta-training / optimizee half)", "Training images of an optimizee run",
                   "Meta-training images (minus the 10% validation hold-out)", "Role in the rounds",

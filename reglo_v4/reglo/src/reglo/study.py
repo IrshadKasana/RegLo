@@ -90,6 +90,7 @@ REG_NAMES = {"none": "—", "l1": "L1", "l2": "L2", "sam": "SAM", "gam": "GAM", 
 OPTIMIZEE_NAMES = {"convnet4": "ConvNet-4", "mlp": "MLP", "resnet18": "ResNet-18", "wrn28": "WRN-28",
                    "vit_lite7": "ViT-Lite-7/4"}
 DATASET_NAMES = {"svhn": "SVHN", "fmnist": "FMNIST", "cifar10": "CIFAR-10", "cifar100": "CIFAR-100",
+                 "imagenet": "ImageNet-32",
                  "synthetic": "synthetic"}
 
 

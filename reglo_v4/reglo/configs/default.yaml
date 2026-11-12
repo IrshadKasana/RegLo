@@ -14,7 +14,7 @@
 # ════════════════════════════════════════════════════════════════════════════
 
 defaults:                    # every run picks these two (an entry file may preset them)
-  dataset: ???               # fmnist | svhn | cifar10 | cifar100   (synthetic: unit tests only)
+  dataset: ???               # fmnist | svhn | cifar10 | cifar100 | imagenet   (synthetic: unit tests only)
   optimizee: ???             # convnet4 | mlp | resnet18 | wrn28 | vit_lite7
 
 profile: production          # set from profile=… / $REGLO_PROFILE when the config is composed

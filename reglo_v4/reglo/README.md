@@ -103,11 +103,12 @@ Another round is one entry in `configs/rounds.yaml` and its name in the experime
 | 4 | `make_report.py`, `stage4_analysis` | the 3D tables per round, the benchmark, the cross-evaluation; audits and same-GPU timing | one audit per run |
 | — | `extended_evaluation` *(optional, round A)* | WRN-28 and ViT-Lite-7/4 as more unseen optimizees, CIFAR-100 as a harder unseen dataset | 252 · 84 |
 | — | `pilot` *(optional)* | M1 vs M3 (round A) for 10 epochs: does the LSTM hold up over long training? | 2 · 2 |
+| — | `imagenet_evaluation` *(optional, rounds A and B)* | ResNet-18 on ImageNet-1k 32×32 (1,000 classes, 1.28 M images): unseen optimizee + dataset for both rounds; with `--extended` | 54 · 18 |
 
 Each evaluation pair runs M1 + M2 × 5 r + (M3 + M4 × 5 r) × 2 rounds = 18 variants × 3 seeds
 (smoke: 1 seed); the extended grid, with round A only, 12. On the two source pairs (ConvNet-4 /
 SVHN in Stage 2, MLP / FMNIST in Stage 3) M2's 15 runs are Stage 1's, so they are not repeated:
-3 × 54 − 15 = 147 and 6 × 54 − 15 = 309. In all, 740 optimizee runs (30 + 147 + 309 + 252 + 2)
+3 × 54 − 15 = 147 and 6 × 54 − 15 = 309. In all, 740 optimizee runs (30 + 147 + 309 + 252 + 2; 794 with the optional ImageNet grid)
 and 12 meta-training runs:
 
 | Grid | M1 | M2 | M3 | M4 | Runs |
@@ -117,6 +118,7 @@ and 12 meta-training runs:
 | Stage 3 | 18 | 90 − 15 = 75 | 36 | 180 | 309 |
 | Extended (round A) | 21 | 105 | 21 | 105 | 252 |
 | Pilot | 1 | — | 1 | — | 2 |
+| ImageNet (optional) | 3 | 15 | 6 | 30 | 54 |
 
 The file names follow round A's view (Stage 2: its source dataset; Stage 3: the others); for
 round B the same runs fall into its own Stage 2 and 3 (table above). Runs on SVHN and FMNIST — the
@@ -171,6 +173,7 @@ pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu  
 pip install -e ".[dev,analysis]"
 
 python scripts/prepare_data.py                          # once: FMNIST, SVHN, CIFAR-10/100 (~0.6 GB)
+python scripts/prepare_data.py imagenet                 # optional: ImageNet-1k 32×32 (~0.6 GB, pip install pyarrow)
 python scripts/run_study.py --profile smoke             # Stage 1 → 4, report, connectivity check
 ```
 
@@ -252,7 +255,7 @@ reglo/
 │   ├── default.yaml              profile, study namespace, round (meta_tag), paths, seed, device, training loop
 │   ├── rounds.yaml               the meta-training rounds: A ConvNet-4 / SVHN, B MLP / FMNIST
 │   ├── profiles/                 production · smoke · smoke_offline: every number that differs
-│   ├── datasets/                 fmnist · svhn · cifar10 · cifar100 (· synthetic: unit tests)
+│   ├── datasets/                 fmnist · svhn · cifar10 · cifar100 · imagenet (32×32) (· synthetic: unit tests)
 │   ├── optimizees/               convnet4 · mlp · resnet18 · wrn28 · vit_lite7
 │   ├── optimizers/
 │   │   ├── adamw.yaml            conventional optimizer   → M1, M2
