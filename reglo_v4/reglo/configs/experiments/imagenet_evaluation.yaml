@@ -1,0 +1,30 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  IMAGENET — optional: ResNet-18 on ImageNet-1k (32×32)                 54 runs
+#
+#  ImageNet as a large unseen dataset: 1,000 classes, 1.28 M training images. ResNet-18 /
+#  ImageNet is "unseen optimizee + dataset" for both rounds (A: ConvNet-4 / SVHN, B: MLP /
+#  FMNIST), so it is evaluated with the optimizers of both: M1, M2 × 5 r, and M3, M4 × 5 r per
+#  round = 18 variants × 3 seeds. Shown in the *_extended cubes; runs with --extended:
+#      python scripts/prepare_data.py imagenet                       once: ~0.6 GB download
+#      python scripts/run_study.py --extended --only dataset=imagenet
+#  Epochs per profile: configs/profiles/ (production: the default 50).
+# ════════════════════════════════════════════════════════════════════════════
+name: imagenet_evaluation
+stage: 3
+study: main
+extended: true
+rounds: [A, B]
+
+train:
+  pairs:
+    - [resnet18, imagenet]
+  methods:
+    m1_adamw: [none]
+    m2_adamw_reg: [l1, l2, sam, gam, gsam]
+    m3_lstm: [none]
+    m4_lstm_reg: [l1, l2, sam, gam, gsam]
+  from_stage1: [m2_adamw_reg]
+  seeds: [42, 43, 44]
+  overrides: []
+  pair_overrides: {}
+  optimizer_overrides: {}

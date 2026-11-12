@@ -1,0 +1,28 @@
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m4a DYNAMIC (worker 0): 6 jobs in the phase, 0 done
+/home/aroofa_ext/.local/lib/python3.10/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+/home/apps/MLDL/DL-CondaPy3/envs/Pytorch-gpu/lib/python3.10/site-packages/torch/nn/modules/conv.py:456: UserWarning: Applied workaround for CuDNN issue, install nvrtc.so (Triggered internally at /opt/conda/conda-bld/pytorch_1708025831440/work/aten/src/ATen/native/cudnn/Conv_v8.cpp:80.)
+  return F.conv2d(input, weight, bias, self.stride,
+[imagenet none ls=1 lr=0 mlr=0.0001 seed=0] T= 100 ckpt=7.0087 * (16s)
+[imagenet none ls=1 lr=0 mlr=0.0001 seed=0] T= 200 ckpt=6.9142 * (29s)
+[imagenet none ls=1 lr=0 mlr=0.0001 seed=0] T= 500 ckpt=6.9186 (52s)
+[imagenet none ls=1 lr=0 mlr=0.0001 seed=0] T=1000 ckpt=6.9230 (93s)
+LO imagenet_none_ls1_lr0_mlr0.0001_seed0: val_acc=0.0011
+[worker] ok imagenet_none_ls1_lr0_mlr0.0001_seed0 (405s)
+[imagenet none ls=1 lr=0 mlr=0.001 seed=0] T= 100 ckpt=7.1411 * (13s)
+[imagenet none ls=1 lr=0 mlr=0.001 seed=0] T= 200 ckpt=7.0560 * (26s)
+[imagenet none ls=1 lr=0 mlr=0.001 seed=0] T= 500 ckpt=6.9297 * (48s)
+[imagenet none ls=1 lr=0 mlr=0.001 seed=0] T=1000 ckpt=6.9781 (87s)
+LO imagenet_none_ls1_lr0_mlr0.001_seed0: val_acc=0.0010
+[worker] ok imagenet_none_ls1_lr0_mlr0.001_seed0 (381s)
+[imagenet none ls=1 lr=0 mlr=0.01 seed=0] T= 100 ckpt=11.7678 * (12s)
+[imagenet none ls=1 lr=0 mlr=0.01 seed=0] T= 200 ckpt=6.9292 * (25s)
+[imagenet none ls=1 lr=0 mlr=0.01 seed=0] T= 500 ckpt=7.7753 (50s)
+[imagenet none ls=1 lr=0 mlr=0.01 seed=0] T=1000 ckpt=22.7652 (92s)
+LO imagenet_none_ls1_lr0_mlr0.01_seed0: val_acc=0.0010
+[worker] ok imagenet_none_ls1_lr0_mlr0.01_seed0 (397s)
+[worker] shard finished; 0 failed: []
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m4a DYNAMIC (worker 0): 6 jobs in the phase, 6 done
+[worker] shard finished; 0 failed: []

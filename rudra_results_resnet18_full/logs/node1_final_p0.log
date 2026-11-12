@@ -1,0 +1,52 @@
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=final DYNAMIC (worker 1): 14 jobs in the phase, 0 done
+/home/aroofa_ext/.local/lib/python3.10/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+/home/apps/MLDL/DL-CondaPy3/envs/Pytorch-gpu/lib/python3.10/site-packages/torch/nn/modules/conv.py:456: UserWarning: Applied workaround for CuDNN issue, install nvrtc.so (Triggered internally at /opt/conda/conda-bld/pytorch_1708025831440/work/aten/src/ATen/native/cudnn/Conv_v8.cpp:80.)
+  return F.conv2d(input, weight, bias, self.stride,
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=2] T= 100 ckpt=6.5107 * (27s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=2] T= 200 ckpt=6.7330 (45s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=2] T= 500 ckpt=6.3622 * (80s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=2] T=1000 ckpt=6.4552 (143s)
+LO imagenet_gsam_ls1_lr1_mlr0.0003_rho0.01_seed2: val_acc=0.0019
+[worker] ok imagenet_gsam_ls1_lr1_mlr0.0003_rho0.01_seed2 (609s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0003 seed=1] T= 100 ckpt=7.2216 * (9s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0003 seed=1] T= 200 ckpt=6.6597 * (21s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0003 seed=1] T= 500 ckpt=6.9084 (42s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0003 seed=1] T=1000 ckpt=6.9086 (76s)
+LO imagenet_l1_ls1_lr0.001_mlr0.0003_seed1: val_acc=0.0024
+[worker] ok imagenet_l1_ls1_lr0.001_mlr0.0003_seed1 (377s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0003 seed=2] T= 100 ckpt=6.7152 * (10s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0003 seed=2] T= 200 ckpt=6.9025 (22s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0003 seed=2] T= 500 ckpt=6.9089 (42s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0003 seed=2] T=1000 ckpt=6.8843 (77s)
+LO imagenet_l1_ls1_lr0.001_mlr0.0003_seed2: val_acc=0.0014
+[worker] ok imagenet_l1_ls1_lr0.001_mlr0.0003_seed2 (379s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.0003 seed=1] T= 100 ckpt=6.9065 * (10s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.0003 seed=1] T= 200 ckpt=6.9310 (21s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.0003 seed=1] T= 500 ckpt=6.8543 * (42s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.0003 seed=1] T=1000 ckpt=6.2769 * (76s)
+LO imagenet_l2_ls1_lr0.005_mlr0.0003_seed1: val_acc=0.0049
+[worker] ok imagenet_l2_ls1_lr0.005_mlr0.0003_seed1 (376s)
+[imagenet none ls=0 lr=0 mlr=0.0003 seed=1] T= 100 ckpt=6.8994 * (9s)
+[imagenet none ls=0 lr=0 mlr=0.0003 seed=1] T= 200 ckpt=6.3939 * (21s)
+[imagenet none ls=0 lr=0 mlr=0.0003 seed=1] T= 500 ckpt=6.3136 * (40s)
+[imagenet none ls=0 lr=0 mlr=0.0003 seed=1] T=1000 ckpt=6.2239 * (71s)
+LO imagenet_none_ls0_lr0_mlr0.0003_seed1: val_acc=0.0009
+[worker] ok imagenet_none_ls0_lr0_mlr0.0003_seed1 (375s)
+[imagenet none ls=1 lr=0 mlr=0.0003 seed=1] T= 100 ckpt=6.9004 * (10s)
+[imagenet none ls=1 lr=0 mlr=0.0003 seed=1] T= 200 ckpt=6.4521 * (23s)
+[imagenet none ls=1 lr=0 mlr=0.0003 seed=1] T= 500 ckpt=6.5485 (47s)
+[imagenet none ls=1 lr=0 mlr=0.0003 seed=1] T=1000 ckpt=6.9004 (88s)
+LO imagenet_none_ls1_lr0_mlr0.0003_seed1: val_acc=0.0014
+[worker] ok imagenet_none_ls1_lr0_mlr0.0003_seed1 (389s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=1] T= 100 ckpt=6.9089 * (12s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=1] T= 200 ckpt=6.9084 * (30s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=1] T= 500 ckpt=6.2972 * (64s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=1] T=1000 ckpt=6.5929 (127s)
+LO imagenet_sam_ls1_lr1_mlr0.0003_rho0.06_seed1: val_acc=0.0088
+[worker] ok imagenet_sam_ls1_lr1_mlr0.0003_rho0.06_seed1 (427s)
+[worker] shard finished; 0 failed: []
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=final DYNAMIC (worker 1): 14 jobs in the phase, 14 done
+[worker] shard finished; 0 failed: []

@@ -1,0 +1,11 @@
+train_arguments:
+  base_optimizer: 'adam'         # Base optimizer type (overridden by B for baselines)
+  lr: 0.01                       # Learning rate of base_optimizer (same as no_reg.yaml)
+  weight_decay: 0.0              # Weight decay of base_optimizer (kept 0: L1 is applied explicitly)
+  momentum: 0.0                  # Momentum of base_optimizer (same as no_reg.yaml)
+  reg_lambda: 0.00001            # lambda for R(w) = sum |w| over weight tensors (ndim > 1)
+  model_name: 'L1_adam_LO'       # name of the optimizer model with specs
+  regularizer: 'l1'              # name of the regularizer
+  if_avreg: True                 # turn on regularization on Optimizer
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

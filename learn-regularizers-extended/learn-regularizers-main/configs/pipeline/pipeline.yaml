@@ -1,0 +1,111 @@
+# =====================================================================================
+#  Hierarchical L2O regularization pipeline (Meta-Training -> Optimizer Eval -> Optimizee Eval)
+#
+#  Precedence (lowest -> highest):
+#    configs/dmo/base/meta_train.yaml | configs/dmo/base/optimizee_eval.yaml   (base, untouched)
+#    configs/dmo/regularizers/smooth.yaml                                     (base, untouched)
+#    configs/dmo/regularizers/<R>.yaml                                        (base + new l1/l2)
+#    the `overrides` blocks below                                             (this file)
+#    command-line  --set a.b.c=value                                          (run_pipeline.py)
+#
+#  Nothing in this file changes a base hyperparameter unless it is listed under an
+#  `overrides:` block. The task fields (dataset / optimizee) are the only defaults that
+#  differ from the base YAMLs, because the figure fixes the meta-training task to
+#  ConvNet-4 + SVHN.
+# =====================================================================================
+
+experiment:
+  name: "l2o_reg_pipeline"          # results go to artifacts/pipeline/<name>/
+  seed: 1
+  device: "auto"                    # auto | cpu | cuda | cuda:0 | mps
+  data_root: null                   # null -> $LSAIML_DATASETS_DIR or <repo>/datasets
+  download: true                    # torchvision auto-download (not possible for ImageNet)
+  synthetic_data: false             # true -> learnable synthetic stand-ins (smoke tests, no downloads)
+  num_workers: 2
+
+# ---------------------------------------------------------------- method grid
+methods: [1, 2, 3, 4, 5, 6]
+base_optimizers: ["adam", "sgd"]    # B, evaluated separately (methods 1-2)
+regularizers: ["l1", "l2", "sam", "gam", "gsam"]   # R (methods 2, 5, 6)
+
+# which YAML in configs/dmo/regularizers/ supplies the hyperparameters of each R
+regularizer_configs:
+  none: "no_reg.yaml"
+  l1: "l1.yaml"
+  l2: "l2.yaml"
+  sam: "sam.yaml"
+  gam: "gam.yaml"
+  gsam: "gsam.yaml"
+
+# ---------------------------------------------------------------- phase 1 (methods 3-6)
+meta_training:
+  # ---- CHOOSE THE META-TRAINING TASK HERE (it defines "seen"; phases 2-3 follow it automatically) ----
+  dataset: "svhn"                   # seen dataset:   svhn | mnist | fmnist | cifar10 | cifar100 | imagenet
+  optimizee: "convnet4"             # seen optimizee: convnet4 | mlp | resnet18
+  models: {}                        # model settings used ONLY while meta-training (proxy), e.g.
+                                    # {resnet18: {width: 16}}: meta-train on a narrow ResNet-18, evaluate on
+                                    # the full one (the LO is coordinate-wise, so it transfers unchanged)
+  outer_optimizer: "yaml"           # yaml (use the R-yaml's base_optimizer, as in the base code) | sgd | adam
+  meta_loss: "last"                 # last: loss of the last iterate of each truncation (base code)
+                                    # sum : sum of per-step losses over the truncation (SmoothedOptimizer)
+  # meta_loss_scale: "loader_len"   # OLD value (base code): divides the meta-loss by len(train_loader) (~286),
+                                    # which made the SGD-based SAM learned optimizer (M5/M6 + SAM) barely train
+  meta_loss_scale: "none"           # NEW value: no division | loader_len (Adam-based runs are unaffected either way)
+  meta_grad_clip: null              # SmoothedOptimizer clamps meta-grads to [-1, 1]; null = off (base)
+  smooth_every: 1                   # compute R_smooth every k inner steps (1 = every step, as SmoothedOptimizer)
+  eval_seeds_offset: 1000           # seeds of the optimizees used for checkpoint selection
+  overrides: {}                     # e.g. {max_epochs: 200, train_period: 5} for short runs
+
+# ---------------------------------------------------------------- optimizee-training protocol
+# used by methods 1-2 in phase 1 and by every method in phase 2.
+# Defaults come from configs/dmo/base/optimizee_eval.yaml (batch_size 512, optimizee_epochs 1000 steps,
+# n_training 5 seeds, ...).
+optimizee_training:
+  eval_every: 50                    # test-set evaluation interval (steps) for the learning curves
+  train_metric_max_samples: 10000   # train accuracy/loss measured on (at most) this many training images
+  overrides: {}                     # e.g. {optimizee_epochs: 200, n_training: 2}
+
+# ---------------------------------------------------------------- phase 2
+optimizer_evaluation:
+  # dataset: "svhn"                 # OLD (had to be kept equal to meta_training.dataset by hand)
+  dataset: null                     # NEW: null -> meta_training.dataset (optimizers are evaluated on the seen dataset)
+  optimizees: ["convnet4", "mlp", "resnet18"]   # the seen optimizee is added automatically if missing
+  # seen_optimizee: "convnet4"      # OLD (had to be kept equal to meta_training.optimizee by hand)
+  seen_optimizee: null              # NEW: null -> meta_training.optimizee
+  # learned optimizers (methods 3-6) always run frozen and without any explicit regularizer here
+  strip_regularizers_for_baselines: true   # true : baselines also run without R  (method 2 == method 1 here)
+                                           # false: baselines keep B+lambda*R      (original paper protocol)
+
+# ---------------------------------------------------------------- phase 3
+optimizee_evaluation:
+  # optimizees: ["convnet4"]        # OLD
+  optimizees: null                  # NEW: null -> [meta_training.optimizee] (frozen optimizees to evaluate)
+  # seen_dataset: "svhn"            # OLD
+  seen_dataset: null                # NEW: null -> meta_training.dataset
+  # unseen_datasets: ["mnist", "fmnist", "cifar10", "cifar100", "imagenet"]   # OLD (fixed list, no svhn)
+  unseen_datasets: null             # NEW: null -> all 6 datasets except the seen one; or a list, e.g. ["mnist", "cifar10"]
+  skip_missing_datasets: true       # e.g. ImageNet not on disk -> warn and skip
+  probe:                            # frozen backbone + new linear head for unseen label spaces
+    optimizer: "adam"               # adam: fixed, method-independent probe | method: the method's frozen optimizer
+    lr: 0.001
+    epochs: 20
+    batch_size: 256
+    max_train_samples: 50000
+    max_test_samples: null
+
+# ---------------------------------------------------------------- models
+models:
+  convnet4: {width: 32}             # 4 x [conv3x3-BN-ReLU-maxpool]; 64 = classic Conv-4 (more LO memory)
+  mlp: {hidden: [20], activation: "sigmoid"}   # mirrors the base `mlp` optimizee
+  resnet18: {width: 64}             # CIFAR-style ResNet-18 (~11M params)
+  lo_chunk_size: 1048576            # coordinates per LSTM call when the frozen LO updates big nets
+
+datasets:
+  imagenet: {npy_root: null, root: null, resolution: 32}  # npy_root: imagenet32/{x,y}.npy (preferred, default <data_root>/imagenet32); root: ImageFolder train/ val/
+  synthetic: {train_size: 2048, test_size: 512}
+
+# ---------------------------------------------------------------- metrics / reporting
+metrics:
+  count_flops: true
+  gap: "accuracy"                   # accuracy: train_acc - test_acc  | loss: test_loss - train_loss
+  sharpness: {enabled: false, eps: 0.1, r_norm: "euc"}   # base PGD analysis on the final optimizee

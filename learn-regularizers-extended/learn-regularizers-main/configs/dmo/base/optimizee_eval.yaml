@@ -1,0 +1,26 @@
+train_arguments:
+    batch_size: 512               #batch size (default: 128)
+    seed: 10                      #random seed (default: 10)
+    optimizee_epochs: 1000        #number of training steps (default: 1000)
+
+    hidden_size: 20               #hidden size of the meta optimizer (default: 20)
+    num_layers: 2                 #number of LSTM layers (default: 2)
+    save: "artifacts/dmo/results"   #location to results folder
+    cuda_: True                   #enables CUDA training
+
+    dataset: "mnist"              #dataset for the optimizee training (mnist/cifar10/fmnist)
+    optimizee_model: "mlp"        #choice of neural network for the optimizee(mlp/mlp_Relu/deep_mlp/conv/conv_large)
+    n_training: 5                 #number of times the same optimizee training is done
+    patience: 100                 #number of steps to tolerate undesired loss
+    calc_hessian: False           #True if want to calculate hessian eigen values at the end of the training
+    num_ev_hess: 100              #number of eigen value of hessian you want to discover
+
+    if_normal_optim: True         #if need to train using a normal optimizer
+    base_optimizer: "sgd"         #use sgd or adam for normal optimization
+    if_adaptive: True            #to incorporate adaptive with regularizer
+
+    saved_model: "no_LO"          # name of the saved LO model(without .pt)
+    eps: 0.1                      # epsilon ball for Projected gradient descent
+    hyper_eps: True               # to find the optimal hyperparameter epsilon for a task
+
+    r_norm: "euc"               # norm to consider while finding the distance within a nghb (L_inf/euc)

@@ -1,0 +1,10 @@
+numpy
+torch>=2.1          # pipeline: torch.func.functional_call, FlopCounterMode
+torchvision
+tqdm
+PyYAML
+matplotlib          # pipeline: result-table figures (optional)
+scipy               # torchvision SVHN loader
+hessian-eigenthings
+pyhessian
+joblib

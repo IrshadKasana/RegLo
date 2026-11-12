@@ -1,0 +1,53 @@
+source,method,reg,full_cartesian_cells,planned,ran,passed,passed_after_retry,failed,missing,planned_pct_of_full,sweep_design
+svhn,M1,-,20,20,20,20,0,0,0,100.0,full grid
+svhn,M3,-,20,20,20,20,0,0,0,100.0,full grid
+svhn,M4a,-,400,400,400,400,0,0,0,100.0,full meta_lr x lambda_smooth grid
+svhn,M2,l1,400,400,400,400,0,0,0,100.0,full lr x lambda grid
+svhn,M2,l2,400,400,400,400,0,0,0,100.0,full lr x lambda grid
+svhn,M2,sam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+svhn,M2,gsam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+svhn,M2,gam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+svhn,M5,l1,8000,419,419,419,0,0,0,5.24,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+svhn,M5,l2,8000,419,419,419,0,0,0,5.24,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+svhn,M5,sam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+svhn,M5,gsam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+svhn,M5,gam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+cifar10,M1,-,20,20,20,20,0,0,0,100.0,full grid
+cifar10,M3,-,20,20,20,20,0,0,0,100.0,full grid
+cifar10,M4a,-,400,400,400,400,0,0,0,100.0,full meta_lr x lambda_smooth grid
+cifar10,M2,l1,400,400,400,400,0,0,0,100.0,full lr x lambda grid
+cifar10,M2,l2,400,400,400,400,0,0,0,100.0,full lr x lambda grid
+cifar10,M2,sam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+cifar10,M2,gsam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+cifar10,M2,gam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+cifar10,M5,l1,8000,419,419,419,0,0,0,5.24,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+cifar10,M5,l2,8000,419,419,419,0,0,0,5.24,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+cifar10,M5,sam,112000,433,433,433,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+cifar10,M5,gsam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+cifar10,M5,gam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+mnist,M1,-,20,20,20,20,0,0,0,100.0,full grid
+mnist,M3,-,20,20,20,20,0,0,0,100.0,full grid
+mnist,M4a,-,400,400,400,400,0,0,0,100.0,full meta_lr x lambda_smooth grid
+mnist,M2,l1,400,400,400,400,0,0,0,100.0,full lr x lambda grid
+mnist,M2,l2,400,400,400,400,0,0,0,100.0,full lr x lambda grid
+mnist,M2,sam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+mnist,M2,gsam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+mnist,M2,gam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+mnist,M5,l1,8000,419,419,419,0,0,0,5.24,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+mnist,M5,l2,8000,419,419,419,0,0,0,5.24,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+mnist,M5,sam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+mnist,M5,gsam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+mnist,M5,gam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+fmnist,M1,-,20,20,20,20,0,0,0,100.0,full grid
+fmnist,M3,-,20,20,20,20,0,0,0,100.0,full grid
+fmnist,M4a,-,400,400,400,400,0,0,0,100.0,full meta_lr x lambda_smooth grid
+fmnist,M2,l1,400,400,400,400,0,0,0,100.0,full lr x lambda grid
+fmnist,M2,l2,400,400,400,400,0,0,0,100.0,full lr x lambda grid
+fmnist,M2,sam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+fmnist,M2,gsam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+fmnist,M2,gam,5600,660,660,660,0,0,0,11.79,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+fmnist,M5,l1,8000,419,419,419,0,0,0,5.24,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+fmnist,M5,l2,8000,419,419,419,3,0,0,5.24,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+fmnist,M5,sam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+fmnist,M5,gsam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"
+fmnist,M5,gam,112000,432,432,432,0,0,0,0.39,"lambda_smooth x lambda_reg full grid at M4a's meta_lr, then meta_lr, then rho at the best cell"

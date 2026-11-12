@@ -1,0 +1,17 @@
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+suraj_env1/
+datasets/
+checkpoints/
+**/console/outs/
+**/console/errors/
+**/results/json/
+artifacts/pipeline/

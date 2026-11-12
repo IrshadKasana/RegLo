@@ -1,0 +1,15 @@
+train_arguments:
+  adaptive: True             # Turns on for adaptiveSAM
+  SAMonOptimizer: False          # If SAM on optimizer parameters
+  base_optimizer: 'sgd'         # Base optimizer for LO type
+  lr: 0.01                       # Learning rate of base_optimizer for LO 
+  weight_decay: 0.0            # Weight decay of base_optimizer for LO 
+  momentum: 0.9                 # Momentum of base_optimizer for LO 
+  rho: 0.5
+  optzee_wd: 0.005              # L2 Weight decay of optimizee (in case SAMonOptimizer == False)
+  model_name: 'AdSAMopzee_sgd_LO_140424'  # name of the optimizer model with specs
+  regularizer: 'sam_opzee'
+  if_avreg: True                               # turn on regularization on Optimizer
+  if_pretrained: False
+  pretrained_model_name: 'no_name'
+

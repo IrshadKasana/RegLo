@@ -1,0 +1,7 @@
+train_arguments:
+  base_optimizer: 'adam'         # Base optimizer type
+  lr: 0.01                       # Learning rate of base_optimizer
+  weight_decay: 0.0            # Weight decay of base_optimizer
+  momentum: 0.0                 # Momentum of base_optimizer
+  model_name: 'DMO_adam_280424'              # name of the optimizer model with specs
+  if_avreg: False                               # turn on regularization on Optimizer

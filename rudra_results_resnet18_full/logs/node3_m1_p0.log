@@ -1,0 +1,6 @@
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m1 DYNAMIC (worker 3): 6 jobs in the phase, 6 done
+[worker] shard finished; 0 failed: []
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m1 DYNAMIC (worker 3): 6 jobs in the phase, 6 done
+[worker] shard finished; 0 failed: []

@@ -1,0 +1,94 @@
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m5mlr DYNAMIC (worker 1): 30 jobs in the phase, 5 done
+/home/aroofa_ext/.local/lib/python3.10/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+/home/apps/MLDL/DL-CondaPy3/envs/Pytorch-gpu/lib/python3.10/site-packages/torch/nn/modules/conv.py:456: UserWarning: Applied workaround for CuDNN issue, install nvrtc.so (Triggered internally at /opt/conda/conda-bld/pytorch_1708025831440/work/aten/src/ATen/native/cudnn/Conv_v8.cpp:80.)
+  return F.conv2d(input, weight, bias, self.stride,
+[imagenet gsam ls=1 lr=0.01 mlr=0.001 seed=0] T= 100 ckpt=7.1517 * (29s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.001 seed=0] T= 200 ckpt=7.0556 * (45s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.001 seed=0] T= 500 ckpt=6.9307 * (76s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.001 seed=0] T=1000 ckpt=6.9899 (133s)
+LO imagenet_gsam_ls1_lr0.01_mlr0.001_rho0.005_seed0: val_acc=0.0010
+[worker] ok imagenet_gsam_ls1_lr0.01_mlr0.001_rho0.005_seed0 (592s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.003 seed=0] T= 100 ckpt=7.5845 * (11s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.003 seed=0] T= 200 ckpt=6.9152 * (27s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.003 seed=0] T= 500 ckpt=6.9514 (59s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.003 seed=0] T=1000 ckpt=8.4920 (116s)
+LO imagenet_gsam_ls1_lr0.01_mlr0.003_rho0.005_seed0: val_acc=0.0011
+[worker] ok imagenet_gsam_ls1_lr0.01_mlr0.003_rho0.005_seed0 (395s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.01 seed=0] T= 100 ckpt=8.5778 * (12s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.01 seed=0] T= 200 ckpt=6.9121 * (28s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.01 seed=0] T= 500 ckpt=7.0887 (59s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.01 seed=0] T=1000 ckpt=8.6306 (117s)
+LO imagenet_gsam_ls1_lr0.01_mlr0.01_rho0.005_seed0: val_acc=0.0010
+[worker] ok imagenet_gsam_ls1_lr0.01_mlr0.01_rho0.005_seed0 (396s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.03 seed=0] T= 100 ckpt=6.9695 * (12s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.03 seed=0] T= 200 ckpt=22.8082 (28s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.03 seed=0] T= 500 ckpt=604.7613 (59s)
+[imagenet gsam ls=1 lr=0.01 mlr=0.03 seed=0] T=1000 ckpt=19.9060 (116s)
+LO imagenet_gsam_ls1_lr0.01_mlr0.03_rho0.005_seed0: val_acc=0.0010
+[worker] ok imagenet_gsam_ls1_lr0.01_mlr0.03_rho0.005_seed0 (397s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0001 seed=0] T= 100 ckpt=7.0436 * (9s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0001 seed=0] T= 200 ckpt=6.8895 * (20s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0001 seed=0] T= 500 ckpt=7.1109 (39s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.0001 seed=0] T=1000 ckpt=7.2748 (71s)
+LO imagenet_l1_ls1_lr0.001_mlr0.0001_seed0: val_acc=0.0016
+[worker] ok imagenet_l1_ls1_lr0.001_mlr0.0001_seed0 (350s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.001 seed=0] T= 100 ckpt=6.9301 * (9s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.001 seed=0] T= 200 ckpt=6.8810 * (20s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.001 seed=0] T= 500 ckpt=6.9412 (39s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.001 seed=0] T=1000 ckpt=10.8318 (71s)
+LO imagenet_l1_ls1_lr0.001_mlr0.001_seed0: val_acc=0.0010
+[worker] ok imagenet_l1_ls1_lr0.001_mlr0.001_seed0 (338s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.003 seed=0] T= 100 ckpt=21.2057 * (9s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.003 seed=0] T= 200 ckpt=30.3234 (20s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.003 seed=0] T= 500 ckpt=7.0810 * (39s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.003 seed=0] T=1000 ckpt=46.9163 (71s)
+LO imagenet_l1_ls1_lr0.001_mlr0.003_seed0: val_acc=0.0011
+[worker] ok imagenet_l1_ls1_lr0.001_mlr0.003_seed0 (350s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.01 seed=0] T= 100 ckpt=7.0330 * (9s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.01 seed=0] T= 200 ckpt=6.6494 * (20s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.01 seed=0] T= 500 ckpt=7.0159 (39s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.01 seed=0] T=1000 ckpt=7.1283 (71s)
+LO imagenet_l1_ls1_lr0.001_mlr0.01_seed0: val_acc=0.0023
+[worker] ok imagenet_l1_ls1_lr0.001_mlr0.01_seed0 (348s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.03 seed=0] T= 100 ckpt=282396.0000 * (9s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.03 seed=0] T= 200 ckpt=7.1764 * (20s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.03 seed=0] T= 500 ckpt=6.9254 * (39s)
+[imagenet l1 ls=1 lr=0.001 mlr=0.03 seed=0] T=1000 ckpt=1800324.7500 (71s)
+LO imagenet_l1_ls1_lr0.001_mlr0.03_seed0: val_acc=0.0013
+[worker] ok imagenet_l1_ls1_lr0.001_mlr0.03_seed0 (348s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.001 seed=0] T= 100 ckpt=6.9212 * (9s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.001 seed=0] T= 200 ckpt=6.9023 * (20s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.001 seed=0] T= 500 ckpt=6.9848 (39s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.001 seed=0] T=1000 ckpt=63.3740 (71s)
+LO imagenet_l2_ls1_lr0.005_mlr0.001_seed0: val_acc=0.0011
+[worker] ok imagenet_l2_ls1_lr0.005_mlr0.001_seed0 (351s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.01 seed=0] T= 100 ckpt=7.2987 * (9s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.01 seed=0] T= 200 ckpt=45303.7383 (20s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.01 seed=0] T= 500 ckpt=8.8783 (39s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.01 seed=0] T=1000 ckpt=4154077.7500 (71s)
+LO imagenet_l2_ls1_lr0.005_mlr0.01_seed0: val_acc=0.0011
+[worker] ok imagenet_l2_ls1_lr0.005_mlr0.01_seed0 (354s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.03 seed=0] T= 100 ckpt=6.8336 * (11s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.03 seed=0] T= 200 ckpt=7.1935 (22s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.03 seed=0] T= 500 ckpt=60318.4727 (41s)
+[imagenet l2 ls=1 lr=0.005 mlr=0.03 seed=0] T=1000 ckpt=506795.7812 (73s)
+LO imagenet_l2_ls1_lr0.005_mlr0.03_seed0: val_acc=0.0006
+[worker] ok imagenet_l2_ls1_lr0.005_mlr0.03_seed0 (355s)
+[imagenet sam ls=1 lr=0.001 mlr=0.001 seed=0] T= 100 ckpt=7.1524 * (12s)
+[imagenet sam ls=1 lr=0.001 mlr=0.001 seed=0] T= 200 ckpt=7.0521 * (28s)
+[imagenet sam ls=1 lr=0.001 mlr=0.001 seed=0] T= 500 ckpt=6.9304 * (60s)
+[imagenet sam ls=1 lr=0.001 mlr=0.001 seed=0] T=1000 ckpt=6.9980 (117s)
+LO imagenet_sam_ls1_lr0.001_mlr0.001_rho0.001_seed0: val_acc=0.0010
+[worker] ok imagenet_sam_ls1_lr0.001_mlr0.001_rho0.001_seed0 (396s)
+[imagenet sam ls=1 lr=0.001 mlr=0.01 seed=0] T= 100 ckpt=8.5603 * (12s)
+[imagenet sam ls=1 lr=0.001 mlr=0.01 seed=0] T= 200 ckpt=6.9730 * (28s)
+[imagenet sam ls=1 lr=0.001 mlr=0.01 seed=0] T= 500 ckpt=8.4370 (60s)
+[imagenet sam ls=1 lr=0.001 mlr=0.01 seed=0] T=1000 ckpt=7.3458 (117s)
+LO imagenet_sam_ls1_lr0.001_mlr0.01_rho0.001_seed0: val_acc=0.0007
+[worker] ok imagenet_sam_ls1_lr0.001_mlr0.01_rho0.001_seed0 (395s)
+[worker] shard finished; 0 failed: []
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m5mlr DYNAMIC (worker 1): 30 jobs in the phase, 30 done
+[worker] shard finished; 0 failed: []

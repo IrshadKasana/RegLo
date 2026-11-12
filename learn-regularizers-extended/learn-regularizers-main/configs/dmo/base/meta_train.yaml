@@ -1,0 +1,16 @@
+train_arguments:
+  batch_size: 128                              # batch size
+  seed: 1                                      # random seed
+  optimizee_steps: 1000                        # number of meta optimizer steps
+  truncated_bptt_step: 20                      # step at which it truncates bptt
+  max_epochs: 10000                            # number of epoch
+  hidden_size: 20                              # hidden size of the meta optimizer
+  num_layers: 2                                # number of LSTM layers
+  save: 'artifacts/dmo/checkpoints'  # location to optimizer checkpoints
+  cuda_: True                                  # enables CUDA training
+  if_cl: True                                  # employ CL(True) or not(False)
+  dataset: 'mnist'                             # dataset for the optimizee training
+  optimizee_model_name: 'mlp'                       # choice of neural network for the optimizee(mlp/deep_mlp/conv/conv_large)
+  n_period: 3                                  # number of times LO is evaluated with the same #inner-iterations
+  train_period: 20                                 # number of epochs LO trained with the same #inner-iteratarions
+  eval_epochs: 5                               # number of epochs for the evaluation of the optimizers

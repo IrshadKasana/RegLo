@@ -1,0 +1,14 @@
+train_arguments:
+  adaptive: True             # Turns on for adaptiveSAM
+  SAMonOptimizer: True          # If SAM on optimizer parameters
+  base_optimizer: 'sgd'         # Base optimizer type
+  lr: 0.01                       # Learning rate of base_optimizer
+  rho: 0.05
+  model_name: 'AdSAM_sgd_LO_140424'              # name of the optimizer model with specs
+  regularizer: 'sam'
+  optzee_wd: 0.0
+  weight_decay: 0.0            # Weight decay of base_optimizer
+  momentum: 0.0                 # Momentum of base_optimizer
+  if_avreg: True                               # turn on regularization on Optimizer
+  if_pretrained: False
+  pretrained_model_name: 'no_name'

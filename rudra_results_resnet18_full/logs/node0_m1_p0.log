@@ -1,0 +1,22 @@
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m1 DYNAMIC (worker 0): 6 jobs in the phase, 0 done
+/home/aroofa_ext/.local/lib/python3.10/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+/home/apps/MLDL/DL-CondaPy3/envs/Pytorch-gpu/lib/python3.10/site-packages/torch/nn/modules/conv.py:456: UserWarning: Applied workaround for CuDNN issue, install nvrtc.so (Triggered internally at /opt/conda/conda-bld/pytorch_1708025831440/work/aten/src/ATen/native/cudnn/Conv_v8.cpp:80.)
+  return F.conv2d(input, weight, bias, self.stride,
+M1 imagenet_lr0.0001 val=0.0302
+[worker] ok m1_imagenet_lr0.0001 (313s)
+M1 imagenet_lr0.0003 val=0.0318
+[worker] ok m1_imagenet_lr0.0003 (70s)
+M1 imagenet_lr0.001 val=0.0236
+[worker] ok m1_imagenet_lr0.001 (70s)
+M1 imagenet_lr0.003 val=0.0144
+[worker] ok m1_imagenet_lr0.003 (70s)
+M1 imagenet_lr0.01 val=0.0085
+[worker] ok m1_imagenet_lr0.01 (70s)
+M1 imagenet_lr0.03 val=0.0020
+[worker] ok m1_imagenet_lr0.03 (70s)
+[worker] shard finished; 0 failed: []
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m1 DYNAMIC (worker 0): 6 jobs in the phase, 6 done
+[worker] shard finished; 0 failed: []

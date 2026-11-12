@@ -1,0 +1,624 @@
+import tqdm
+import argparse
+import os
+import random
+import sys
+from pathlib import Path
+import torch
+import torch.nn.functional as F
+import torch.optim as optim
+import copy
+from torch.autograd import Variable
+from torchvision import datasets, transforms
+from tqdm import tqdm
+import json
+from utils import *
+from meta_optimizer import *
+from model import *
+from dataloaders import *
+from analysis import (
+    accuracy,
+    compute_hessian_spectrum,
+    copy_gradients,
+    max_grad_norm_PGD,
+    max_loss_PGD,
+)
+from artifact_manager import get_checkpoint_path, get_result_file_path, get_timestamped_result_file
+
+from datetime import datetime
+
+sys.path.append(str(Path(__file__).resolve().parents[3]))
+
+from project_paths import ensure_dir, remap_workspace_path
+from experiment_config import EXPERIMENT_DIR, load_optimizee_args, print_arguments
+
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--regularizer", type=str, default='no_reg', help="regularization type (sam, gsam, gam)")
+parser.add_argument('--base_optimizer', type=str, default='sgd', help="use sgd or adam for normal optimization")
+parser.add_argument('--if_normal_optim', action= 'store_true', help = "if need to train using a normal optimizer")
+parser.add_argument('--saved_model', type= str, default='no_LO', help= 'name of the saved LO model(without .pt)')
+parser.add_argument('--dataset', type = str, default= 'mnist', help = 'dataset for the optimizee training')
+parser.add_argument('--optimizee_model', type = str, default= 'mlp', help = 'choice of neural network for the optimizee(mlp/mlp_Relu/deep_mlp/conv/conv_large)')
+
+reg_info = parser.parse_args()
+
+
+print('****----------extracting yaml files------------****')
+
+args = load_optimizee_args(reg_info)
+print_arguments(args)
+
+# Device setup: CUDA > Apple Silicon (MPS) > CPU
+if args.cuda_ and torch.cuda.is_available():
+    device = torch.device('cuda:0')
+elif torch.backends.mps.is_available():
+    device = torch.device('mps')
+    print("\nUsing Apple Silicon GPU (Metal Performance Shaders)")
+else:
+    device = torch.device('cpu')
+
+print(f"Cuda available: {torch.cuda.is_available()} , MPS available: {torch.backends.mps.is_available()}, device name : {device}")
+
+# Use professional artifact manager for results
+save_root = get_result_file_path(".", experiment="dmo", result_type="json").parent
+print(f"Results will be saved to: {save_root}")
+
+random.seed(args.seed)
+torch.manual_seed(args.seed)
+
+
+
+#defining optimizee
+dataset = args.dataset
+model_name = args.optimizee_model
+
+meta_model = initialize_model(dataset, model_name)
+meta_model = meta_model.to(device)
+
+
+# optimizer checkpoint read
+if not args.if_normal_optim:
+    path = get_checkpoint_path(args.saved_model, experiment="dmo")
+    print(f"Loading learned optimizer checkpoint from: {path}")
+    # load the optimizer
+    num_layers = args.num_layers
+    hidden_size = args.hidden_size
+    meta_optimizer = MetaOptimizerLSTM(MetaModel(meta_model), num_layers, hidden_size, preproc_factor = 10.0, preproc =True)
+    meta_optimizer.load_state_dict(torch.load(path))
+    meta_optimizer.reset_lstm(keep_states=False, model=meta_model)
+    meta_optimizer = meta_optimizer.to(device)
+    
+
+
+
+def evaluate_model(model, data_loader):
+    model.eval()
+    total_loss = 0.0
+    correct = 0
+    total = 0
+
+    with torch.no_grad():
+        for x, y in data_loader:
+            x, y = x.to(device), y.to(device)
+            outputs = model(x)
+            total_loss += F.nll_loss(outputs, y).item()
+            _, predicted = torch.max(outputs, 1)
+            correct += (predicted == y).sum().item()
+            total += y.size(0)
+
+    model.train()
+    avg_loss = total_loss / max(len(data_loader), 1)
+    avg_acc = correct / total if total else 0.0
+    return avg_loss, avg_acc
+
+#eigen values calculation at the convergence points
+
+def train_optimizee(epochs, train_data_loader, test_data_loader,model,meta_optimizer):
+    loss_arr = []
+    loss_val_arr = []
+    acc_val_arr = []
+
+    train_iter = iter(train_data_loader)
+    test_iter = iter(test_data_loader)
+
+    diff = 1e-3
+    max_loss_dict = {}
+    max_grad_norm_dict = {}
+    patience = args.patience
+    min_tr_loss = 999999
+    early_stop_Flag = False
+    eigen_values = {}
+    best_model = copy.deepcopy(model)
+    best_iter = 0
+    tolerance = 0
+
+    for j in tqdm(range(epochs), "epoch: "):
+        try:
+            x, y = next(train_iter)
+        except StopIteration:
+            train_iter = iter(train_data_loader)
+            x, y = next(train_iter)
+        x, y = x.to(device), y.to(device)
+
+        # First we need to compute the gradients wrt model parameters at a point
+        f_x = model(x)
+        loss = F.nll_loss(f_x, y)
+
+        model.zero_grad()
+        loss.backward()
+
+        train_loss_iter = loss.item()
+
+        loss_arr.append(loss.item())
+
+        #Update the values of the parameters using the meta optimizer, meta_model is the new model params
+        with torch.no_grad():
+            meta_optimizer.meta_update(model)
+
+        #####validating......
+        v_loss, v_acc = evaluate_model(model, test_data_loader)
+        loss_val_arr.append(v_loss)
+        acc_val_arr.append(v_acc)
+
+        print("training loss:", train_loss_iter, "validation loss:", v_loss)
+
+
+        #early stopping
+        check = min_tr_loss - (train_loss_iter)
+        
+        
+        if (check > diff):
+            min_tr_loss = train_loss_iter
+            best_model = copy.deepcopy(model)
+            
+            #required for GAM Property
+            copy_gradients(model, best_model)
+            
+            best_iter = j
+            if not early_stop_Flag:
+                tolerance = 0
+
+        else:
+            if not early_stop_Flag:
+                tolerance += 1
+                
+                if(tolerance <= patience):
+                    continue
+                
+                #True if tolerance has gone beyond patience
+
+                if args.calc_hessian:
+                    eigen_vals, eigen_vecs = compute_hessian_spectrum(args.num_ev_hess, best_model, train_data_loader)
+                    eigen_values[best_iter] = eigen_vals
+                    print(eigen_vals)
+
+                if args.hyper_eps:
+                    early_stop_Flag = True
+                    max_loss_nghb_dict = {}
+                    max_grad_norm_nghb_dict = {}
+
+                    for e in [0.001,0.005,0.01, 0.05, 0.1]:
+                        print(f"Computing max loss and max gradient in {e}-nghb of the converged point")
+                        pgd_loss_profile = max_loss_PGD(best_model, e, train_data_loader, device)
+                        pgd_grad_norm_profile = max_grad_norm_PGD(best_model, e, train_data_loader, device)
+
+                        max_loss_nghb_dict[e] = pgd_loss_profile
+                        max_grad_norm_nghb_dict[e] = pgd_grad_norm_profile
+
+                    max_loss_dict[best_iter] = max_loss_nghb_dict
+                    max_grad_norm_dict[best_iter] = max_grad_norm_nghb_dict
+                else:
+                    early_stop_Flag = True
+                    max_loss_nghb_list = max_loss_PGD(best_model, args.eps, train_data_loader, device)
+                    max_grad_norm_nghb_list = max_grad_norm_PGD(best_model, args.eps, train_data_loader, device)
+                    
+                    max_loss_dict[best_iter] = max_loss_nghb_list
+                    max_grad_norm_dict[best_iter] = max_grad_norm_nghb_list
+            
+
+            # do not break the loop--- donot want the trainign to stop and keep training untill the last step
+            # but want to keep track of when the model first converged to
+            # will have two outputs if the model converged in between and at the very end
+            # only have one output if it never converged in between
+            
+            
+
+    #case when the training doesnt stop at all and evenif it stops once, it calculates the same with the best model once
+    if args.calc_hessian:            
+        eigen_vals, eigen_vecs = compute_hessian_spectrum(args.num_ev_hess, best_model, train_data_loader)
+        eigen_values[best_iter] = eigen_vals
+        print(eigen_vals)
+        
+    if args.hyper_eps:
+        max_loss_nghb_dict = {}
+        max_grad_norm_nghb_dict = {}
+
+        for e in [0.001,0.005,0.01, 0.05, 0.1]:
+            print(f"Computing max loss and max gradient in {e}-nghb of the converged point")
+            pgd_loss_profile = max_loss_PGD(best_model, e, train_data_loader, device)
+            pgd_grad_norm_profile = max_grad_norm_PGD(best_model, e, train_data_loader, device)
+
+            max_loss_nghb_dict[e] = pgd_loss_profile
+            max_grad_norm_nghb_dict[e] = pgd_grad_norm_profile
+
+        max_loss_dict[best_iter] = max_loss_nghb_dict
+        max_grad_norm_dict[best_iter] = max_grad_norm_nghb_dict
+
+    else:
+        max_loss_nghb_list = max_loss_PGD(best_model, args.eps, train_data_loader, device)
+        max_grad_norm_nghb_list = max_grad_norm_PGD(best_model, args.eps, train_data_loader, device)
+        
+        max_loss_dict[best_iter] = max_loss_nghb_list
+        max_grad_norm_dict[best_iter] = max_grad_norm_nghb_list
+
+
+    return loss_arr,loss_val_arr,acc_val_arr, max_loss_dict, max_grad_norm_dict
+
+
+
+
+
+
+#########################################################################################################
+##############################  For NORMAL Optimizers #############################################
+#########################################################################################################
+
+
+
+#########################################################################################################
+########### Some required auxillary functions for GAM and GSAM ###################################
+#########################################################################################################
+
+
+def OPZEE_get_optim_and_schedulers(model, args): # optzee_model, data_laoder, 
+    if args.base_optimizer == 'sgd':
+        base_optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum,
+                                  weight_decay=args.weight_decay)
+    elif args.base_optimizer == 'adam':
+        base_optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+
+    elif args.base_optimizer == 'AdamW':
+        base_optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+
+    else:
+        raise NotImplementedError
+
+    
+
+    # optional grad_rho_scheduler and grad_norm_rho_scheduler
+    if args.regularizer=='gam':
+        lr_scheduler = optim.lr_scheduler.CosineAnnealingLR(base_optimizer, T_max=args.optimizee_epochs)
+        grad_rho_scheduler = ProportionScheduler(pytorch_lr_scheduler=lr_scheduler, max_lr=args.lr, min_lr=0.0,
+                                                max_value=args.grad_rho_max, min_value=args.grad_rho_min)
+
+        grad_norm_rho_scheduler = ProportionScheduler(pytorch_lr_scheduler=lr_scheduler, max_lr=args.lr, min_lr=0.0,
+                                                  max_value=args.grad_norm_rho_max, min_value=args.grad_norm_rho_min)
+
+    
+        optimizer = GAM(params=model.parameters(), base_optimizer=base_optimizer, model=model,
+                        grad_rho_scheduler=grad_rho_scheduler, grad_norm_rho_scheduler=grad_norm_rho_scheduler,
+                        adaptive=args.adaptive, args=args)
+        
+    
+    elif args.regularizer=='gsam':
+        scheduler = CosineScheduler(T_max=args.optimizee_epochs, max_value=args.lr, min_value=0.0, optimizer=base_optimizer)
+        rho_scheduler = ProportionScheduler(pytorch_lr_scheduler=scheduler, max_lr=args.lr, min_lr=0.0, 
+                                            max_value=args.rho_max, min_value=args.rho_min)
+
+        optimizer = GSAM(params=model.parameters(), base_optimizer=base_optimizer, model=model, gsam_alpha=args.alpha, 
+                         rho_scheduler=rho_scheduler, adaptive=args.adaptive, args=args)
+
+
+    return optimizer #, base_optimizer, lr_scheduler, grad_rho_scheduler, grad_norm_rho_scheduler
+
+#########################################################################################################
+#########################################################################################################
+
+
+
+
+
+
+
+def fit_w_normal_optimizer(epochs, train_data_loader, test_data_loader,model):
+    
+    
+    
+    #if normal optimization
+    if args.if_normal_optim:
+        if args.base_optimizer == 'sgd':
+            optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum,
+                                  weight_decay=args.weight_decay)
+        elif args.base_optimizer == 'adam':
+            optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+
+        elif args.base_optimizer == 'AdamW':
+            optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+
+        else:
+            raise NotImplementedError
+        ##################################################################################################
+        if args.regularizer=='sam':
+            sam_optimizer = SAM(model.parameters(),args = args)
+            scheduler = StepLR(sam_optimizer, args.lr, args.optimizee_epochs)
+
+        elif args.regularizer=='gam':
+            gam_optimizer = OPZEE_get_optim_and_schedulers(model, args = args)
+
+        elif args.regularizer=='gsam':
+            gsam_optimizer = OPZEE_get_optim_and_schedulers(model, args= args)
+
+
+    
+    
+    loss_arr = []
+    loss_val_arr = []
+    acc_val_arr = []
+
+    train_iter = iter(train_data_loader)
+    test_iter = iter(test_data_loader)
+
+    diff = 1e-3
+    max_loss_dict= {}
+    max_grad_norm_dict = {}
+    patience = args.patience
+    min_tr_loss = 999999
+    early_stop_Flag = False
+    eigen_values = {}
+    best_model = copy.deepcopy(model)
+    best_iter = 0
+    tolerance = 0
+
+    for j in tqdm(range(epochs), "epoch: "):
+        try:
+            x, y = next(train_iter)
+        except StopIteration:
+            train_iter = iter(train_data_loader)
+            x, y = next(train_iter)
+        x, y = x.to(device), y.to(device)
+
+        # First we need to compute the gradients wrt model parameters at a point
+        f_x = model(x)
+        loss_fn = F.nll_loss
+        loss = loss_fn(f_x, y)
+
+        model.zero_grad()
+        loss.backward()
+
+        train_loss_iter = loss.item()
+
+        loss_arr.append(loss.item())
+
+        #Update the values of the parameters using an optimizer
+        
+        # Optimization step for different Regularization
+        if args.regularizer=='sam':
+            sam_optimizer.first_step(zero_grad=True)
+            loss_fn(model(x), y).backward()  # make sure to do a full forward pass
+            sam_optimizer.second_step()
+            scheduler(j)
+
+        elif args.regularizer=='gam':
+            gam_optimizer.set_closure(loss_fn, x, y)
+            gam_optimizer.update_rho_t()
+            gam_optimizer.step()
+        
+        elif args.regularizer=='gsam':
+            gsam_optimizer.set_closure(loss_fn, x, y)
+            gsam_optimizer.update_rho_t()
+            gsam_optimizer.step()
+        
+        else:
+            optimizer.step()
+
+    
+        #####validating......
+        v_loss, v_acc = evaluate_model(model, test_data_loader)
+        loss_val_arr.append(v_loss)
+        acc_val_arr.append(v_acc)
+
+        #early stopping
+        check = min_tr_loss - (train_loss_iter)
+
+        print(train_loss_iter)
+
+
+        if (check > diff):
+            min_tr_loss = train_loss_iter
+            best_model = copy.deepcopy(model)
+
+            #required for GAM Property
+            copy_gradients(model, best_model)
+
+            
+            best_iter = j
+            if not early_stop_Flag:
+                tolerance = 0
+
+        else:
+            if not early_stop_Flag:
+                tolerance += 1
+                
+                if(tolerance <= patience):
+                    continue
+                
+                #True if tolerance has gone beyond patience
+
+                if args.calc_hessian:
+                    eigen_vals, eigen_vecs = compute_hessian_spectrum(args.num_ev_hess, best_model, train_data_loader)
+                    eigen_values[best_iter] = eigen_vals
+                    print(eigen_vals)
+
+                if args.hyper_eps:
+                    early_stop_Flag = True
+
+                    max_loss_nghb_dict = {}
+                    max_grad_norm_nghb_dict = {}
+
+                    for e in [0.001,0.005,0.01, 0.05, 0.1]:
+                        print(f"Computing max loss and max gradient in {e}-nghb of the converged point")
+                        pgd_loss_profile = max_loss_PGD(best_model, e, train_data_loader, device)
+                        pgd_grad_norm_profile = max_grad_norm_PGD(best_model, e, train_data_loader, device)
+
+                        max_loss_nghb_dict[e] = pgd_loss_profile
+                        max_grad_norm_nghb_dict[e] = pgd_grad_norm_profile
+
+                    max_loss_dict[best_iter] = max_loss_nghb_dict
+                    max_grad_norm_dict[best_iter] = max_grad_norm_nghb_dict
+
+                else:
+                    early_stop_Flag = True
+                    max_loss_nghb_list = max_loss_PGD(best_model, args.eps, train_data_loader, device)
+                    max_grad_norm_nghb_list = max_grad_norm_PGD(best_model, args.eps, train_data_loader, device)
+                    
+                    max_loss_dict[best_iter] = max_loss_nghb_list
+                    max_grad_norm_dict[best_iter] = max_grad_norm_nghb_list
+
+            # do not break the loop--- donot want the training to stop(even though converged) and keep training untill the last step
+            # but want to keep track of when the model first converged to
+            # will have two outputs if the model converged in between and at the very end
+            # only have one output if it never converged in between
+            
+            
+
+    #case when the training doesnt stop at all and evenif it stops once, it calculates the same with the best model once
+                
+    if args.calc_hessian:
+        eigen_vals, eigen_vecs = compute_hessian_spectrum(args.num_ev_hess, best_model, train_data_loader)
+        eigen_values[best_iter] = eigen_vals
+        print(eigen_vals)
+        
+    if args.hyper_eps:
+        max_loss_nghb_dict = {}
+        max_grad_norm_nghb_dict = {}
+
+        for e in [0.001,0.005,0.01, 0.05, 0.1]:
+            print(f"Computing max loss and max gradient in {e}-nghb of the converged point")
+            pgd_loss_profile = max_loss_PGD(best_model, e, train_data_loader, device)
+            pgd_grad_norm_profile = max_grad_norm_PGD(best_model, e, train_data_loader, device)
+
+            max_loss_nghb_dict[e] = pgd_loss_profile
+            max_grad_norm_nghb_dict[e] = pgd_grad_norm_profile
+
+        max_loss_dict[best_iter] = max_loss_nghb_dict
+        max_grad_norm_dict[best_iter] = max_grad_norm_nghb_dict
+
+    else:
+        max_loss_nghb_list = max_loss_PGD(best_model, args.eps, train_data_loader, device)
+        max_grad_norm_nghb_list = max_grad_norm_PGD(best_model, args.eps, train_data_loader, device)
+        
+        max_loss_dict[best_iter] = max_loss_nghb_list
+        max_grad_norm_dict[best_iter] = max_grad_norm_nghb_list
+
+
+    return loss_arr,loss_val_arr,acc_val_arr, max_loss_dict, max_grad_norm_dict
+
+
+
+
+########################### Training ###############################
+#epochs = args.n_training
+
+train_data_loader, test_data_loader = data_loader_optimizee(dataset, batch_size = args.batch_size, random_seed = args.seed)
+train_iter = iter(train_data_loader)
+instances_loss_tr = []
+instances_loss_ts = []
+instances_acc_ts = []
+instances_max_loss_nghb = []
+instances_max_grad_norm = []
+# instances_eigen_val = []
+
+for i in range (args.n_training):
+    print(f"instance {i} ---------------------------------- \n")
+    model = initialize_model(dataset, model_name)
+    model = model.to(device)
+    if args.if_normal_optim:
+        print(f"optimizing using {args.base_optimizer} with {args.regularizer}")
+        loss_train_arr, loss_test_arr, acc_test_arr, max_loss_nghb, max_grad_norm_nghb = fit_w_normal_optimizer(args.optimizee_epochs, train_data_loader, test_data_loader,model)
+        
+    else:   
+        print(f"optimizing using {args.saved_model}") 
+        loss_train_arr, loss_test_arr, acc_test_arr, max_loss_nghb, max_grad_norm_nghb  = train_optimizee(args.optimizee_epochs, train_data_loader, test_data_loader,model,meta_optimizer)
+    
+    instances_loss_tr.append(loss_train_arr)
+    instances_loss_ts.append(loss_test_arr)
+    instances_acc_ts.append(acc_test_arr)
+    instances_max_loss_nghb.append(max_loss_nghb)
+    instances_max_grad_norm.append(max_grad_norm_nghb)
+    # instances_eigen_val.append(eigen_values)
+json_dict = {"instances_loss_tr" : instances_loss_tr, "instances_loss_ts" : instances_loss_ts, "instances_acc_ts": instances_acc_ts, "max_loss_nghb_list" : instances_max_loss_nghb, "max_grad_norm_nghb_list" : instances_max_grad_norm} #"eigen_values": instances_eigen_val
+
+current_date = datetime.now().strftime("%d-%m-%Y")
+
+
+
+
+if args.hyper_eps:
+    e = '_hyper_eps'
+else:
+    e = ''.join(str(args.eps).split('.'))
+    
+if args.if_normal_optim:
+    optim_ = args.base_optimizer
+    if args.regularizer=='sam':
+        optim_ += '_SAM_'
+    elif args.regularizer=='gam':
+        optim_ += '_GAM_'
+    elif args.regularizer=='gsam':
+        optim_ += '_GSAM_'
+    else:
+        optim_ += '_noREG_'
+
+    # Use artifact manager for consistent result storage
+    base_filename = f"evaluation_base_optimizer_eps{e}{optim_}{model_name}_{dataset}"
+    file_name = get_timestamped_result_file(base_filename, experiment="dmo", result_type="json")
+
+else:
+    optim_ = '_meta_optim_'
+    meta_opt_name = args.saved_model
+    
+    # Use artifact manager for consistent result storage
+    base_filename = f"evaluation_learned_optimizer_eps{e}{optim_}{model_name}_{dataset}_{meta_opt_name}"
+    file_name = get_timestamped_result_file(base_filename, experiment="dmo", result_type="json")
+
+with open(file_name, "w") as json_file:
+    json.dump(json_dict, json_file)
+print(f"Results saved to: {file_name}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################################################

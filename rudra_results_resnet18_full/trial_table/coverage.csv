@@ -1,0 +1,14 @@
+source,method,reg,full_cartesian_cells,planned,ran,passed,passed_after_retry,failed,missing,planned_pct_of_full,sweep_design
+imagenet,M1,-,6,6,6,6,0,0,0,100.0,full grid
+imagenet,M3,-,6,6,6,6,0,0,0,100.0,full grid
+imagenet,M4a,-,6,6,6,6,0,0,0,100.0,meta_lr sweep at fixed lambda_smooth
+imagenet,M2,l1,36,36,36,36,0,0,0,100.0,full lr x lambda grid
+imagenet,M2,l2,36,36,36,36,0,0,0,100.0,full lr x lambda grid
+imagenet,M2,sam,180,60,60,60,0,0,0,33.33,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+imagenet,M2,gsam,180,60,60,60,0,0,0,33.33,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+imagenet,M2,gam,180,60,60,60,0,0,0,33.33,"full lr x lambda grid at the default rho, then rho x lambda at the best lr"
+imagenet,M5,l1,42,12,12,12,0,0,0,28.57,"lambda_reg sweep (lambda_smooth fixed) at M4a's meta_lr, then meta_lr, then rho x lambda_reg at the best meta_lr"
+imagenet,M5,l2,42,12,12,12,0,0,0,28.57,"lambda_reg sweep (lambda_smooth fixed) at M4a's meta_lr, then meta_lr, then rho x lambda_reg at the best meta_lr"
+imagenet,M5,sam,210,40,40,40,0,0,0,19.05,"lambda_reg sweep (lambda_smooth fixed) at M4a's meta_lr, then meta_lr, then rho x lambda_reg at the best meta_lr"
+imagenet,M5,gsam,210,40,40,40,0,0,0,19.05,"lambda_reg sweep (lambda_smooth fixed) at M4a's meta_lr, then meta_lr, then rho x lambda_reg at the best meta_lr"
+imagenet,M5,gam,210,40,40,40,0,0,0,19.05,"lambda_reg sweep (lambda_smooth fixed) at M4a's meta_lr, then meta_lr, then rho x lambda_reg at the best meta_lr"

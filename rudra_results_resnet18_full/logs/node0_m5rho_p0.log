@@ -1,0 +1,244 @@
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m5rho DYNAMIC (worker 0): 105 jobs in the phase, 21 done
+/home/aroofa_ext/.local/lib/python3.10/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+/home/apps/MLDL/DL-CondaPy3/envs/Pytorch-gpu/lib/python3.10/site-packages/torch/nn/modules/conv.py:456: UserWarning: Applied workaround for CuDNN issue, install nvrtc.so (Triggered internally at /opt/conda/conda-bld/pytorch_1708025831440/work/aten/src/ATen/native/cudnn/Conv_v8.cpp:80.)
+  return F.conv2d(input, weight, bias, self.stride,
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 100 ckpt=6.9174 * (50s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 200 ckpt=6.9810 (74s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 500 ckpt=6.9397 (130s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T=1000 ckpt=6.9238 (239s)
+LO imagenet_gam_ls1_lr0.001_mlr0.0003_rho0.001_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.001_mlr0.0003_rho0.001_seed0 (1097s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 100 ckpt=6.9178 * (19s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 200 ckpt=6.9814 (48s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 500 ckpt=6.9401 (105s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T=1000 ckpt=6.9240 (210s)
+LO imagenet_gam_ls1_lr0.001_mlr0.0003_rho0.005_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.001_mlr0.0003_rho0.005_seed0 (530s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 100 ckpt=6.9172 * (19s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 200 ckpt=6.9801 (45s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 500 ckpt=6.9403 (100s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T=1000 ckpt=6.9245 (205s)
+LO imagenet_gam_ls1_lr0.001_mlr0.0003_rho0.01_seed0: val_acc=0.0011
+[worker] ok imagenet_gam_ls1_lr0.001_mlr0.0003_rho0.01_seed0 (522s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 100 ckpt=6.9170 * (18s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 200 ckpt=7.0057 (44s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 500 ckpt=6.9372 (100s)
+[imagenet gam ls=1 lr=0.001 mlr=0.0003 seed=0] T=1000 ckpt=6.9347 (205s)
+LO imagenet_gam_ls1_lr0.001_mlr0.0003_rho0.06_seed0: val_acc=0.0009
+[worker] ok imagenet_gam_ls1_lr0.001_mlr0.0003_rho0.06_seed0 (526s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 100 ckpt=6.9172 * (19s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 200 ckpt=6.9833 (46s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 500 ckpt=6.9403 (100s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T=1000 ckpt=6.9248 (207s)
+LO imagenet_gam_ls1_lr0.005_mlr0.0003_rho0.001_seed0: val_acc=0.0011
+[worker] ok imagenet_gam_ls1_lr0.005_mlr0.0003_rho0.001_seed0 (527s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 100 ckpt=6.9179 * (18s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 200 ckpt=6.9788 (48s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 500 ckpt=6.9399 (104s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T=1000 ckpt=6.9241 (213s)
+LO imagenet_gam_ls1_lr0.005_mlr0.0003_rho0.005_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.005_mlr0.0003_rho0.005_seed0 (530s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 100 ckpt=6.9173 * (19s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 200 ckpt=6.9794 (45s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 500 ckpt=6.9398 (101s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T=1000 ckpt=6.9251 (204s)
+LO imagenet_gam_ls1_lr0.005_mlr0.0003_rho0.01_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.005_mlr0.0003_rho0.01_seed0 (507s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 100 ckpt=7.0876 * (17s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 200 ckpt=6.9281 * (43s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 500 ckpt=6.9313 (102s)
+[imagenet gam ls=1 lr=0.005 mlr=0.0003 seed=0] T=1000 ckpt=6.9397 (205s)
+LO imagenet_gam_ls1_lr0.005_mlr0.0003_rho0.06_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.005_mlr0.0003_rho0.06_seed0 (518s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 100 ckpt=6.9172 * (17s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 200 ckpt=6.9827 (43s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 500 ckpt=6.9402 (99s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T=1000 ckpt=6.9248 (204s)
+LO imagenet_gam_ls1_lr0.01_mlr0.0003_rho0.001_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.01_mlr0.0003_rho0.001_seed0 (521s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 100 ckpt=6.9173 * (21s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 200 ckpt=6.9763 (46s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 500 ckpt=6.9398 (100s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T=1000 ckpt=6.9248 (206s)
+LO imagenet_gam_ls1_lr0.01_mlr0.0003_rho0.005_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.01_mlr0.0003_rho0.005_seed0 (523s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 100 ckpt=6.9164 * (20s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 200 ckpt=6.9778 (45s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 500 ckpt=6.9383 (100s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T=1000 ckpt=6.9261 (205s)
+LO imagenet_gam_ls1_lr0.01_mlr0.0003_rho0.01_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.01_mlr0.0003_rho0.01_seed0 (519s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 100 ckpt=7.0230 * (20s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 200 ckpt=6.9228 * (44s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 500 ckpt=6.9448 (96s)
+[imagenet gam ls=1 lr=0.01 mlr=0.0003 seed=0] T=1000 ckpt=6.9469 (200s)
+LO imagenet_gam_ls1_lr0.01_mlr0.0003_rho0.06_seed0: val_acc=0.0009
+[worker] ok imagenet_gam_ls1_lr0.01_mlr0.0003_rho0.06_seed0 (508s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 100 ckpt=6.9179 * (18s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 200 ckpt=6.9778 (42s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 500 ckpt=6.9398 (94s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T=1000 ckpt=6.9241 (190s)
+LO imagenet_gam_ls1_lr0.05_mlr0.0003_rho0.001_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.05_mlr0.0003_rho0.001_seed0 (487s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 100 ckpt=6.9186 * (16s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 200 ckpt=6.9669 (41s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 500 ckpt=6.9384 (92s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T=1000 ckpt=6.9267 (189s)
+LO imagenet_gam_ls1_lr0.05_mlr0.0003_rho0.005_seed0: val_acc=0.0011
+[worker] ok imagenet_gam_ls1_lr0.05_mlr0.0003_rho0.005_seed0 (487s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 100 ckpt=6.9231 * (16s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 200 ckpt=6.9586 (40s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 500 ckpt=6.9246 (92s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T=1000 ckpt=6.9290 (188s)
+LO imagenet_gam_ls1_lr0.05_mlr0.0003_rho0.01_seed0: val_acc=0.0008
+[worker] ok imagenet_gam_ls1_lr0.05_mlr0.0003_rho0.01_seed0 (491s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 100 ckpt=21.5927 * (16s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 200 ckpt=17.3049 * (40s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 500 ckpt=6.9271 * (91s)
+[imagenet gam ls=1 lr=0.05 mlr=0.0003 seed=0] T=1000 ckpt=6.9349 (188s)
+LO imagenet_gam_ls1_lr0.05_mlr0.0003_rho0.06_seed0: val_acc=0.0010
+[worker] ok imagenet_gam_ls1_lr0.05_mlr0.0003_rho0.06_seed0 (499s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 100 ckpt=6.9174 * (18s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 200 ckpt=6.9784 (43s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 500 ckpt=6.9400 (98s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T=1000 ckpt=6.9246 (209s)
+LO imagenet_gam_ls1_lr0.1_mlr0.0003_rho0.001_seed0: val_acc=0.0012
+[worker] ok imagenet_gam_ls1_lr0.1_mlr0.0003_rho0.001_seed0 (541s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 100 ckpt=6.9224 * (18s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 200 ckpt=6.9646 (45s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 500 ckpt=6.9403 (104s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T=1000 ckpt=6.9273 (214s)
+LO imagenet_gam_ls1_lr0.1_mlr0.0003_rho0.005_seed0: val_acc=0.0011
+[worker] ok imagenet_gam_ls1_lr0.1_mlr0.0003_rho0.005_seed0 (547s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 100 ckpt=6.9763 * (18s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 200 ckpt=6.9286 * (45s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 500 ckpt=6.9167 * (104s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T=1000 ckpt=6.9252 (213s)
+LO imagenet_gam_ls1_lr0.1_mlr0.0003_rho0.01_seed0: val_acc=0.0010
+[worker] ok imagenet_gam_ls1_lr0.1_mlr0.0003_rho0.01_seed0 (527s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 100 ckpt=17.1195 * (17s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 200 ckpt=19.4373 (43s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 500 ckpt=6.3235 * (97s)
+[imagenet gam ls=1 lr=0.1 mlr=0.0003 seed=0] T=1000 ckpt=6.4134 (200s)
+LO imagenet_gam_ls1_lr0.1_mlr0.0003_rho0.06_seed0: val_acc=0.0024
+[worker] ok imagenet_gam_ls1_lr0.1_mlr0.0003_rho0.06_seed0 (514s)
+[imagenet gam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 100 ckpt=6.9176 * (17s)
+[imagenet gam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 200 ckpt=6.9778 (43s)
+[imagenet gam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 500 ckpt=6.9396 (98s)
+[imagenet gam ls=1 lr=0.5 mlr=0.0003 seed=0] T=1000 ckpt=6.9295 (201s)
+LO imagenet_gam_ls1_lr0.5_mlr0.0003_rho0.001_seed0: val_acc=0.0013
+[worker] ok imagenet_gam_ls1_lr0.5_mlr0.0003_rho0.001_seed0 (515s)
+[imagenet gsam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 100 ckpt=6.9162 * (13s)
+[imagenet gsam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 200 ckpt=6.9866 (31s)
+[imagenet gsam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 500 ckpt=6.9550 (65s)
+[imagenet gsam ls=1 lr=0.1 mlr=0.0003 seed=0] T=1000 ckpt=6.9653 (128s)
+LO imagenet_gsam_ls1_lr0.1_mlr0.0003_rho0.06_seed0: val_acc=0.0011
+[worker] ok imagenet_gsam_ls1_lr0.1_mlr0.0003_rho0.06_seed0 (441s)
+[imagenet gsam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 100 ckpt=6.5618 * (13s)
+[imagenet gsam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 200 ckpt=6.6424 (30s)
+[imagenet gsam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 500 ckpt=6.3224 * (65s)
+[imagenet gsam ls=1 lr=0.5 mlr=0.0003 seed=0] T=1000 ckpt=6.2713 * (128s)
+LO imagenet_gsam_ls1_lr0.5_mlr0.0003_rho0.01_seed0: val_acc=0.0024
+[worker] ok imagenet_gsam_ls1_lr0.5_mlr0.0003_rho0.01_seed0 (442s)
+[imagenet gsam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 100 ckpt=6.9087 * (13s)
+[imagenet gsam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 200 ckpt=6.9888 (30s)
+[imagenet gsam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 500 ckpt=6.9524 (65s)
+[imagenet gsam ls=1 lr=0.5 mlr=0.0003 seed=0] T=1000 ckpt=6.9777 (128s)
+LO imagenet_gsam_ls1_lr0.5_mlr0.0003_rho0.06_seed0: val_acc=0.0014
+[worker] ok imagenet_gsam_ls1_lr0.5_mlr0.0003_rho0.06_seed0 (449s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=0] T= 100 ckpt=6.6427 * (16s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=0] T= 200 ckpt=6.8339 (33s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=0] T= 500 ckpt=6.9275 (68s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=0] T=1000 ckpt=6.9548 (131s)
+LO imagenet_gsam_ls1_lr1_mlr0.0003_rho0.01_seed0: val_acc=0.0037
+[worker] ok imagenet_gsam_ls1_lr1_mlr0.0003_rho0.01_seed0 (429s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=0] T= 100 ckpt=6.8894 * (12s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=0] T= 200 ckpt=6.9459 (28s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=0] T= 500 ckpt=6.9639 (61s)
+[imagenet gsam ls=1 lr=1 mlr=0.0003 seed=0] T=1000 ckpt=6.9824 (119s)
+LO imagenet_gsam_ls1_lr1_mlr0.0003_rho0.06_seed0: val_acc=0.0015
+[worker] ok imagenet_gsam_ls1_lr1_mlr0.0003_rho0.06_seed0 (417s)
+[imagenet sam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 100 ckpt=6.9173 * (12s)
+[imagenet sam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 200 ckpt=6.9822 (28s)
+[imagenet sam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 500 ckpt=6.9399 (61s)
+[imagenet sam ls=1 lr=0.001 mlr=0.0003 seed=0] T=1000 ckpt=6.9242 (120s)
+LO imagenet_sam_ls1_lr0.001_mlr0.0003_rho0.01_seed0: val_acc=0.0012
+[worker] ok imagenet_sam_ls1_lr0.001_mlr0.0003_rho0.01_seed0 (416s)
+[imagenet sam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 100 ckpt=6.9171 * (12s)
+[imagenet sam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 200 ckpt=6.9814 (28s)
+[imagenet sam ls=1 lr=0.001 mlr=0.0003 seed=0] T= 500 ckpt=6.9405 (61s)
+[imagenet sam ls=1 lr=0.001 mlr=0.0003 seed=0] T=1000 ckpt=6.9251 (119s)
+LO imagenet_sam_ls1_lr0.001_mlr0.0003_rho0.06_seed0: val_acc=0.0012
+[worker] ok imagenet_sam_ls1_lr0.001_mlr0.0003_rho0.06_seed0 (415s)
+[imagenet sam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 100 ckpt=6.9174 * (12s)
+[imagenet sam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 200 ckpt=6.9809 (28s)
+[imagenet sam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 500 ckpt=6.9404 (61s)
+[imagenet sam ls=1 lr=0.005 mlr=0.0003 seed=0] T=1000 ckpt=6.9248 (120s)
+LO imagenet_sam_ls1_lr0.005_mlr0.0003_rho0.01_seed0: val_acc=0.0012
+[worker] ok imagenet_sam_ls1_lr0.005_mlr0.0003_rho0.01_seed0 (450s)
+[imagenet sam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 100 ckpt=6.9171 * (13s)
+[imagenet sam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 200 ckpt=6.9808 (32s)
+[imagenet sam ls=1 lr=0.005 mlr=0.0003 seed=0] T= 500 ckpt=6.9418 (70s)
+[imagenet sam ls=1 lr=0.005 mlr=0.0003 seed=0] T=1000 ckpt=6.9262 (137s)
+LO imagenet_sam_ls1_lr0.005_mlr0.0003_rho0.06_seed0: val_acc=0.0013
+[worker] ok imagenet_sam_ls1_lr0.005_mlr0.0003_rho0.06_seed0 (469s)
+[imagenet sam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 100 ckpt=6.9173 * (13s)
+[imagenet sam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 200 ckpt=6.9831 (32s)
+[imagenet sam ls=1 lr=0.01 mlr=0.0003 seed=0] T= 500 ckpt=6.9407 (70s)
+[imagenet sam ls=1 lr=0.01 mlr=0.0003 seed=0] T=1000 ckpt=6.9259 (137s)
+LO imagenet_sam_ls1_lr0.01_mlr0.0003_rho0.01_seed0: val_acc=0.0012
+[worker] ok imagenet_sam_ls1_lr0.01_mlr0.0003_rho0.01_seed0 (465s)
+[imagenet sam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 100 ckpt=6.9172 * (13s)
+[imagenet sam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 200 ckpt=6.9810 (31s)
+[imagenet sam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 500 ckpt=6.9425 (65s)
+[imagenet sam ls=1 lr=0.05 mlr=0.0003 seed=0] T=1000 ckpt=6.9281 (129s)
+LO imagenet_sam_ls1_lr0.05_mlr0.0003_rho0.005_seed0: val_acc=0.0012
+[worker] ok imagenet_sam_ls1_lr0.05_mlr0.0003_rho0.005_seed0 (442s)
+[imagenet sam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 100 ckpt=6.9154 * (13s)
+[imagenet sam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 200 ckpt=6.9731 (31s)
+[imagenet sam ls=1 lr=0.05 mlr=0.0003 seed=0] T= 500 ckpt=6.9433 (65s)
+[imagenet sam ls=1 lr=0.05 mlr=0.0003 seed=0] T=1000 ckpt=6.9520 (129s)
+LO imagenet_sam_ls1_lr0.05_mlr0.0003_rho0.04_seed0: val_acc=0.0013
+[worker] ok imagenet_sam_ls1_lr0.05_mlr0.0003_rho0.04_seed0 (443s)
+[imagenet sam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 100 ckpt=6.9172 * (13s)
+[imagenet sam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 200 ckpt=6.9835 (31s)
+[imagenet sam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 500 ckpt=6.9444 (66s)
+[imagenet sam ls=1 lr=0.1 mlr=0.0003 seed=0] T=1000 ckpt=6.9328 (129s)
+LO imagenet_sam_ls1_lr0.1_mlr0.0003_rho0.005_seed0: val_acc=0.0012
+[worker] ok imagenet_sam_ls1_lr0.1_mlr0.0003_rho0.005_seed0 (442s)
+[imagenet sam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 100 ckpt=6.9179 * (13s)
+[imagenet sam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 200 ckpt=6.9774 (30s)
+[imagenet sam ls=1 lr=0.1 mlr=0.0003 seed=0] T= 500 ckpt=6.9548 (65s)
+[imagenet sam ls=1 lr=0.1 mlr=0.0003 seed=0] T=1000 ckpt=6.9708 (128s)
+LO imagenet_sam_ls1_lr0.1_mlr0.0003_rho0.04_seed0: val_acc=0.0011
+[worker] ok imagenet_sam_ls1_lr0.1_mlr0.0003_rho0.04_seed0 (443s)
+[imagenet sam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 100 ckpt=6.9170 * (13s)
+[imagenet sam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 200 ckpt=6.9853 (31s)
+[imagenet sam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 500 ckpt=6.9559 (65s)
+[imagenet sam ls=1 lr=0.5 mlr=0.0003 seed=0] T=1000 ckpt=6.9626 (129s)
+LO imagenet_sam_ls1_lr0.5_mlr0.0003_rho0.005_seed0: val_acc=0.0011
+[worker] ok imagenet_sam_ls1_lr0.5_mlr0.0003_rho0.005_seed0 (443s)
+[imagenet sam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 100 ckpt=6.9145 * (13s)
+[imagenet sam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 200 ckpt=6.9751 (30s)
+[imagenet sam ls=1 lr=0.5 mlr=0.0003 seed=0] T= 500 ckpt=6.9611 (65s)
+[imagenet sam ls=1 lr=0.5 mlr=0.0003 seed=0] T=1000 ckpt=6.9913 (128s)
+LO imagenet_sam_ls1_lr0.5_mlr0.0003_rho0.04_seed0: val_acc=0.0014
+[worker] ok imagenet_sam_ls1_lr0.5_mlr0.0003_rho0.04_seed0 (446s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=0] T= 100 ckpt=6.9171 * (14s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=0] T= 200 ckpt=6.9824 (31s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=0] T= 500 ckpt=6.9639 (64s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=0] T=1000 ckpt=6.9883 (123s)
+LO imagenet_sam_ls1_lr1_mlr0.0003_rho0.005_seed0: val_acc=0.0012
+[worker] ok imagenet_sam_ls1_lr1_mlr0.0003_rho0.005_seed0 (420s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=0] T= 100 ckpt=6.8905 * (12s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=0] T= 200 ckpt=6.9669 (28s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=0] T= 500 ckpt=6.9552 (61s)
+[imagenet sam ls=1 lr=1 mlr=0.0003 seed=0] T=1000 ckpt=7.0050 (120s)
+LO imagenet_sam_ls1_lr1_mlr0.0003_rho0.04_seed0: val_acc=0.0014
+[worker] ok imagenet_sam_ls1_lr1_mlr0.0003_rho0.04_seed0 (417s)
+[worker] shard finished; 0 failed: []
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m5rho DYNAMIC (worker 0): 105 jobs in the phase, 105 done
+[worker] shard finished; 0 failed: []

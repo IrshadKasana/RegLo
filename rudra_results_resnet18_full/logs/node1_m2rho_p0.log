@@ -1,0 +1,94 @@
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m2rho DYNAMIC (worker 1): 90 jobs in the phase, 18 done
+/home/aroofa_ext/.local/lib/python3.10/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+/home/apps/MLDL/DL-CondaPy3/envs/Pytorch-gpu/lib/python3.10/site-packages/torch/nn/modules/conv.py:456: UserWarning: Applied workaround for CuDNN issue, install nvrtc.so (Triggered internally at /opt/conda/conda-bld/pytorch_1708025831440/work/aten/src/ATen/native/cudnn/Conv_v8.cpp:80.)
+  return F.conv2d(input, weight, bias, self.stride,
+M2 imagenet_gam_lr0.0003_lam0.1_rho0.1 val=0.0289
+[worker] ok m2_imagenet_gam_lr0.0003_lam0.1_rho0.1 (411s)
+M2 imagenet_gam_lr0.0003_lam0.1_rho0.2 val=0.0274
+[worker] ok m2_imagenet_gam_lr0.0003_lam0.1_rho0.2 (218s)
+M2 imagenet_gam_lr0.0003_lam0.5_rho0.01 val=0.0319
+[worker] ok m2_imagenet_gam_lr0.0003_lam0.5_rho0.01 (218s)
+M2 imagenet_gam_lr0.0003_lam0.5_rho0.02 val=0.0288
+[worker] ok m2_imagenet_gam_lr0.0003_lam0.5_rho0.02 (220s)
+M2 imagenet_gam_lr0.0003_lam0.5_rho0.1 val=0.0220
+[worker] ok m2_imagenet_gam_lr0.0003_lam0.5_rho0.1 (217s)
+M2 imagenet_gam_lr0.0003_lam0.5_rho0.2 val=0.0179
+[worker] ok m2_imagenet_gam_lr0.0003_lam0.5_rho0.2 (217s)
+M2 imagenet_gsam_lr0.0003_lam0.001_rho0.01 val=0.0321
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.001_rho0.01 (102s)
+M2 imagenet_gsam_lr0.0003_lam0.001_rho0.02 val=0.0333
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.001_rho0.02 (104s)
+M2 imagenet_gsam_lr0.0003_lam0.001_rho0.1 val=0.0314
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.001_rho0.1 (101s)
+M2 imagenet_gsam_lr0.0003_lam0.001_rho0.2 val=0.0316
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.001_rho0.2 (102s)
+M2 imagenet_gsam_lr0.0003_lam0.005_rho0.01 val=0.0347
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.005_rho0.01 (104s)
+M2 imagenet_gsam_lr0.0003_lam0.005_rho0.02 val=0.0324
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.005_rho0.02 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.005_rho0.1 val=0.0333
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.005_rho0.1 (104s)
+M2 imagenet_gsam_lr0.0003_lam0.005_rho0.2 val=0.0310
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.005_rho0.2 (104s)
+M2 imagenet_gsam_lr0.0003_lam0.01_rho0.01 val=0.0308
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.01_rho0.01 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.01_rho0.02 val=0.0320
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.01_rho0.02 (102s)
+M2 imagenet_gsam_lr0.0003_lam0.01_rho0.1 val=0.0333
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.01_rho0.1 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.01_rho0.2 val=0.0321
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.01_rho0.2 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.05_rho0.01 val=0.0322
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.05_rho0.01 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.05_rho0.02 val=0.0313
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.05_rho0.02 (102s)
+M2 imagenet_gsam_lr0.0003_lam0.05_rho0.1 val=0.0301
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.05_rho0.1 (104s)
+M2 imagenet_gsam_lr0.0003_lam0.05_rho0.2 val=0.0326
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.05_rho0.2 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.1_rho0.01 val=0.0324
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.1_rho0.01 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.1_rho0.02 val=0.0331
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.1_rho0.02 (104s)
+M2 imagenet_gsam_lr0.0003_lam0.1_rho0.1 val=0.0310
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.1_rho0.1 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.1_rho0.2 val=0.0302
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.1_rho0.2 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.5_rho0.01 val=0.0303
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.5_rho0.01 (102s)
+M2 imagenet_gsam_lr0.0003_lam0.5_rho0.02 val=0.0295
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.5_rho0.02 (103s)
+M2 imagenet_gsam_lr0.0003_lam0.5_rho0.1 val=0.0286
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.5_rho0.1 (111s)
+M2 imagenet_gsam_lr0.0003_lam0.5_rho0.2 val=0.0240
+[worker] ok m2_imagenet_gsam_lr0.0003_lam0.5_rho0.2 (101s)
+M2 imagenet_sam_lr0.0003_lam0.001_rho0.01 val=0.0326
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.001_rho0.01 (100s)
+M2 imagenet_sam_lr0.0003_lam0.001_rho0.02 val=0.0330
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.001_rho0.02 (113s)
+M2 imagenet_sam_lr0.0003_lam0.001_rho0.2 val=0.0327
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.001_rho0.2 (103s)
+M2 imagenet_sam_lr0.0003_lam0.005_rho0.02 val=0.0314
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.005_rho0.02 (102s)
+M2 imagenet_sam_lr0.0003_lam0.005_rho0.2 val=0.0317
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.005_rho0.2 (103s)
+M2 imagenet_sam_lr0.0003_lam0.01_rho0.02 val=0.0323
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.01_rho0.02 (104s)
+M2 imagenet_sam_lr0.0003_lam0.01_rho0.2 val=0.0312
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.01_rho0.2 (102s)
+M2 imagenet_sam_lr0.0003_lam0.05_rho0.02 val=0.0327
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.05_rho0.02 (103s)
+M2 imagenet_sam_lr0.0003_lam0.05_rho0.2 val=0.0302
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.05_rho0.2 (103s)
+M2 imagenet_sam_lr0.0003_lam0.1_rho0.1 val=0.0293
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.1_rho0.1 (103s)
+M2 imagenet_sam_lr0.0003_lam0.5_rho0.01 val=0.0309
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.5_rho0.01 (104s)
+M2 imagenet_sam_lr0.0003_lam0.5_rho0.1 val=0.0289
+[worker] ok m2_imagenet_sam_lr0.0003_lam0.5_rho0.1 (103s)
+[worker] shard finished; 0 failed: []
+[worker] torch 2.2.1 device=cuda:0 gpu=NVIDIA A100 80GB PCIe
+[worker] phase=m2rho DYNAMIC (worker 1): 90 jobs in the phase, 90 done
+[worker] shard finished; 0 failed: []
