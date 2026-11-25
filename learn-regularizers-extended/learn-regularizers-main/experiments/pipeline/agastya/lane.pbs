@@ -1,0 +1,82 @@
+#!/bin/bash
+#PBS -N lrMLP
+#PBS -q gpu-ext
+#PBS -l select=1:ncpus=40:mem=120gb
+#PBS -l walltime=190:00:00
+#PBS -j oe
+# One lane = one Agastya V100-32GB node running a pool of pipeline processes for ONE case (rudra/rudra_jobs.py).
+# Do not qsub this directly: use   bash experiments/pipeline/agastya/submit_agastya.sh   (from the repo root).
+# Variables (passed with qsub -v by submit_agastya.sh):
+#   CASE (mlp_mnist) PROCS (3) WALL_H (190) GPU_BUDGET_GB (31) EXP_PREFIX (agastya) GEN (1) MAX_GEN (3)
+#   PREFLIGHT (1 = on GEN 1: unit tests + quick real-data smoke of 2 units + production speed/memory check;
+#              the lane stops before the full run if any of them fails)
+cd "$PBS_O_WORKDIR" || exit 1
+ROOT=$PWD; HERE="$ROOT/experiments/pipeline/agastya"
+CASE="${CASE:-mlp_mnist}"; PROCS="${PROCS:-3}"; WALL_H="${WALL_H:-190}"; GPU_BUDGET_GB="${GPU_BUDGET_GB:-31}"
+GEN="${GEN:-1}"; MAX_GEN="${MAX_GEN:-3}"; PREFLIGHT="${PREFLIGHT:-1}"
+export EXP_PREFIX="${EXP_PREFIX:-agastya}" NUM_WORKERS="${NUM_WORKERS:-3}" MAX_FAILS="${MAX_FAILS:-2}"
+JID="${PBS_JOBID%%.*}"
+mkdir -p logs/agastya
+LOG="logs/agastya/${CASE}_gen${GEN}_${JID}.log"
+exec > "$LOG" 2>&1          # live log (PBS copies its own -o file only when the job ends)
+echo "lane case=$CASE gen=$GEN/$MAX_GEN procs=$PROCS budget=${GPU_BUDGET_GB}GB wall=${WALL_H}h exp=${EXP_PREFIX}_$CASE job=$PBS_JOBID host=$(hostname) $(date)"
+. "$HERE/env.sh" || exit 1
+export PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+export OMP_NUM_THREADS=$(( 40 / (PROCS * 2) )); [ "$OMP_NUM_THREADS" -lt 1 ] && OMP_NUM_THREADS=1
+nvidia-smi --query-gpu=index,name,memory.used,memory.total,driver_version --format=csv || echo "WARNING: nvidia-smi failed"
+
+# ---- GPU guard: the V100 must be visible to torch and (nearly) empty
+python - <<'PY' || { echo "!! GPU GUARD failed: not starting (qsub again with submit_agastya.sh)"; exit 3; }
+import socket, sys, torch
+if not torch.cuda.is_available():
+    print("GPU GUARD: torch sees no CUDA device"); sys.exit(3)
+free, total = (x / 2**30 for x in torch.cuda.mem_get_info(0))
+cap = torch.cuda.get_device_capability(0)
+print(f"GPU GUARD: {socket.gethostname()} {torch.cuda.get_device_name(0)} sm_{cap[0]}{cap[1]} free {free:.1f}/{total:.1f} GB")
+x = torch.randn(512, 512, device="cuda"); print("GPU GUARD: matmul ok", float((x @ x).abs().sum()) > 0)
+sys.exit(0 if free >= 28 else 3)
+PY
+
+# ---- preflight (first generation only)
+if [ "$GEN" = 1 ] && [ "$PREFLIGHT" = 1 ]; then
+    echo "== PREFLIGHT $(date)"
+    pf="logs/agastya/preflight_${CASE}_${JID}"
+    python tests/test_pipeline.py > "${pf}_tests.log" 2>&1 && echo "PREFLIGHT unit tests OK" \
+        || { echo "!! PREFLIGHT unit tests FAILED (tail of ${pf}_tests.log):"; tail -30 "${pf}_tests.log"; exit 4; }
+    args=$(python experiments/pipeline/rudra/rudra_jobs.py args "$CASE")
+    # quick preset on the REAL datasets: one baseline with R (M2) + the heaviest LO unit (M6 + GAM), phases 1-3
+    eval "python experiments/pipeline/run_pipeline.py $args --quick --set experiment.name=agastya_preflight_$CASE \
+          --phases 1 2 3 --run-ids M2_sgd_sam M6_LO_gam" > "${pf}_smoke.log" 2>&1 && echo "PREFLIGHT smoke OK" \
+        || { echo "!! PREFLIGHT smoke FAILED (tail of ${pf}_smoke.log):"; tail -40 "${pf}_smoke.log"; exit 4; }
+    # production settings: speed + peak GPU memory of M3, M4, M5-GAM, M6-SAM, M6-GAM; projected meta-training hours
+    python experiments/pipeline/rudra/gpu_check.py "$CASE" > "${pf}_gpucheck.log" 2>&1 \
+        && { echo "PREFLIGHT gpu check OK:"; sed -n '/^SUMMARY/,$p' "${pf}_gpucheck.log"; } \
+        || { echo "!! PREFLIGHT gpu check FAILED (tail of ${pf}_gpucheck.log):"; tail -40 "${pf}_gpucheck.log"; exit 4; }
+    rm -rf "artifacts/pipeline/agastya_preflight_$CASE" "artifacts/pipeline/gpucheck_$CASE"
+    echo "== PREFLIGHT passed $(date)"
+fi
+
+# ---- the full run: stop 30 min before the walltime (time already used by the preflight is subtracted)
+MAX_HOURS=$(awk -v h="$WALL_H" -v s="$SECONDS" 'BEGIN{printf "%.2f", h - 0.5 - s/3600}')
+echo "== POOL start $(date), max ${MAX_HOURS} h"
+python experiments/pipeline/rudra/rudra_jobs.py pool "$CASE" --procs "$PROCS" --max-hours "$MAX_HOURS" \
+    --gpu-budget-gb "$GPU_BUDGET_GB"
+rc=$?
+echo "pool rc=$rc $(date)"
+resubmit() {   # same lane again once this one has ended its work (a fresh job, not a held/dependent one)
+    if [ "$GEN" -ge "$MAX_GEN" ]; then echo "!! MAX_GEN=$MAX_GEN reached: run  bash experiments/pipeline/agastya/submit_agastya.sh  to continue"; return; fi
+    local id
+    id=$(qsub -N "$PBS_JOBNAME" -l walltime="${WALL_H}:00:00" \
+         -v CASE="$CASE",PROCS="$PROCS",WALL_H="$WALL_H",GPU_BUDGET_GB="$GPU_BUDGET_GB",EXP_PREFIX="$EXP_PREFIX",GEN=$((GEN+1)),MAX_GEN="$MAX_GEN",PREFLIGHT=0 \
+         -o "$ROOT/logs/agastya/pbs_${CASE}_gen$((GEN+1)).out" "$HERE/lane.pbs" 2>&1)
+    echo "== resubmit ($1): $id"; echo "$(date) $CASE gen $((GEN+1)) $id ($1)" >> logs/agastya/submits.txt
+    case "$id" in *agastya*) ;; *) echo "!! qsub from the compute node failed: run  bash experiments/pipeline/agastya/submit_agastya.sh  on the login node";; esac
+}
+case $rc in
+    0)  echo "== $CASE complete; tables in artifacts/pipeline/${EXP_PREFIX}_$CASE/tables/" ;;
+    10) resubmit "walltime, work left" ;;
+    11) echo "== nothing left for this lane; another lane is finishing the rest" ;;
+    12) echo "!! some units failed $MAX_FAILS times: see artifacts/pipeline/${EXP_PREFIX}_$CASE/rudra_queue/logs/" ;;
+    *)  echo "!! pool crashed (rc=$rc)" ;;
+esac
+exit 0
